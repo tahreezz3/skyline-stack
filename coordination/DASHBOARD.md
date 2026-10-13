@@ -1,6 +1,6 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:26 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:27 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
@@ -18,23 +18,21 @@ _Generated 2026-10-13 04:26 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (7)
+## Ready to claim (5)
 
-- **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0
 - **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0
-- **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1
 - **T-0304** [Localisation framework](../coordination/tasks/T-0304-localisation-framework.md) · M3 P2
 - **T-0401** [City map grid and placement](../coordination/tasks/T-0401-city-map-grid-and-placement.md) · M4 P1
 - **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
 - **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
-## In-Progress (0)
+## In-Progress (1)
 
-- none
+- **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0 · _owner opus55-a7k2_
 
-## Review (0)
+## Review (1)
 
-- none
+- **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1 · _owner opus55-a7k2_
 
 ## Blocked (0)
 

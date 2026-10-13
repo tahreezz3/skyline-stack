@@ -54,7 +54,7 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - priority: P1
 - needed_for: T-0110, M2
 - requested: 2026-10-13 by opus55-planner
-- spec: Read the candidate hooks in `docs/01_GDD.md` section 6 and pick 1–2 to build. This is what makes the game stand apart from other stackers and is needed before store submission.
+- spec: Read the five design briefs in `docs/design/hooks.md` (rules, effort, risks for each) and pick 1–2 to build. Recommendation from T-0110: **H2 special blocks first, then H3 daily skyline**. Write your choice (and any changes) below this entry and set `status: answered`. This is what makes the game stand apart from other stackers and is needed before store submission.
 
 ### HR-0004 · Building block sprites (4 colours × 4 parts)
 - status: open

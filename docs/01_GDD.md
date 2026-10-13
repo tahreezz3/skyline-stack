@@ -83,7 +83,8 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 - The original genre game used neighbour rules; we must design **our own** rule set in T-0402.
 
 ## 6. The unique hook (needs HR-0003)
-Candidates. Pick 1–2 so the game is more than a clone:
+Full design briefs with rules, effort and risks: `docs/design/hooks.md` (recommendation: special blocks, then
+daily skyline). Summary of the candidates:
 1. **Weather and height zones**: wind at 20+ storeys pushes the falling block; night zone dims the view; clouds hide the top.
 2. **Special blocks**: heavy block (stabilises: resets wobble), glass block (double residents, collapses at 0.25), balloon block (floats slowly).
 3. **Daily skyline**: one seeded challenge tower per day with a shared target, local best and a share card.

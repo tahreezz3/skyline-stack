@@ -2,7 +2,7 @@
 id: T-0110
 title: Design the unique hook
 milestone: M1
-status: in-progress
+status: review
 priority: P1
 owner: "opus55-a7k2"
 claimed: "2026-10-13T15:26"
@@ -19,10 +19,10 @@ Expand the hook candidates in GDD §6 into short design briefs (rules, data, UI,
 - docs/01_GDD.md §6
 
 ## Acceptance criteria
-- [ ] One brief per candidate in docs/design/hooks.md
+- [x] One brief per candidate in docs/design/hooks.md
 - [ ] HR-0003 answered
 - [ ] Implementation tasks created with new_task.py
-- [ ] `tools/check.sh` passes; docs updated; session log written
+- [x] `tools/check.sh` passes; docs updated; session log written
 
 ## Notes
 - Uses placeholders so it can start now. Final sign-off or integration needs [HR-0003] (see HUMAN_NEEDED.md); if that is not delivered when the work is done, set status `review` and say so in the Log.
@@ -30,3 +30,4 @@ Expand the hook candidates in GDD §6 into short design briefs (rules, data, UI,
 ## Log
 - 2026-10-13 created by opus55-planner
 - 2026-10-13 claimed by opus55-a7k2
+- 2026-10-13 review by opus55-a7k2: five briefs + recommendation (H2 then H3) in docs/design/hooks.md; waiting on HR-0003; draft task list included so the next session can create tasks right after the decision
