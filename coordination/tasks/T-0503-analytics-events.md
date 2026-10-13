@@ -2,10 +2,10 @@
 id: T-0503
 title: Analytics events
 milestone: M5
-status: todo
+status: in-progress
 priority: P2
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:47"
 depends: [T-0201]
 human: []
 updated: 2026-10-13
@@ -28,3 +28,4 @@ Analytics service listening to GameEvents; event taxonomy doc; respects consent.
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
