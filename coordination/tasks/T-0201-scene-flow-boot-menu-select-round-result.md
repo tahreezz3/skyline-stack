@@ -2,10 +2,10 @@
 id: T-0201
 title: Scene flow: boot, menu, select, round, results
 milestone: M2
-status: todo
+status: in-progress
 priority: P1
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:11"
 depends: [T-0003]
 human: []
 updated: 2026-10-13
@@ -28,3 +28,4 @@ Add a SceneRouter autoload with fade transitions and placeholder screens: main m
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2

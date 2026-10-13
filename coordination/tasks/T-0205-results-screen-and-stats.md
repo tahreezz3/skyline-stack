@@ -2,10 +2,10 @@
 id: T-0205
 title: Results screen and stats
 milestone: M2
-status: todo
+status: in-progress
 priority: P2
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:11"
 depends: [T-0201]
 human: []
 updated: 2026-10-13
@@ -27,3 +27,4 @@ Results screen: population, height, max combo, trophy roof, personal bests, butt
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2

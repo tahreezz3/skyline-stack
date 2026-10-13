@@ -2,10 +2,10 @@
 id: T-0202
 title: Block type selection and unlocks
 milestone: M2
-status: todo
+status: in-progress
 priority: P1
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:11"
 depends: [T-0201, T-0203]
 human: []
 updated: 2026-10-13
@@ -28,3 +28,4 @@ Tower select screen lists block types from block_types.json; locked types show t
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
