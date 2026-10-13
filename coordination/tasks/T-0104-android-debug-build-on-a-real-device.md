@@ -2,10 +2,10 @@
 id: T-0104
 title: Android debug build on a real device
 milestone: M1
-status: todo
+status: in-progress
 priority: P0
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:35"
 depends: [T-0003]
 human: []
 updated: 2026-10-13
@@ -30,3 +30,4 @@ Set up Android export templates and a debug export preset, produce a debug APK, 
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
