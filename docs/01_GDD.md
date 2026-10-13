@@ -80,7 +80,7 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 - Tower select screen: choose an unlocked type; harder types are taller with bigger roof bonuses. Locked types show
   their unlock population. Results show level-ups and new unlocks.
 
-## 5. City map [planned, M4]
+## 5. City map (grid and placement built in T-0401; rules and districts pending T-0402/T-0403)
 - A grid of plots (start 5×5). Completing a tower lets you place it on a plot.
 - Placement rules give variety (draft: some types must neighbour others; downtown plots for skyscrapers).
 - City population = sum of placed towers; new districts unlock at population thresholds.

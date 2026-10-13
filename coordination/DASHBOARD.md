@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:43 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:47 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:43:43Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:47:12Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -14,13 +14,12 @@ _Generated 2026-10-13 04:43 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M1 Core feel | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
 | M3 Art and audio | `█████░░░░░░░░░░░░░░░` | 1 / 4 |
-| M4 City meta | `░░░░░░░░░░░░░░░░░░░░` | 0 / 3 |
+| M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (3)
+## Ready to claim (2)
 
-- **T-0401** [City map grid and placement](../coordination/tasks/T-0401-city-map-grid-and-placement.md) · M4 P1
 - **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
 - **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
@@ -90,7 +89,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (14)
+## Done (15)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -106,3 +105,4 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 - T-0206 Pause and app lifecycle
 - T-0207 Endless mode
 - T-0304 Localisation framework
+- T-0401 City map grid and placement

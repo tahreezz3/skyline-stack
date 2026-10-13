@@ -19,6 +19,7 @@ REQUIRED = {
     ],
     "block_types.json": ["types"],
     "levels.json": ["levels"],
+    "city_map.json": ["width", "height", "disabled", "rules"],
     "feel.json": [
         "shake.land", "shake.land_sloppy", "shake.perfect", "shake.collapse_per_block", "shake.miss", "shake.max", "shake.decay",
         "camera_kick.perfect", "camera_kick.decay", "squash.amount", "squash.time",

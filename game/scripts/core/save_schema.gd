@@ -6,7 +6,8 @@
 ## add defaults, add a test, and update docs/03_DATA_SPEC.md "Save file".
 extends RefCounted
 
-const VERSION := 2
+const CityState := preload("res://scripts/core/city_state.gd")
+const VERSION := 3
 
 
 static func defaults() -> Dictionary:
@@ -22,6 +23,7 @@ static func defaults() -> Dictionary:
 			"best_combo": 0,
 		},
 		"best_by_type": {},     # id -> {population, height, star}
+		"city": {"plots": {}, "unplaced": []},   # see scripts/core/city_state.gd
 		"settings": {
 			"music_volume": 0.8,
 			"sfx_volume": 1.0,
@@ -37,6 +39,7 @@ static func migrate(data: Dictionary) -> Dictionary:
 	var v := int(out.get("version", 1))
 	if v < 2:
 		out = _v1_to_v2(out)
+	# v2 -> v3 only added "city"; _fill() below supplies it.
 	out = _fill(out, defaults())
 	out["version"] = VERSION
 	return out
@@ -95,4 +98,8 @@ static func apply_round(data: Dictionary, summary: Dictionary) -> Dictionary:
 		best["height"] = maxi(int(best["height"]), height)
 		best["star"] = bool(best["star"]) or bool(summary.get("star", false))
 		data["best_by_type"][id] = best
+	# A finished tower (not endless) waits to be placed on the city map.
+	if summary.get("complete", false) and not summary.get("endless", false):
+		CityState.add_completed(data["city"], summary)
+		result["city_tower_added"] = true
 	return result

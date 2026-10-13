@@ -57,7 +57,7 @@ Block types unlock **only** through `block_types[].unlock_population` (single so
 Shake and camera kick are skipped when `settings.reduced_motion` is true.
 
 ## Save file (`user://save.json`, schema in `scripts/core/save_schema.gd`)
-Current version **2**:
+Current version **3** (v3 added `city`):
 
 | Key | Meaning |
 |---|---|
@@ -66,6 +66,8 @@ Current version **2**:
 | `stats.best_height`, `stats.best_population`, `stats.best_combo` | personal bests |
 | `stats.rounds_played`, `stats.towers_completed`, `stats.trophy_roofs` | counters |
 | `best_by_type.<id>` | `{population, height, star}` per block type |
+| `city.plots` | `"x,y" -> {type, population, height, star}` placed towers |
+| `city.unplaced` | completed towers waiting to be placed |
 | `settings.music_volume`, `settings.sfx_volume` | 0..1 |
 | `settings.reduced_motion` | disables screen shake and camera kick |
 | `settings.language` | locale code, `""` = device language |
@@ -73,8 +75,12 @@ Current version **2**:
 Writes are atomic (`save.tmp.json` then rename); the previous file is kept as `save.bak.json`;
 an unreadable file is moved to `save.corrupt.json` and the game starts fresh.
 
+## `city_map.json`
+`width`, `height` (grid size), `disabled` (list of `[x, y]` plots that can't be built on), `rules` (empty until
+T-0402 designs our placement rules). Completed non-endless towers go to the save's `city.unplaced` tray; placing one
+moves it to `city.plots["x,y"]` (`scripts/core/city_state.gd`).
+
 ## Planned tables
-- `city_map.json` (M4): grid size, plots, district unlock thresholds, placement rules.
 - `economy.json` (M5): population → coins rate, ad reward amounts, interstitial cadence.
 
 ## `localisation/strings.csv`

@@ -26,6 +26,9 @@ func _ready() -> void:
 
 	col.add_child(UI.button(tr("BTN_PLAY"), func() -> void: SceneRouter.go("select")))
 	col.add_child(UI.button(tr("BTN_ENDLESS"), func() -> void: SceneRouter.go("game", {"block_type": "blue", "endless": true})))
+	var to_place: int = SaveData.data["city"]["unplaced"].size()
+	var city_text: String = tr("BTN_CITY") % to_place if to_place > 0 else tr("BTN_CITY_PLAIN")
+	col.add_child(UI.button(city_text, func() -> void: SceneRouter.go("city")))
 	col.add_child(UI.button(tr("BTN_SETTINGS"), func() -> void: SceneRouter.go("settings"), 30))
 	col.add_child(UI.spacer(40))
 

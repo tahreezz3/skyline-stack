@@ -1,0 +1,7 @@
+{
+  "_doc": "City map (T-0401). A grid of plots; completed towers are placed on free, enabled plots. Placement rules (adjacency, districts) come from T-0402 and will be added here. See docs/03_DATA_SPEC.md.",
+  "width": 5,
+  "height": 5,
+  "disabled": [],
+  "rules": {}
+}

@@ -35,6 +35,8 @@ func _ready() -> void:
 	col.add_child(UI.spacer(24))
 	# Rewarded "double population" arrives with ads in T-0501.
 	col.add_child(UI.button(tr("BTN_DOUBLE_AD"), func() -> void: pass, 26, false))
+	if record.get("city_tower_added", false):
+		col.add_child(UI.button(tr("RES_PLACE_CITY"), func() -> void: SceneRouter.go("city")))
 	var again := {"block_type": summary.get("block_type", "blue"), "endless": summary.get("endless", false)}
 	col.add_child(UI.button(tr("BTN_PLAY_AGAIN"), func() -> void: SceneRouter.go("game", again)))
 	col.add_child(UI.button(tr("BTN_CHOOSE_TOWER"), func() -> void: SceneRouter.go("select")))

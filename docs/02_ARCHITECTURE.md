@@ -83,7 +83,7 @@ English. Screens build their text in `_ready()`, so changing language reloads th
 - Exports: JSON configs are not resources; the export preset must include `*.json` (T-0601).
 
 ## Scene flow (implemented in M2)
-`main_menu → (settings) → tower_select → tower_game → results → (tower_game | tower_select | main_menu)`; the menu's
+`main_menu → (settings | city_map) → tower_select → tower_game → results → (tower_game | tower_select | main_menu)`; the menu's
 Endless button goes straight to `tower_game` with `{endless: true}`. `SceneRouter.go(name, params)` fades and
 switches; the next screen reads `SceneRouter.params`. Every screen implements `on_back()` (Android back / Escape).
 In a round, back or focus loss opens the pause overlay (`get_tree().paused`); resuming counts down 3 s.
