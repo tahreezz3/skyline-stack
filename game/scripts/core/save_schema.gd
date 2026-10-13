@@ -24,6 +24,8 @@ static func defaults() -> Dictionary:
 		},
 		"best_by_type": {},     # id -> {population, height, star}
 		"city": {"plots": {}, "unplaced": []},   # see scripts/core/city_state.gd
+		"ads": {"rounds_since_interstitial": 0, "last_interstitial_unix": 0.0},   # pacing state (T-0501)
+		"purchases": {"remove_ads": false},   # set by the store in T-0502
 		"settings": {
 			"music_volume": 0.8,
 			"sfx_volume": 1.0,

@@ -25,5 +25,7 @@ signal block_type_unlocked(id: String)
 signal setting_changed(key: String, value: Variant)
 ## A tower was placed on the city map (city_map screen).
 signal city_tower_placed(tower: Dictionary, city_population: int)
+## An ad finished (Ads autoload). format = rewarded | interstitial.
+signal ad_finished(format: String, placement: String, completed: bool)
 ## Any UI button pressed (for the click sound).
 signal ui_pressed

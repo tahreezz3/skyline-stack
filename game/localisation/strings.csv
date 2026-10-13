@@ -37,7 +37,6 @@ NEW_BEST,  NEW BEST,  NUEVO RÉCORD,  NEUER REKORD
 RES_BEST_COMBO,Best combo %d,Mejor combo %d,Beste Kombo %d
 RES_LEVEL_UP,Level up! Level %d,¡Subes de nivel! Nivel %d,Aufgestiegen! Stufe %d
 RES_UNLOCKED,New tower unlocked: %s,Nueva torre desbloqueada: %s,Neuer Turm freigeschaltet: %s
-BTN_DOUBLE_AD,"Double reward (ad, coming in M5)","Doble recompensa (anuncio, próximamente)","Doppelte Belohnung (Werbung, bald)"
 BTN_PLAY_AGAIN,Play again,Jugar otra vez,Nochmal spielen
 BTN_CHOOSE_TOWER,Choose tower,Elegir torre,Turm wählen
 BTN_MENU,Menu,Menú,Menü
@@ -81,3 +80,10 @@ CITY_TOWER_BTN,"%s
 %d"
 RES_PLACE_CITY,Place it in your city,Colócala en tu ciudad,In deiner Stadt platzieren
 SET_ANALYTICS,Share anonymous gameplay stats,Compartir estadísticas de juego anónimas,Anonyme Spielstatistiken teilen
+CONTINUE_TITLE,Out of lives!,¡Sin vidas!,Keine Leben mehr!
+CONTINUE_OFFER,Watch an ad to keep building with +%d life?,¿Ves un anuncio para seguir construyendo con +%d vida?,Werbung ansehen und mit +%d Leben weiterbauen?
+BTN_WATCH_CONTINUE,Watch ad · continue,Ver anuncio · continuar,Werbung ansehen · weiter
+BTN_NO_THANKS,No thanks,"No, gracias","Nein, danke"
+POP_EXTRA_LIFE,+%d LIFE,+%d VIDA,+%d LEBEN
+BTN_DOUBLE_REWARD,Watch ad · double population (+%d),Ver anuncio · doble población (+%d),Werbung ansehen · doppelte Bevölkerung (+%d)
+RES_BONUS,Bonus +%d population!,¡Bonus +%d habitantes!,Bonus +%d Einwohner!

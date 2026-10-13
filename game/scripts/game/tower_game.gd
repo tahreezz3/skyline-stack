@@ -12,6 +12,7 @@ extends Node2D
 
 const TowerState := preload("res://scripts/core/tower_state.gd")
 const UI := preload("res://scripts/game/ui_kit.gd")
+const AdPolicy := preload("res://scripts/core/ad_policy.gd")
 const RESUME_COUNTDOWN_S := 3
 const RESULTS_DELAY_S := 1.2
 
@@ -44,6 +45,8 @@ var kick := 0.0
 var squash_t := 0.0
 var particles: Array[Dictionary] = []   # {x, y, vx, vy, age, life, kind, size}
 var last_combo_count := 0
+var continues_used := 0
+var offering_continue := false
 
 var autoplay := false
 var autoplay_seconds := 0.0
@@ -239,7 +242,38 @@ func _on_resolved(ev: Dictionary) -> void:
 	if ev.get("complete", false):
 		_popup(tr("POP_ROOF") % ev["roof_people"] + (tr("POP_TROPHY") if ev["star"] else ""), Color.GOLD)
 	if state.is_over:
+		_on_round_over()
+
+
+## Game over (not a completed tower): offer one rewarded "continue" per round, then finish.
+func _on_round_over() -> void:
+	var cfg: Dictionary = GameConfig.table("economy")["rewarded"]
+	if state.is_complete or autoplay or not AdPolicy.can_offer_continue(continues_used, cfg):
 		_finish_round()
+		return
+	offering_continue = true
+	var layer := CanvasLayer.new()
+	layer.layer = 20
+	add_child(layer)
+	var root := Control.new()
+	layer.add_child(root)
+	var col := UI.screen(root)
+	(root.get_child(0) as ColorRect).color = Color(0, 0, 0, 0.7)
+	col.add_child(UI.label(tr("CONTINUE_TITLE"), 56, UI.ACCENT))
+	col.add_child(UI.label(tr("CONTINUE_OFFER") % int(cfg["continue_lives"]), 32))
+	col.add_child(UI.button(tr("BTN_WATCH_CONTINUE"), func() -> void:
+		layer.queue_free()
+		continues_used += 1
+		var earned: bool = await Ads.show_rewarded("continue")
+		offering_continue = false
+		if earned and state.revive(int(cfg["continue_lives"])):
+			_popup(tr("POP_EXTRA_LIFE") % int(cfg["continue_lives"]), Color.GREEN_YELLOW)
+		else:
+			_finish_round()))
+	col.add_child(UI.button(tr("BTN_NO_THANKS"), func() -> void:
+		layer.queue_free()
+		offering_continue = false
+		_finish_round()))
 
 
 # --- feedback (presentation only) ------------------------------------------------

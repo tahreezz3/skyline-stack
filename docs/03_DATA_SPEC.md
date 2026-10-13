@@ -84,8 +84,17 @@ an unreadable file is moved to `save.corrupt.json` and the game starts fresh.
 T-0402 designs our placement rules). Completed non-endless towers go to the save's `city.unplaced` tray; placing one
 moves it to `city.plots["x,y"]` (`scripts/core/city_state.gd`).
 
+## `economy.json`
+| Key | Meaning |
+|---|---|
+| `interstitial.min_rounds_before_first` | no interstitial until this many rounds have been played |
+| `interstitial.every_n_rounds`, `interstitial.min_seconds_between` | cadence limits |
+| `rewarded.continue_per_round`, `rewarded.continue_lives` | rewarded continue: how often per round, lives restored |
+| `rewarded.double_reward_multiplier` | results "double reward": lifetime population gets `population × (multiplier − 1)` more |
+
+Save keys: `ads.rounds_since_interstitial`, `ads.last_interstitial_unix`, `purchases.remove_ads`.
+
 ## Planned tables
-- `economy.json` (M5): population → coins rate, ad reward amounts, interstitial cadence.
 
 ## `localisation/strings.csv`
 Godot translation CSV: header `keys,en,es,de`, one row per UI string. Code uses `tr("KEY")`; block names use

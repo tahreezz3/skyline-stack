@@ -1,0 +1,13 @@
+{
+  "_doc": "Monetisation pacing (T-0501). Never shows ads during a round. See docs/01_GDD.md section 7 and docs/03_DATA_SPEC.md.",
+  "interstitial": {
+    "min_rounds_before_first": 3,
+    "every_n_rounds": 3,
+    "min_seconds_between": 90
+  },
+  "rewarded": {
+    "continue_per_round": 1,
+    "continue_lives": 1,
+    "double_reward_multiplier": 2
+  }
+}

@@ -200,6 +200,16 @@ func _miss(x: float) -> Dictionary:
 	return {"result": RESULT_MISS, "x": x, "lives": lives, "banked": banked, "game_over": is_over}
 
 
+## Rewarded "continue": give lives back after a game over (never after completion).
+## Returns false if the round can't be revived.
+func revive(extra_lives: int) -> bool:
+	if not is_over or is_complete or extra_lives <= 0:
+		return false
+	lives += extra_lives
+	is_over = false
+	return true
+
+
 func _complete() -> Dictionary:
 	var banked := _bank_combo()
 	var star := population >= int(round_cfg.get("star_population", 1 << 30))

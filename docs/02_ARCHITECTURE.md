@@ -47,7 +47,8 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `SceneRouter` | `scripts/autoload/scene_router.gd` | Screen changes with fade, params, back button, `--autoplay`/`--tour` flags |
 | `AudioDirector` | `scripts/autoload/audio_director.gd` | Only place that plays sound. Listens to GameEvents; buses Music/SFX/UI; real files from `res://assets/audio/<name>.wav/.ogg` or procedural placeholders (`scripts/game/placeholder_synth.gd`) |
 | `Analytics` | `scripts/autoload/analytics.gd` | GameEvents → schema-validated events (`core/analytics_events.gd`), consent-gated; `log` backend for development (docs/ANALYTICS.md) |
-| `Ads`, `Store` [planned M5] | | Behind interfaces, with a fake implementation for desktop/tests |
+| `Ads` | `scripts/autoload/ads.gd` | `await show_rewarded(placement)`, `on_round_finished()` (interstitial pacing via `core/ad_policy.gd`, `config/economy.json`); `fake` backend shows a 2 s TEST AD overlay; AdMob backend in T-0506 |
+| `Store` [planned T-0502] | | Remove-ads purchase; sets `purchases.remove_ads` |
 
 ## Signals on `GameEvents`
 
@@ -64,6 +65,7 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `setting_changed(key, value)` | String, Variant | SaveData.set_setting |
 | `round_started(block_type, endless)` | String, bool | tower_game |
 | `city_tower_placed(tower, city_population)` | Dictionary, int | city_map |
+| `ad_finished(format, placement, completed)` | String, String, bool | Ads |
 | `ui_pressed` | none | UI buttons |
 
 Add new signals here when you add them to `game_events.gd`.

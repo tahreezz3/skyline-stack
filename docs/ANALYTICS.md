@@ -29,6 +29,7 @@ the schema drift apart, so update both together.
 | `tower_unlocked` | `block_type` | a tower type unlocks |
 | `city_tower_placed` | `block_type`, `city_population` | a tower is placed on the city map |
 | `setting_changed` | `key`, `value` | a reportable setting changes |
+| `ad_finished` | `format`, `placement`, `completed` | a rewarded or interstitial ad ends |
 
 ## Questions these answer (soft launch KPIs, docs/00_VISION.md)
 - Session length and rounds per session: `session_start`, `round_start`/`round_end` with `duration_s`.

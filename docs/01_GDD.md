@@ -95,10 +95,13 @@ daily skyline). Summary of the candidates:
 4. **Tenants with wishes**: residents ask for "a perfect streak of 5" or "a 15-storey tower", rewarding cosmetics.
 5. **Cosmetic district themes**: Tokyo neon, Nordic wood, desert adobe; changes block art, music and backgrounds.
 
-## 7. Economy and monetisation [planned, M5]
+## 7. Economy and monetisation (ad flow built in T-0501 with a test backend; real SDK in T-0506)
 - Soft currency: coins from towers (population → coins), spent on cosmetics and districts.
-- Rewarded ad: "continue" once per round after the last life (restores 1 life), "double coins" on results.
-- Interstitial: at most one every 3 rounds and never in the first 3 rounds; never during a round.
+- Rewarded ad: "continue" once per round after the last life is lost (not after a completed tower), restoring
+  `rewarded.continue_lives`; "double reward" on results adds the round's population again to lifetime population.
+- Interstitial: only on the results screen; not before 3 rounds played, at most every 3 rounds, at least 90 s apart,
+  never for players who bought remove-ads (`config/economy.json`, `core/ad_policy.gd`).
+- Coins are not implemented yet; population is the only currency so far.
 - IAP: remove ads (non-consumable). Optional later: cosmetic packs.
 
 ## 8. Feedback and juice [planned, M1/M3]

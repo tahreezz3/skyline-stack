@@ -12,6 +12,7 @@ const SCHEMA := {
 	"tower_unlocked": ["block_type"],
 	"city_tower_placed": ["block_type", "city_population"],
 	"setting_changed": ["key", "value"],
+	"ad_finished": ["format", "placement", "completed"],
 }
 
 ## Setting keys that may be reported (values are non-identifying).

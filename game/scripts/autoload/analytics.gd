@@ -39,6 +39,8 @@ func _ready() -> void:
 	GameEvents.setting_changed.connect(func(k: String, v: Variant) -> void:
 		if k in Events.REPORTABLE_SETTINGS:
 			track("setting_changed", {"key": k, "value": v}))
+	GameEvents.ad_finished.connect(func(f: String, p: String, done: bool) -> void:
+		track("ad_finished", {"format": f, "placement": p, "completed": done}))
 	track("session_start", {"app_version": String(ProjectSettings.get_setting("application/config/version", "0.1.0")),
 		"locale": TranslationServer.get_locale()})
 

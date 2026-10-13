@@ -20,6 +20,8 @@ REQUIRED = {
     "block_types.json": ["types"],
     "levels.json": ["levels"],
     "city_map.json": ["width", "height", "disabled", "rules"],
+    "economy.json": ["interstitial.min_rounds_before_first", "interstitial.every_n_rounds", "interstitial.min_seconds_between",
+                     "rewarded.continue_per_round", "rewarded.continue_lives", "rewarded.double_reward_multiplier"],
     "feel.json": [
         "shake.land", "shake.land_sloppy", "shake.perfect", "shake.collapse_per_block", "shake.miss", "shake.max", "shake.decay",
         "camera_kick.perfect", "camera_kick.decay", "squash.amount", "squash.time",

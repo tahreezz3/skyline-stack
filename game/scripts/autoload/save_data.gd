@@ -84,20 +84,34 @@ func set_setting(key: String, value: Variant) -> void:
 	GameEvents.setting_changed.emit(key, value)
 
 
+## Add bonus lifetime population (rewarded "double reward"). Announces level-ups and unlocks.
+## Returns {level_before, level_after, unlocked}.
+func add_bonus_population(amount: int) -> Dictionary:
+	var before := lifetime_population()
+	data["stats"]["lifetime_population"] = before + amount
+	write_save()
+	return _announce_progress(before, before + amount)
+
+
+func _announce_progress(before: int, after: int) -> Dictionary:
+	var levels: Array = GameConfig.table("levels")["levels"]
+	var types: Array = GameConfig.table("block_types")["types"]
+	var out := {
+		"level_before": Progression.level_info(before, levels)["level"],
+		"level_after": Progression.level_info(after, levels)["level"],
+		"unlocked": Progression.newly_unlocked(types, before, after),
+	}
+	if out["level_after"] > out["level_before"]:
+		GameEvents.level_up.emit(out["level_before"], out["level_after"])
+	for id in out["unlocked"]:
+		GameEvents.block_type_unlocked.emit(id)
+	return out
+
+
 ## Record a round, persist, and announce level-ups and unlocks.
 ## Returns the SaveSchema.apply_round() result plus level/unlock info.
 func record_round(summary: Dictionary) -> Dictionary:
 	var result := SaveSchema.apply_round(data, summary)
 	write_save()
-	var levels: Array = GameConfig.table("levels")["levels"]
-	var types: Array = GameConfig.table("block_types")["types"]
-	var before := int(result["population_before"])
-	var after := int(result["population_after"])
-	result["level_before"] = Progression.level_info(before, levels)["level"]
-	result["level_after"] = Progression.level_info(after, levels)["level"]
-	result["unlocked"] = Progression.newly_unlocked(types, before, after)
-	if result["level_after"] > result["level_before"]:
-		GameEvents.level_up.emit(result["level_before"], result["level_after"])
-	for id in result["unlocked"]:
-		GameEvents.block_type_unlocked.emit(id)
+	result.merge(_announce_progress(int(result["population_before"]), int(result["population_after"])), true)
 	return result

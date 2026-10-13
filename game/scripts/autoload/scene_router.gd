@@ -52,7 +52,7 @@ func _ready() -> void:
 func _run_tour() -> void:
 	var fake_summary := {"complete": true, "star": true, "population": 123, "height": 10, "max_combo": 7, "block_type": "blue", "endless": false}
 	var fake_record := {"new_best_population": true, "new_best_height": false, "level_before": 1, "level_after": 2, "unlocked": ["red"]}
-	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
+	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["game", {"block_type": "blue"}], ["continue", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
 	# The tour never writes the save; it fills the city with sample towers in memory so the screen has content.
 	SaveData.persist = false
 	SaveData.data["city"] = {"plots": {
@@ -65,6 +65,24 @@ func _run_tour() -> void:
 		await get_tree().create_timer(1.0, true, false, true).timeout
 		if step[0] == "pause":
 			get_tree().current_scene.pause_game()
+		elif step[0] == "continue":
+			# force a game over, accept the continue offer through the fake ad, check the round resumes
+			var g := get_tree().current_scene
+			for i in range(3):
+				g._on_resolved(g.state.land(9.0))
+			await get_tree().create_timer(0.8, true, false, true).timeout
+			var watch: Button = null
+			for b in g.find_children("*", "Button", true, false):
+				if b.text == tr("BTN_WATCH_CONTINUE"):
+					watch = b
+			var found := watch != null   # the button is freed once pressed; freed objects compare equal to null
+			Ads.backend = "fake"
+			if found:
+				watch.pressed.emit()
+			await get_tree().create_timer(Ads.FAKE_AD_S + 0.8, true, false, true).timeout
+			Ads.backend = "none"
+			var ok: bool = found and not g.state.is_over and g.state.lives == 1
+			print("TOUR continue ", "ok" if ok else "FAILED (button=%s over=%s lives=%d)" % [found, g.state.is_over, g.state.lives])
 		elif step[0] == "analytics":
 			SaveData.data["settings"]["analytics_consent"] = "unknown"
 			var dropped: bool = not Analytics.track("level_up", {"from_level": 1, "to_level": 2})
