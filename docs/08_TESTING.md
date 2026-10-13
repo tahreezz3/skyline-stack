@@ -5,8 +5,10 @@
 2. Rule tests: `godot --headless --path game --script res://tests/run_tests.gd` (exit 0 = pass).
 3. Smoke test: `godot --headless --path game -- --autoplay --seconds=60`: a bot plays a round; it must print
    `AUTOPLAY_SUMMARY` or `AUTOPLAY_TIMEOUT` with no `SCRIPT ERROR` lines.
-4. `tools/cleanroom_check.py`.
-5. `tools/dashboard.py` regenerates the dashboard and records the check result.
+4. UI tour: `godot --headless --path game -- --tour` visits menu, select, round, pause, results; must print `TOUR_DONE`
+   with no script errors.
+5. `tools/cleanroom_check.py`.
+6. `tools/dashboard.py` regenerates the dashboard and records the check result.
 
 ## 2. Writing tests
 - Suites are files named `game/tests/test_<area>.gd` that extend `res://tests/test_case.gd`; the runner finds them
@@ -18,7 +20,8 @@
 
 ## 3. Looking at the game without a screen
 `godot --path game --write-movie /tmp/frames/f.png --fixed-fps 30 --quit-after 600 -- --autoplay`
-writes PNG frames you can inspect (it opens a window briefly).
+writes PNG frames you can inspect (it opens a window briefly). Use `-- --tour` instead of `-- --autoplay` to
+capture every screen. Always look at frames after UI changes: a headless run cannot catch layout bugs.
 
 ## 4. Human playtest questions (HR-0017)
 1. Is the perfect window too tight, too loose, or right? (Try 20 drops, count perfects.)

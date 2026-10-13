@@ -2,7 +2,7 @@
 id: T-0205
 title: Results screen and stats
 milestone: M2
-status: in-progress
+status: done
 priority: P2
 owner: "opus55-a7k2"
 claimed: "2026-10-13T15:11"
@@ -19,12 +19,13 @@ Results screen: population, height, max combo, trophy roof, personal bests, butt
 - (see milestone in docs/04_ROADMAP.md)
 
 ## Acceptance criteria
-- [ ] Shows data from round_ended summary
-- [ ] New best highlighted
-- [ ] `tools/check.sh` passes; docs updated; session log written
+- [x] Shows data from round_ended summary
+- [x] New best highlighted
+- [x] `tools/check.sh` passes; docs updated; session log written
 
 ## Notes
 
 ## Log
 - 2026-10-13 created by opus55-planner
 - 2026-10-13 claimed by opus55-a7k2
+- 2026-10-13 done by opus55-a7k2: results.gd: population/height/combo, new-best flags, level-up and unlock messages, retry/select/menu, disabled ad button placeholder for T-0501

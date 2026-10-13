@@ -62,7 +62,8 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 ### 3.4 Round goal
 - Each block type has a `target_height`. Reaching it completes the tower: the combo is banked, then a roof is
   added: `roof_people`, or `star_roof_people` (the trophy roof) if population ≥ `star_population`.
-- Endless mode is `target_height = 0` **[planned, T-0207]**.
+- Endless mode: `target_height = 0`, play until lives run out; crane speed keeps ramping to `speed_max`;
+  its best is saved separately (`best_by_type.endless`).
 
 ### 3.5 Crane
 - `crane_x = amplitude × sin(t × speed)`, speed = `min(speed + speed_per_block × height, speed_max)`.
@@ -72,7 +73,8 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 ## 4. Progression (rules implemented in `scripts/core/progression.gd`; UI in M2)
 - Lifetime population (sum of all rounds) raises the player level (`levels.json`).
 - Each block type unlocks when lifetime population reaches its `unlock_population` (`block_types.json`).
-- Tower select screen: choose an unlocked type; harder types are taller with bigger roof bonuses.
+- Tower select screen: choose an unlocked type; harder types are taller with bigger roof bonuses. Locked types show
+  their unlock population. Results show level-ups and new unlocks.
 
 ## 5. City map [planned, M4]
 - A grid of plots (start 5×5). Completing a tower lets you place it on a plot.

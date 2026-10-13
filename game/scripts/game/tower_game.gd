@@ -5,11 +5,15 @@
 ## Placeholder visuals: blocks are coloured rectangles drawn in _draw() until
 ## the art in HUMAN_NEEDED.md (HR-0004..HR-0007) is delivered.
 ##
-## Headless autoplay for smoke tests:
+## Params (SceneRouter.params): {block_type: id, endless: bool}.
+## Headless autoplay for smoke tests (menu jumps straight here):
 ##   godot --headless --path game -- --autoplay --seconds=20
 extends Node2D
 
 const TowerState := preload("res://scripts/core/tower_state.gd")
+const UI := preload("res://scripts/game/ui_kit.gd")
+const RESUME_COUNTDOWN_S := 3
+const RESULTS_DELAY_S := 1.2
 
 const UNIT := 160.0                     # screen pixels per world unit (one block width)
 const SCREEN := Vector2(720, 1280)
@@ -19,6 +23,7 @@ const FOUNDATION_COLOUR := Color("#5a5a66")
 
 var rules: Dictionary
 var block_type: Dictionary
+var endless := false
 var state
 
 var t := 0.0
@@ -38,30 +43,30 @@ var hud_lives: Label
 var hud_height: Label
 var hud_combo: ProgressBar
 var hud_message: Label
+var pause_layer: CanvasLayer
+var pause_label: Label
+var pause_buttons: VBoxContainer
+var paused := false
 
 
 func _ready() -> void:
 	rules = GameConfig.table("tower_rules")
-	block_type = GameConfig.block_type("blue")   # block selection arrives in M2 (T-0202)
+	block_type = GameConfig.block_type(String(SceneRouter.params.get("block_type", "blue")))
+	endless = bool(SceneRouter.params.get("endless", false))
 	state = TowerState.new(rules, {
-		"target_height": block_type["target_height"],
+		"target_height": 0 if endless else block_type["target_height"],
 		"roof_people": block_type["roof_people"],
 		"star_population": block_type["star_population"],
 		"star_roof_people": block_type["star_roof_people"],
 	})
-	_parse_args()
+	if SceneRouter.autoplay:
+		autoplay = true
+		autoplay_seconds = SceneRouter.autoplay_seconds
+		Engine.time_scale = 4.0
+		SaveData.persist = false
 	_build_hud()
+	_build_pause()
 	_refresh_hud()
-
-
-func _parse_args() -> void:
-	for arg in OS.get_cmdline_user_args():
-		if arg == "--autoplay":
-			autoplay = true
-			Engine.time_scale = 4.0
-			SaveData.persist = false
-		elif arg.begins_with("--seconds="):
-			autoplay_seconds = float(arg.get_slice("=", 1))
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -72,11 +77,71 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_tap() -> void:
-	if round_finished:
-		get_tree().reload_current_scene()
+	if round_finished or paused:
 		return
 	if falling.is_empty() and not state.is_over:
 		falling = {"x": crane_x, "y": _crane_y(), "vy": 0.0, "missed": false, "miss_x": 0.0}
+		GameEvents.block_released.emit()
+
+
+# --- pause and app lifecycle (T-0206) -----------------------------------------
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
+		if not round_finished and not autoplay:
+			pause_game()
+		SaveData.write_save()
+
+
+func on_back() -> void:
+	if round_finished:
+		return
+	if paused:
+		SceneRouter.go("menu")
+	else:
+		pause_game()
+
+
+func pause_game() -> void:
+	if paused:
+		return
+	paused = true
+	get_tree().paused = true
+	pause_label.text = "Paused"
+	pause_buttons.visible = true
+	pause_layer.visible = true
+
+
+func resume_game() -> void:
+	pause_buttons.visible = false
+	for n in range(RESUME_COUNTDOWN_S, 0, -1):
+		pause_label.text = str(n)
+		await get_tree().create_timer(1.0, true, false, true).timeout
+		if not is_inside_tree():
+			return
+	pause_layer.visible = false
+	paused = false
+	get_tree().paused = false
+
+
+func _build_pause() -> void:
+	pause_layer = CanvasLayer.new()
+	pause_layer.layer = 10
+	pause_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	pause_layer.visible = false
+	add_child(pause_layer)
+	var root := Control.new()
+	pause_layer.add_child(root)
+	var col := UI.screen(root)
+	(root.get_child(0) as ColorRect).color = Color(0, 0, 0, 0.6)
+	pause_label = UI.label("Paused", 72, UI.ACCENT)
+	col.add_child(pause_label)
+	pause_buttons = VBoxContainer.new()
+	pause_buttons.add_theme_constant_override("separation", 24)
+	pause_buttons.add_child(UI.button("Resume", resume_game))
+	pause_buttons.add_child(UI.button("Restart", func() -> void: SceneRouter.go("game", SceneRouter.params)))
+	pause_buttons.add_child(UI.button("Quit to menu", func() -> void: SceneRouter.go("menu")))
+	col.add_child(pause_buttons)
 
 
 func _process(delta: float) -> void:
@@ -162,15 +227,16 @@ func _finish_round() -> void:
 		"height": state.height(),
 		"max_combo": state.max_combo,
 		"block_type": block_type["id"],
+		"endless": endless,
 	}
 	GameEvents.round_ended.emit(summary)
-	SaveData.record_round(summary)
-	hud_message.text = ("TOWER COMPLETE!" if state.is_complete else "GAME OVER") \
-		+ "\nPopulation %d\nTap to play again" % state.population
+	var record: Dictionary = SaveData.record_round(summary)
+	hud_message.text = "TOWER COMPLETE!" if state.is_complete else "GAME OVER"
 	hud_message.visible = true
 	if autoplay:
 		print("AUTOPLAY_SUMMARY ", JSON.stringify(summary))
-		get_tree().quit(0)
+	await get_tree().create_timer(RESULTS_DELAY_S).timeout
+	SceneRouter.go("results", {"summary": summary, "record": record})
 
 
 func _spawn_debris(ev: Dictionary) -> void:
@@ -195,6 +261,9 @@ func _update_debris(delta: float) -> void:
 		if d["delay"] > 0.0:
 			d["delay"] -= delta
 			continue
+		if not d.get("toppled", false):
+			d["toppled"] = true
+			GameEvents.block_toppled.emit()
 		d["vy"] -= g * delta
 		d["x"] += d["vx"] * delta
 		d["y"] += d["vy"] * delta
@@ -311,6 +380,14 @@ func _build_hud() -> void:
 	hud_combo.position = Vector2(420, 32)
 	hud_combo.size = Vector2(276, 28)
 	layer.add_child(hud_combo)
+	var pause_btn := Button.new()
+	pause_btn.text = "II"
+	pause_btn.position = Vector2(620, 80)
+	pause_btn.size = Vector2(76, 76)
+	pause_btn.add_theme_font_size_override("font_size", 32)
+	pause_btn.focus_mode = Control.FOCUS_NONE
+	pause_btn.pressed.connect(pause_game)
+	layer.add_child(pause_btn)
 	hud_message = _hud_label(layer, Vector2(0, 520), 48)
 	hud_message.size = Vector2(SCREEN.x, 300)
 	hud_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

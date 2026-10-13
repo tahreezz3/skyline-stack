@@ -43,7 +43,8 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 |---|---|---|
 | `GameConfig` | `scripts/autoload/game_config.gd` | Loads `config/*.json` at startup; `table(name)`, `block_type(id)` |
 | `GameEvents` | `scripts/autoload/game_events.gd` | Signal bus |
-| `SaveData` | `scripts/autoload/save_data.gd` | `user://save.json`, lifetime stats |
+| `SaveData` | `scripts/autoload/save_data.gd` | `user://save.json`: stats, bests, settings (schema in `core/save_schema.gd`) |
+| `SceneRouter` | `scripts/autoload/scene_router.gd` | Screen changes with fade, params, back button, `--autoplay`/`--tour` flags |
 | `AudioDirector` [planned T-0103] | | Listens to GameEvents, plays SFX/music |
 | `Ads`, `Store`, `Analytics` [planned M5] | | Behind interfaces, with a fake implementation for desktop/tests |
 
@@ -75,6 +76,12 @@ Add new signals here when you add them to `game_events.gd`.
 - No magic numbers in gameplay code: read from `GameConfig`.
 - Exports: JSON configs are not resources; the export preset must include `*.json` (T-0601).
 
-## Planned scene flow [M2]
-`boot → main_menu → tower_select → tower_game → results → (main_menu | city_map)`, managed by a
-`SceneRouter` autoload with fade transitions.
+## Scene flow (implemented in M2)
+`main_menu → tower_select → tower_game → results → (tower_game | tower_select | main_menu)`; the menu's
+Endless button goes straight to `tower_game` with `{endless: true}`. `SceneRouter.go(name, params)` fades and
+switches; the next screen reads `SceneRouter.params`. Every screen implements `on_back()` (Android back / Escape).
+In a round, back or focus loss opens the pause overlay (`get_tree().paused`); resuming counts down 3 s.
+
+Screens are built in code with `scripts/game/ui_kit.gd` (placeholder styling until T-0303).
+Debug modes (user args after `--`): `--autoplay [--seconds=N]` plays a round and quits on the results screen;
+`--tour` visits every screen and quits (combine with `--write-movie` to see them).

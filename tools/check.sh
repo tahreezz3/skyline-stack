@@ -15,6 +15,7 @@ run_step() {   # name, command...
   echo "$out" | grep -vE '^Godot Engine|^\s*$' | tail -20
   if [ "$name" = "smoke" ] && echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error'; then rc=1; fi
   if [ "$name" = "smoke" ] && ! echo "$out" | grep -qE 'AUTOPLAY_(SUMMARY|TIMEOUT)'; then rc=1; fi
+  if [ "$name" = "ui-tour" ] && { echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error' || ! echo "$out" | grep -q 'TOUR_DONE'; }; then rc=1; fi
   local v=true; [ $rc -ne 0 ] && { v=false; ok_all=0; echo "!! $name FAILED"; }
   steps_json="${steps_json}\"$name\": $v, "
 }
@@ -25,6 +26,7 @@ run_step config  python3 tools/validate_config.py
 "$GODOT" --headless --path game --import >/dev/null 2>&1
 run_step tests   "$GODOT" --headless --path game --script res://tests/run_tests.gd
 run_step smoke   "$GODOT" --headless --path game -- --autoplay --seconds=90
+run_step ui-tour "$GODOT" --headless --path game -- --tour
 run_step cleanroom python3 tools/cleanroom_check.py
 
 ok_json=$([ $ok_all -eq 1 ] && echo true || echo false)

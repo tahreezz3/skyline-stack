@@ -41,3 +41,10 @@ func test_apply_round() -> void:
 	var r2 := SaveSchema.apply_round(d, {"population": 30, "height": 4, "complete": false, "star": false, "max_combo": 1, "block_type": "blue"})
 	check(not r2["new_best_population"] and r2["population_before"] == 80 and r2["population_after"] == 110, "worse round accumulates but no best")
 	check(d["best_by_type"]["blue"]["star"], "trophy flag is sticky")
+
+
+func test_endless_best_is_separate() -> void:
+	var d := SaveSchema.defaults()
+	SaveSchema.apply_round(d, {"population": 500, "height": 60, "complete": false, "star": false, "max_combo": 3, "block_type": "blue", "endless": true})
+	check(d["best_by_type"].has("endless") and not d["best_by_type"].has("blue"), "endless best stored under 'endless'")
+	check(d["best_by_type"]["endless"]["height"] == 60, "endless best height recorded")

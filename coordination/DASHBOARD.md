@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:10 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:14 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:10:40Z  config: ok · tests: ok · smoke: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:14:51Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -12,20 +12,23 @@ _Generated 2026-10-13 04:10 UTC by `tools/dashboard.py`. Do not edit by hand._
 |---|---|---|
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `░░░░░░░░░░░░░░░░░░░░` | 0 / 6 |
-| M2 Game loop | `██████░░░░░░░░░░░░░░` | 2 / 7 |
+| M2 Game loop | `████████████████████` | 7 / 7 |
 | M3 Art and audio | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M4 City meta | `░░░░░░░░░░░░░░░░░░░░` | 0 / 3 |
 | M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (6)
+## Ready to claim (9)
 
 - **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0
 - **T-0102** [Juice pass with placeholder effects](../coordination/tasks/T-0102-juice-pass-with-placeholder-effects.md) · M1 P1
 - **T-0103** [AudioDirector autoload with placeholder sounds](../coordination/tasks/T-0103-audiodirector-autoload-with-placeholder-.md) · M1 P1
 - **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0
 - **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1
-- **T-0201** [Scene flow: boot, menu, select, round, results](../coordination/tasks/T-0201-scene-flow-boot-menu-select-round-result.md) · M2 P1
+- **T-0304** [Localisation framework](../coordination/tasks/T-0304-localisation-framework.md) · M3 P2
+- **T-0401** [City map grid and placement](../coordination/tasks/T-0401-city-map-grid-and-placement.md) · M4 P1
+- **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
+- **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
 ## In-Progress (0)
 
@@ -39,23 +42,15 @@ _Generated 2026-10-13 04:10 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 - none
 
-## Waiting (20)
+## Waiting (12)
 
 - **T-0105** [Crane polish and swing patterns](../coordination/tasks/T-0105-crane-polish-and-swing-patterns.md) · M1 P2 · _waits on T-0101_
-- **T-0202** [Block type selection and unlocks](../coordination/tasks/T-0202-block-type-selection-and-unlocks.md) · M2 P1 · _waits on T-0201, T-0203_
-- **T-0205** [Results screen and stats](../coordination/tasks/T-0205-results-screen-and-stats.md) · M2 P2 · _waits on T-0201_
-- **T-0206** [Pause and app lifecycle](../coordination/tasks/T-0206-pause-and-app-lifecycle.md) · M2 P2 · _waits on T-0201_
-- **T-0207** [Endless mode](../coordination/tasks/T-0207-endless-mode.md) · M2 P2 · _waits on T-0201_
 - **T-0301** [Integrate final block, background and crane art](../coordination/tasks/T-0301-integrate-final-block-background-and-cra.md) · M3 P1 · _waits on T-0102; needs HR-0002, HR-0004, HR-0006_
 - **T-0302** [Integrate final SFX and music](../coordination/tasks/T-0302-integrate-final-sfx-and-music.md) · M3 P1 · _waits on T-0103; needs HR-0008, HR-0009_
-- **T-0303** [UI skin and font](../coordination/tasks/T-0303-ui-skin-and-font.md) · M3 P2 · _waits on T-0201; needs HR-0010, HR-0002_
-- **T-0304** [Localisation framework](../coordination/tasks/T-0304-localisation-framework.md) · M3 P2 · _waits on T-0201_
-- **T-0401** [City map grid and placement](../coordination/tasks/T-0401-city-map-grid-and-placement.md) · M4 P1 · _waits on T-0202_
+- **T-0303** [UI skin and font](../coordination/tasks/T-0303-ui-skin-and-font.md) · M3 P2 · _needs HR-0010, HR-0002_
 - **T-0402** [Design our own city placement rules](../coordination/tasks/T-0402-design-our-own-city-placement-rules.md) · M4 P1 · _waits on T-0110_
 - **T-0403** [City population and district unlocks](../coordination/tasks/T-0403-city-population-and-district-unlocks.md) · M4 P2 · _waits on T-0401, T-0402_
-- **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1 · _waits on T-0205_
 - **T-0502** [Remove-ads purchase](../coordination/tasks/T-0502-remove-ads-purchase.md) · M5 P1 · _waits on T-0501; needs HR-0013_
-- **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2 · _waits on T-0201_
 - **T-0504** [Consent and privacy](../coordination/tasks/T-0504-consent-and-privacy.md) · M5 P1 · _waits on T-0501; needs HR-0016_
 - **T-0601** [Release build pipeline](../coordination/tasks/T-0601-release-build-pipeline.md) · M6 P0 · _waits on T-0104; needs HR-0013, HR-0014, HR-0011_
 - **T-0602** [Performance and device QA](../coordination/tasks/T-0602-performance-and-device-qa.md) · M6 P1 · _waits on T-0301_
@@ -98,11 +93,16 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (6)
+## Done (11)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
 - T-0003 Placeholder tower round scene with autoplay
 - T-0004 Coordination tooling and dashboard
+- T-0201 Scene flow: boot, menu, select, round, results
+- T-0202 Block type selection and unlocks
 - T-0203 Player level and progression rules
 - T-0204 Save system v2
+- T-0205 Results screen and stats
+- T-0206 Pause and app lifecycle
+- T-0207 Endless mode

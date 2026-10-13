@@ -13,13 +13,13 @@ const LOCKED := Color("#4a5163")
 
 ## Full-screen root with a background and a centred vertical column.
 static func screen(owner: Control, gap := 24) -> VBoxContainer:
-	owner.set_anchors_preset(Control.PRESET_FULL_RECT)
+	owner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
 	bg.color = BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	owner.add_child(bg)
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right"]:
 		margin.add_theme_constant_override("margin_" + side, 48)
 	for side in ["top", "bottom"]:
@@ -75,7 +75,7 @@ static func spacer(h := 24) -> Control:
 ## Display name for a block type until localisation exists (T-0304).
 static func type_name(t: Dictionary) -> String:
 	var key := String(t.get("name_key", ""))
-	var translated := TranslationServer.translate(key) if key != "" else ""
+	var translated: String = String(TranslationServer.translate(key)) if key != "" else ""
 	if translated != "" and translated != key:
 		return translated
 	return String(t["id"]).capitalize() + " Tower"

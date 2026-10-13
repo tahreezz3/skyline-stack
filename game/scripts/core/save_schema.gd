@@ -85,7 +85,8 @@ static func apply_round(data: Dictionary, summary: Dictionary) -> Dictionary:
 	if summary.get("star", false):
 		s["trophy_roofs"] = int(s["trophy_roofs"]) + 1
 
-	var id := String(summary.get("block_type", ""))
+	# Endless runs keep their own best entry so they don't mix with tower bests.
+	var id := "endless" if summary.get("endless", false) else String(summary.get("block_type", ""))
 	if id != "":
 		var best: Dictionary = data["best_by_type"].get(id, {"population": 0, "height": 0, "star": false})
 		if pop > int(best["population"]):

@@ -16,6 +16,8 @@ var params: Dictionary = {}
 ## True when the game was started with `-- --autoplay` (headless smoke test).
 var autoplay := false
 var autoplay_seconds := 0.0
+## True with `-- --tour`: visit every screen for a moment, then quit (for screenshots/smoke).
+var tour := false
 
 var _fade: ColorRect
 var _busy := false
@@ -34,6 +36,28 @@ func _ready() -> void:
 			autoplay = true
 		elif arg.begins_with("--seconds="):
 			autoplay_seconds = float(arg.get_slice("=", 1))
+		elif arg == "--tour":
+			tour = true
+	if tour:
+		_run_tour.call_deferred()
+
+
+## `godot --path game --write-movie /tmp/tour/f.png --fixed-fps 10 -- --tour`
+## captures every screen (menu, select, round, pause, results).
+func _run_tour() -> void:
+	var fake_summary := {"complete": true, "star": true, "population": 123, "height": 10, "max_combo": 7, "block_type": "blue", "endless": false}
+	var fake_record := {"new_best_population": true, "new_best_height": false, "level_before": 1, "level_after": 2, "unlocked": ["red"]}
+	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["results", {"summary": fake_summary, "record": fake_record}]]
+	for step in steps:
+		await get_tree().create_timer(1.0, true, false, true).timeout
+		if step[0] == "pause":
+			get_tree().current_scene.pause_game()
+		else:
+			await go(step[0], step[1])
+		print("TOUR ", step[0])
+	await get_tree().create_timer(1.0, true, false, true).timeout
+	print("TOUR_DONE")
+	get_tree().quit(0)
 
 
 ## Go to a screen by name (see SCENES).

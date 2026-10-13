@@ -8,7 +8,8 @@ config_version=5
 
 config/name="Skyline Stack (working title)"
 config/description="Tower-stacking city builder. See ../README.md."
-run/main_scene="res://scenes/tower_game.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.7", "Mobile")
 
 [autoload]
@@ -16,6 +17,7 @@ config/features=PackedStringArray("4.7", "Mobile")
 GameConfig="*res://scripts/autoload/game_config.gd"
 GameEvents="*res://scripts/autoload/game_events.gd"
 SaveData="*res://scripts/autoload/save_data.gd"
+SceneRouter="*res://scripts/autoload/scene_router.gd"
 
 [display]
 
