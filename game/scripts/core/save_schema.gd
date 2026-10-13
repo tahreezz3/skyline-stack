@@ -29,6 +29,7 @@ static func defaults() -> Dictionary:
 			"sfx_volume": 1.0,
 			"reduced_motion": false,
 			"language": "",       # "" = follow the device
+			"analytics_consent": "unknown",   # unknown | granted | denied (T-0503/T-0504)
 		},
 	}
 

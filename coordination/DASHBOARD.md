@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:47 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:50 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:47:12Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:50:02Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -15,13 +15,12 @@ _Generated 2026-10-13 04:47 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M2 Game loop | `████████████████████` | 7 / 7 |
 | M3 Art and audio | `█████░░░░░░░░░░░░░░░` | 1 / 4 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
-| M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
+| M5 Services | `████░░░░░░░░░░░░░░░░` | 1 / 5 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (2)
+## Ready to claim (1)
 
 - **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
-- **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
 ## In-Progress (0)
 
@@ -37,7 +36,7 @@ _Generated 2026-10-13 04:47 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 - none
 
-## Waiting (12)
+## Waiting (13)
 
 - **T-0105** [Crane polish and swing patterns](../coordination/tasks/T-0105-crane-polish-and-swing-patterns.md) · M1 P2 · _waits on T-0101_
 - **T-0301** [Integrate final block, background and crane art](../coordination/tasks/T-0301-integrate-final-block-background-and-cra.md) · M3 P1 · _needs HR-0002, HR-0004, HR-0006_
@@ -47,6 +46,7 @@ _Generated 2026-10-13 04:47 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0403** [City population and district unlocks](../coordination/tasks/T-0403-city-population-and-district-unlocks.md) · M4 P2 · _waits on T-0401, T-0402_
 - **T-0502** [Remove-ads purchase](../coordination/tasks/T-0502-remove-ads-purchase.md) · M5 P1 · _waits on T-0501; needs HR-0013_
 - **T-0504** [Consent and privacy](../coordination/tasks/T-0504-consent-and-privacy.md) · M5 P1 · _waits on T-0501; needs HR-0016_
+- **T-0505** [Integrate the production analytics provider](../coordination/tasks/T-0505-integrate-the-production-analytics-provi.md) · M5 P2 · _needs HR-0015_
 - **T-0601** [Release build pipeline](../coordination/tasks/T-0601-release-build-pipeline.md) · M6 P0 · _waits on T-0104; needs HR-0013, HR-0014, HR-0011_
 - **T-0602** [Performance and device QA](../coordination/tasks/T-0602-performance-and-device-qa.md) · M6 P1 · _waits on T-0301_
 - **T-0603** [Store listing](../coordination/tasks/T-0603-store-listing.md) · M6 P1 · _waits on T-0301; needs HR-0001, HR-0012_
@@ -72,7 +72,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0012 | Store listing graphics | store | P2 | 0/1 | T-0603 |
 | HR-0013 | Studio name, package id and Google Play account | account | P1 | - | T-0502, T-0601 |
 | HR-0014 | Android signing keystore | account | P1 | - | T-0601 |
-| HR-0015 | Ads and analytics accounts | account | P2 | - | - |
+| HR-0015 | Ads and analytics accounts | account | P2 | - | T-0505 |
 | HR-0016 | Privacy policy and legal entity | legal | P1 | - | T-0504 |
 | HR-0017 | Device playtest of core feel | playtest | P1 | - | - |
 | HR-0018 | Review Spanish and German translations | design | P2 | - | - |
@@ -89,7 +89,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (15)
+## Done (16)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -106,3 +106,4 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 - T-0207 Endless mode
 - T-0304 Localisation framework
 - T-0401 City map grid and placement
+- T-0503 Analytics events

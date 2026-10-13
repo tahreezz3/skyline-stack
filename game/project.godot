@@ -19,6 +19,7 @@ GameEvents="*res://scripts/autoload/game_events.gd"
 SaveData="*res://scripts/autoload/save_data.gd"
 SceneRouter="*res://scripts/autoload/scene_router.gd"
 AudioDirector="*res://scripts/autoload/audio_director.gd"
+Analytics="*res://scripts/autoload/analytics.gd"
 
 [display]
 

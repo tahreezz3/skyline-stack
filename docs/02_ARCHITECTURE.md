@@ -46,7 +46,8 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `SaveData` | `scripts/autoload/save_data.gd` | `user://save.json`: stats, bests, settings (schema in `core/save_schema.gd`) |
 | `SceneRouter` | `scripts/autoload/scene_router.gd` | Screen changes with fade, params, back button, `--autoplay`/`--tour` flags |
 | `AudioDirector` | `scripts/autoload/audio_director.gd` | Only place that plays sound. Listens to GameEvents; buses Music/SFX/UI; real files from `res://assets/audio/<name>.wav/.ogg` or procedural placeholders (`scripts/game/placeholder_synth.gd`) |
-| `Ads`, `Store`, `Analytics` [planned M5] | | Behind interfaces, with a fake implementation for desktop/tests |
+| `Analytics` | `scripts/autoload/analytics.gd` | GameEvents → schema-validated events (`core/analytics_events.gd`), consent-gated; `log` backend for development (docs/ANALYTICS.md) |
+| `Ads`, `Store` [planned M5] | | Behind interfaces, with a fake implementation for desktop/tests |
 
 ## Signals on `GameEvents`
 
@@ -61,6 +62,8 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `level_up(from, to)` | ints | SaveData.record_round |
 | `block_type_unlocked(id)` | String | SaveData.record_round |
 | `setting_changed(key, value)` | String, Variant | SaveData.set_setting |
+| `round_started(block_type, endless)` | String, bool | tower_game |
+| `city_tower_placed(tower, city_population)` | Dictionary, int | city_map |
 | `ui_pressed` | none | UI buttons |
 
 Add new signals here when you add them to `game_events.gd`.

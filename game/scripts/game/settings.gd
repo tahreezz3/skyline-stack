@@ -20,6 +20,15 @@ func _ready() -> void:
 	motion.focus_mode = Control.FOCUS_NONE
 	motion.toggled.connect(func(on: bool) -> void: SaveData.set_setting("reduced_motion", on))
 	col.add_child(motion)
+	var stats := CheckButton.new()
+	stats.text = tr("SET_ANALYTICS")
+	stats.add_theme_font_size_override("font_size", 30)
+	stats.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stats.custom_minimum_size = Vector2(1, 0)
+	stats.focus_mode = Control.FOCUS_NONE
+	stats.button_pressed = String(SaveData.get_setting("analytics_consent")) == "granted"
+	stats.toggled.connect(func(on: bool) -> void: SaveData.set_setting("analytics_consent", "granted" if on else "denied"))
+	col.add_child(stats)
 	col.add_child(UI.label(tr("SET_LANGUAGE"), 30, UI.TEXT, HORIZONTAL_ALIGNMENT_LEFT))
 	var lang := OptionButton.new()
 	lang.add_theme_font_size_override("font_size", 30)

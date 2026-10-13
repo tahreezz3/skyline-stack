@@ -71,6 +71,10 @@ Current version **3** (v3 added `city`):
 | `settings.music_volume`, `settings.sfx_volume` | 0..1 |
 | `settings.reduced_motion` | disables screen shake and camera kick |
 | `settings.language` | locale code, `""` = device language |
+| `settings.analytics_consent` | `unknown` (default) / `granted` / `denied`; analytics only sends when `granted` |
+
+Additive keys with defaults (like `analytics_consent`) don't need a version bump: `SaveSchema.migrate()` fills
+missing keys from `defaults()`. Bump `VERSION` when data moves, is renamed, or changes meaning.
 
 Writes are atomic (`save.tmp.json` then rename); the previous file is kept as `save.bak.json`;
 an unreadable file is moved to `save.corrupt.json` and the game starts fresh.

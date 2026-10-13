@@ -123,6 +123,7 @@ func _on_grid_input(event: InputEvent) -> void:
 				if reason == CityState.OK:
 					selected = -1
 					SaveData.write_save()
+					GameEvents.city_tower_placed.emit(city.tower_at(x, y), city.population())
 					GameEvents.ui_pressed.emit()
 					_refresh()
 					hint_label.text = tr("CITY_PLACED")

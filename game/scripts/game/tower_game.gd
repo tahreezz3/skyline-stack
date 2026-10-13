@@ -77,6 +77,7 @@ func _ready() -> void:
 		autoplay_seconds = SceneRouter.autoplay_seconds
 		Engine.time_scale = 4.0
 		SaveData.persist = false
+	GameEvents.round_started.emit(String(block_type["id"]), endless)
 	_build_hud()
 	_build_pause()
 	_refresh_hud()

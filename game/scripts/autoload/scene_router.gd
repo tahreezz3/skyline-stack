@@ -52,7 +52,7 @@ func _ready() -> void:
 func _run_tour() -> void:
 	var fake_summary := {"complete": true, "star": true, "population": 123, "height": 10, "max_combo": 7, "block_type": "blue", "endless": false}
 	var fake_record := {"new_best_population": true, "new_best_height": false, "level_before": 1, "level_after": 2, "unlocked": ["red"]}
-	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}]]
+	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
 	# The tour never writes the save; it fills the city with sample towers in memory so the screen has content.
 	SaveData.persist = false
 	SaveData.data["city"] = {"plots": {
@@ -65,6 +65,14 @@ func _run_tour() -> void:
 		await get_tree().create_timer(1.0, true, false, true).timeout
 		if step[0] == "pause":
 			get_tree().current_scene.pause_game()
+		elif step[0] == "analytics":
+			SaveData.data["settings"]["analytics_consent"] = "unknown"
+			var dropped: bool = not Analytics.track("level_up", {"from_level": 1, "to_level": 2})
+			SaveData.data["settings"]["analytics_consent"] = "denied"
+			var dropped2: bool = not Analytics.track("level_up", {"from_level": 1, "to_level": 2})
+			SaveData.data["settings"]["analytics_consent"] = "granted"
+			var sent: bool = Analytics.track("level_up", {"from_level": 1, "to_level": 2})
+			print("TOUR analytics ", "ok" if dropped and dropped2 and sent else "FAILED")
 		elif step[0] == "city_place":
 			# simulate: pick the first tray tower, tap plot (1,1); fails the tour if it didn't land
 			var scene := get_tree().current_scene
