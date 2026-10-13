@@ -2,10 +2,10 @@
 id: T-0501
 title: Rewarded and interstitial ads
 milestone: M5
-status: todo
+status: in-progress
 priority: P1
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:50"
 depends: [T-0205]
 human: []
 updated: 2026-10-13
@@ -29,3 +29,4 @@ Ads service behind an interface with a fake desktop implementation; rewarded con
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
