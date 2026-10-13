@@ -1,0 +1,15 @@
+# Godot cache and build output
+game/.godot/
+game/build/
+*.apk
+*.aab
+# Secrets: never commit
+*.keystore
+*.jks
+export_credentials.cfg
+.env
+# OS / editor
+.DS_Store
+*.tmp
+# Generated check result (dashboard files are committed so they can be read without running tools)
+coordination/.last_check.json

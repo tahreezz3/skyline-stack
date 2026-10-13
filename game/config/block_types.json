@@ -1,0 +1,9 @@
+{
+  "_doc": "Tower (block) types. target_height = blocks needed to finish the tower; roof_people = roof bonus; star_population = population needed for the trophy roof; star_roof_people = trophy roof bonus. unlock_population = lifetime population needed to unlock. colour = placeholder colour until art lands (HR-0004). Numbers are starting values; retune in T-0101/T-0201.",
+  "types": [
+    {"id": "blue",   "name_key": "block_blue",   "colour": "#4a90d9", "target_height": 10, "roof_people": 40,  "star_population": 70,   "star_roof_people": 60,  "unlock_population": 0},
+    {"id": "red",    "name_key": "block_red",    "colour": "#d9534a", "target_height": 20, "roof_people": 80,  "star_population": 250,  "star_roof_people": 120, "unlock_population": 250},
+    {"id": "green",  "name_key": "block_green",  "colour": "#5cb85c", "target_height": 30, "roof_people": 130, "star_population": 550,  "star_roof_people": 180, "unlock_population": 800},
+    {"id": "yellow", "name_key": "block_yellow", "colour": "#e6b800", "target_height": 40, "roof_people": 130, "star_population": 1000, "star_roof_people": 250, "unlock_population": 2200}
+  ]
+}
