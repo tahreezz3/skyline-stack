@@ -2,10 +2,10 @@
 id: T-0110
 title: Design the unique hook
 milestone: M1
-status: todo
+status: in-progress
 priority: P1
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:26"
 depends: [T-0001]
 human: []
 updated: 2026-10-13
@@ -29,3 +29,4 @@ Expand the hook candidates in GDD §6 into short design briefs (rules, data, UI,
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2

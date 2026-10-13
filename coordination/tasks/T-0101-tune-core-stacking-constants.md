@@ -2,10 +2,10 @@
 id: T-0101
 title: Tune core stacking constants
 milestone: M1
-status: todo
+status: in-progress
 priority: P0
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:26"
 depends: [T-0003]
 human: []
 updated: 2026-10-13
@@ -32,3 +32,4 @@ Make the drop feel great: tune snap window, max/stable offsets, crane speed curv
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
