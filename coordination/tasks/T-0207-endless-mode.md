@@ -2,10 +2,10 @@
 id: T-0207
 title: Endless mode
 milestone: M2
-status: todo
+status: in-progress
 priority: P2
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:12"
 depends: [T-0201]
 human: []
 updated: 2026-10-13
@@ -27,3 +27,4 @@ Round with target_height 0, increasing difficulty, best-height tracking.
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
