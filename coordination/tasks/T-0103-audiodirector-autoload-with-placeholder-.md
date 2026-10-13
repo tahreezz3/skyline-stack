@@ -2,10 +2,10 @@
 id: T-0103
 title: AudioDirector autoload with placeholder sounds
 milestone: M1
-status: todo
+status: in-progress
 priority: P1
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:15"
 depends: [T-0003]
 human: []
 updated: 2026-10-13
@@ -31,3 +31,4 @@ Create an AudioDirector autoload that listens to GameEvents and plays SFX/music 
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2

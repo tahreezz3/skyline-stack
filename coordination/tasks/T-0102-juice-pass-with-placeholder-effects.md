@@ -2,10 +2,10 @@
 id: T-0102
 title: Juice pass with placeholder effects
 milestone: M1
-status: todo
+status: in-progress
 priority: P1
-owner: ""
-claimed: ""
+owner: "opus55-a7k2"
+claimed: "2026-10-13T15:15"
 depends: [T-0003]
 human: []
 updated: 2026-10-13
@@ -29,3 +29,4 @@ Add screen shake (scaled by blocks lost), camera kick on perfect, squash on land
 
 ## Log
 - 2026-10-13 created by opus55-planner
+- 2026-10-13 claimed by opus55-a7k2
