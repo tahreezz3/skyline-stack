@@ -8,6 +8,7 @@ const SCENES := {
 	"select": "res://scenes/tower_select.tscn",
 	"game": "res://scenes/tower_game.tscn",
 	"results": "res://scenes/results.tscn",
+	"settings": "res://scenes/settings.tscn",
 }
 const FADE_S := 0.15
 
@@ -47,7 +48,7 @@ func _ready() -> void:
 func _run_tour() -> void:
 	var fake_summary := {"complete": true, "star": true, "population": 123, "height": 10, "max_combo": 7, "block_type": "blue", "endless": false}
 	var fake_record := {"new_best_population": true, "new_best_height": false, "level_before": 1, "level_after": 2, "unlocked": ["red"]}
-	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["results", {"summary": fake_summary, "record": fake_record}]]
+	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}]]
 	for step in steps:
 		await get_tree().create_timer(1.0, true, false, true).timeout
 		if step[0] == "pause":

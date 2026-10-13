@@ -3,7 +3,7 @@
 ## (see docs/adr/ADR-0002-data-driven-config.md).
 extends Node
 
-const TABLES := ["tower_rules", "block_types", "levels"]
+const TABLES := ["tower_rules", "block_types", "levels", "feel"]
 
 var tables: Dictionary = {}
 

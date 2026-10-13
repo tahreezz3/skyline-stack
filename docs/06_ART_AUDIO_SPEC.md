@@ -23,6 +23,23 @@ sprites without changing rules. Keep placeholders functional, not pretty.
 Warm, playful, slightly toy-like. Feedback sounds rise in pitch with the combo. Music adapts in layers (base
 loop, plus a combo layer). Mix: SFX bus, Music bus, UI bus, each with a settings slider.
 
+### Event → sound mapping (implemented in `AudioDirector.SFX`)
+| Event | Sound |
+|---|---|
+| block released | `sfx_block_release` |
+| stack, \|offset\| < stable_offset | `sfx_block_land` |
+| stack, \|offset\| ≥ stable_offset | `sfx_block_land_sloppy` |
+| perfect (pitch +6% per combo level, max 12) | `sfx_perfect`; plus `sfx_combo_start` on the first |
+| combo running (pitch follows drain speed) | `sfx_combo_tick_loop` |
+| combo paid out | `sfx_combo_bank` |
+| collapse | `sfx_collapse` |
+| miss | `sfx_miss_fall` + `sfx_life_lost` |
+| tower complete | `sfx_tower_complete` |
+| any UI button | `sfx_ui_tap` |
+
+Until files exist in `game/assets/audio/`, each plays a procedural placeholder. `tests/test_audio.gd` fails if this
+list and HR-0008 drift apart.
+
 ## 5. Naming convention
 `<category>_<thing>[_<variant>].<ext>`, lowercase snake_case.
 Categories: `block_`, `bg_`, `fx_`, `ui_`, `icon_`, `sfx_`, `music_`.

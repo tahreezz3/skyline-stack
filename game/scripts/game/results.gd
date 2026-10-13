@@ -13,6 +13,7 @@ func _ready() -> void:
 		get_tree().quit(0)
 		return
 
+	AudioDirector.play_music("menu")
 	var col := UI.screen(self, 16)
 	var title := "TOWER COMPLETE!" if summary.get("complete", false) else "GAME OVER"
 	if summary.get("endless", false):

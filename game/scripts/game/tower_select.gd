@@ -8,6 +8,7 @@ const Progression := preload("res://scripts/core/progression.gd")
 
 
 func _ready() -> void:
+	AudioDirector.play_music("menu")
 	var col := UI.screen(self, 18)
 	col.add_child(UI.label("Choose a tower", 48))
 	var pop := SaveData.lifetime_population()

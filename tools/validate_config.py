@@ -19,6 +19,13 @@ REQUIRED = {
     ],
     "block_types.json": ["types"],
     "levels.json": ["levels"],
+    "feel.json": [
+        "shake.land", "shake.land_sloppy", "shake.perfect", "shake.collapse_per_block", "shake.miss", "shake.max", "shake.decay",
+        "camera_kick.perfect", "camera_kick.decay", "squash.amount", "squash.time",
+        "particles.dust_count", "particles.dust_life", "particles.sparkle_count", "particles.sparkle_life",
+        "combo_bar.pulse_hz", "combo_bar.warn_below",
+        "audio.perfect_pitch_step", "audio.perfect_pitch_max_steps", "audio.combo_tick_pitch_min", "audio.combo_tick_pitch_max",
+    ],
 }
 BLOCK_KEYS = ["id", "name_key", "colour", "target_height", "roof_people", "star_population", "star_roof_people", "unlock_population"]
 

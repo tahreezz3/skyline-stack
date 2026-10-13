@@ -114,12 +114,16 @@ func land(x: float) -> Dictionary:
 func tick(delta: float) -> int:
 	if combo_time <= 0.0 or is_over:
 		return 0
-	var c: Dictionary = rules["combo"]
-	var rate := float(c["drain_base"]) + float(c["drain_extra"]) * minf(1.0, float(combo_count) / float(c["drain_full_at"]))
-	combo_time -= delta * rate
+	combo_time -= delta * drain_rate()
 	if combo_time <= 0.0:
 		return _bank_combo()
 	return 0
+
+
+## Seconds of bar drained per real second at the current combo count.
+func drain_rate() -> float:
+	var c: Dictionary = rules["combo"]
+	return float(c["drain_base"]) + float(c["drain_extra"]) * minf(1.0, float(combo_count) / float(c["drain_full_at"]))
 
 
 ## Remaining combo bar as 0..1 for the HUD.

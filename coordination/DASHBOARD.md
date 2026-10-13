@@ -1,28 +1,26 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:14 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:26 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:14:51Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:26:19Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
 | Milestone | Progress | Done / total |
 |---|---|---|
 | M0 Foundation | `████████████████████` | 4 / 4 |
-| M1 Core feel | `░░░░░░░░░░░░░░░░░░░░` | 0 / 6 |
+| M1 Core feel | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
 | M3 Art and audio | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M4 City meta | `░░░░░░░░░░░░░░░░░░░░` | 0 / 3 |
 | M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (9)
+## Ready to claim (7)
 
 - **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0
-- **T-0102** [Juice pass with placeholder effects](../coordination/tasks/T-0102-juice-pass-with-placeholder-effects.md) · M1 P1
-- **T-0103** [AudioDirector autoload with placeholder sounds](../coordination/tasks/T-0103-audiodirector-autoload-with-placeholder-.md) · M1 P1
 - **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0
 - **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1
 - **T-0304** [Localisation framework](../coordination/tasks/T-0304-localisation-framework.md) · M3 P2
@@ -45,8 +43,8 @@ _Generated 2026-10-13 04:14 UTC by `tools/dashboard.py`. Do not edit by hand._
 ## Waiting (12)
 
 - **T-0105** [Crane polish and swing patterns](../coordination/tasks/T-0105-crane-polish-and-swing-patterns.md) · M1 P2 · _waits on T-0101_
-- **T-0301** [Integrate final block, background and crane art](../coordination/tasks/T-0301-integrate-final-block-background-and-cra.md) · M3 P1 · _waits on T-0102; needs HR-0002, HR-0004, HR-0006_
-- **T-0302** [Integrate final SFX and music](../coordination/tasks/T-0302-integrate-final-sfx-and-music.md) · M3 P1 · _waits on T-0103; needs HR-0008, HR-0009_
+- **T-0301** [Integrate final block, background and crane art](../coordination/tasks/T-0301-integrate-final-block-background-and-cra.md) · M3 P1 · _needs HR-0002, HR-0004, HR-0006_
+- **T-0302** [Integrate final SFX and music](../coordination/tasks/T-0302-integrate-final-sfx-and-music.md) · M3 P1 · _needs HR-0008, HR-0009_
 - **T-0303** [UI skin and font](../coordination/tasks/T-0303-ui-skin-and-font.md) · M3 P2 · _needs HR-0010, HR-0002_
 - **T-0402** [Design our own city placement rules](../coordination/tasks/T-0402-design-our-own-city-placement-rules.md) · M4 P1 · _waits on T-0110_
 - **T-0403** [City population and district unlocks](../coordination/tasks/T-0403-city-population-and-district-unlocks.md) · M4 P2 · _waits on T-0401, T-0402_
@@ -93,12 +91,14 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (11)
+## Done (13)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
 - T-0003 Placeholder tower round scene with autoplay
 - T-0004 Coordination tooling and dashboard
+- T-0102 Juice pass with placeholder effects
+- T-0103 AudioDirector autoload with placeholder sounds
 - T-0201 Scene flow: boot, menu, select, round, results
 - T-0202 Block type selection and unlocks
 - T-0203 Player level and progression rules

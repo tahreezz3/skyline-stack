@@ -9,6 +9,8 @@ signal block_released
 signal block_resolved(ev: Dictionary)
 ## A collapsed block finished toppling (one per block, 0.2 s apart).
 signal block_toppled
+## Combo count changed (0 = combo over). drain_rate = bar seconds lost per second.
+signal combo_progress(count: int, drain_rate: float)
 ## The combo bar ran out or was broken and its pool was paid out.
 signal combo_banked(amount: int)
 ## A round ended. summary = {complete, star, population, height, max_combo, block_type, endless}

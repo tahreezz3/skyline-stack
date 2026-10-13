@@ -36,6 +36,21 @@ Invariant (tested): `snap_window < stable_offset < max_offset < miss_offset`.
 `levels[]`: `level`, `population` (lifetime population needed; must strictly increase).
 Block types unlock **only** through `block_types[].unlock_population` (single source of truth).
 
+## `feel.json` (presentation only; never affects scoring)
+
+| Key | Meaning |
+|---|---|
+| `shake.land`, `shake.land_sloppy`, `shake.perfect`, `shake.miss` | screen-shake amount (px) added per event |
+| `shake.collapse_per_block`, `shake.max`, `shake.decay` | collapse shake per fallen block; cap; decay rate per second |
+| `camera_kick.perfect`, `camera_kick.decay` | downward camera nudge on a perfect (px) and its decay |
+| `squash.amount`, `squash.time` | newest block squash ratio and duration |
+| `particles.dust_count`, `particles.dust_life`, `particles.sparkle_count`, `particles.sparkle_life` | landing dust and perfect sparkles |
+| `combo_bar.pulse_hz`, `combo_bar.warn_below` | HUD bar pulse speed; ratio below which it turns red |
+| `audio.perfect_pitch_step`, `audio.perfect_pitch_max_steps` | perfect chime rises by step per combo level, capped |
+| `audio.combo_tick_pitch_min`, `audio.combo_tick_pitch_max` | combo ticking pitch range, mapped from drain rate 1x..4x |
+
+Shake and camera kick are skipped when `settings.reduced_motion` is true.
+
 ## Save file (`user://save.json`, schema in `scripts/core/save_schema.gd`)
 Current version **2**:
 

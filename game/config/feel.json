@@ -1,0 +1,36 @@
+{
+  "_doc": "Presentation-only tuning: screen shake, camera kick, squash, particles, combo bar pulse, audio pitch. Never affects scoring. See docs/03_DATA_SPEC.md. Shake and kick are disabled when settings.reduced_motion is true.",
+  "shake": {
+    "land": 3.0,
+    "land_sloppy": 6.0,
+    "perfect": 5.0,
+    "collapse_per_block": 9.0,
+    "miss": 14.0,
+    "max": 32.0,
+    "decay": 7.0
+  },
+  "camera_kick": {
+    "perfect": 14.0,
+    "decay": 10.0
+  },
+  "squash": {
+    "amount": 0.16,
+    "time": 0.22
+  },
+  "particles": {
+    "dust_count": 8,
+    "dust_life": 0.6,
+    "sparkle_count": 12,
+    "sparkle_life": 0.7
+  },
+  "combo_bar": {
+    "pulse_hz": 2.5,
+    "warn_below": 0.3
+  },
+  "audio": {
+    "perfect_pitch_step": 0.06,
+    "perfect_pitch_max_steps": 12,
+    "combo_tick_pitch_min": 0.9,
+    "combo_tick_pitch_max": 1.6
+  }
+}

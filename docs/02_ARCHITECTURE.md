@@ -45,7 +45,7 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `GameEvents` | `scripts/autoload/game_events.gd` | Signal bus |
 | `SaveData` | `scripts/autoload/save_data.gd` | `user://save.json`: stats, bests, settings (schema in `core/save_schema.gd`) |
 | `SceneRouter` | `scripts/autoload/scene_router.gd` | Screen changes with fade, params, back button, `--autoplay`/`--tour` flags |
-| `AudioDirector` [planned T-0103] | | Listens to GameEvents, plays SFX/music |
+| `AudioDirector` | `scripts/autoload/audio_director.gd` | Only place that plays sound. Listens to GameEvents; buses Music/SFX/UI; real files from `res://assets/audio/<name>.wav/.ogg` or procedural placeholders (`scripts/game/placeholder_synth.gd`) |
 | `Ads`, `Store`, `Analytics` [planned M5] | | Behind interfaces, with a fake implementation for desktop/tests |
 
 ## Signals on `GameEvents`
@@ -55,6 +55,7 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `block_released` | none | tower_game |
 | `block_resolved(ev)` | event dict from `TowerState.land()`: `result` = perfect/stack/collapse/miss, plus `x`, `offset`, `residents`, `height`, `removed`, `fallen`, `lost_residents`, `banked`, `lives`, `complete`, `star`, `roof_people` | tower_game |
 | `block_toppled` | none (one per falling block in a collapse) | tower_game |
+| `combo_progress(count, drain_rate)` | int, float (count 0 = combo over) | tower_game |
 | `combo_banked(amount)` | int | tower_game |
 | `round_ended(summary)` | `{complete, star, population, height, max_combo, block_type, endless}` | tower_game |
 | `level_up(from, to)` | ints | SaveData.record_round |
@@ -77,7 +78,7 @@ Add new signals here when you add them to `game_events.gd`.
 - Exports: JSON configs are not resources; the export preset must include `*.json` (T-0601).
 
 ## Scene flow (implemented in M2)
-`main_menu → tower_select → tower_game → results → (tower_game | tower_select | main_menu)`; the menu's
+`main_menu → (settings) → tower_select → tower_game → results → (tower_game | tower_select | main_menu)`; the menu's
 Endless button goes straight to `tower_game` with `{endless: true}`. `SceneRouter.go(name, params)` fades and
 switches; the next screen reads `SceneRouter.params`. Every screen implements `on_back()` (Android back / Escape).
 In a round, back or focus loss opens the pause overlay (`get_tree().paused`); resuming counts down 3 s.

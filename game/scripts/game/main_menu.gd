@@ -10,6 +10,7 @@ func _ready() -> void:
 		# Smoke test: go straight into a round with the default tower.
 		SceneRouter.go.call_deferred("game", {"block_type": "blue"})
 		return
+	AudioDirector.play_music("menu")
 	var col := UI.screen(self)
 	col.add_child(UI.label("SKYLINE STACK", 64, UI.ACCENT))
 	col.add_child(UI.label("working title", 22, UI.MUTED))
@@ -25,6 +26,7 @@ func _ready() -> void:
 
 	col.add_child(UI.button("Play", func() -> void: SceneRouter.go("select")))
 	col.add_child(UI.button("Endless", func() -> void: SceneRouter.go("game", {"block_type": "blue", "endless": true})))
+	col.add_child(UI.button("Settings", func() -> void: SceneRouter.go("settings"), 30))
 	col.add_child(UI.spacer(40))
 
 	var s := SaveData.stats()

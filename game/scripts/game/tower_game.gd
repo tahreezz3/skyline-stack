@@ -35,6 +35,16 @@ var debris: Array[Dictionary] = []      # toppled blocks: {x, y, vx, vy, rot, vr
 var popups: Array[Dictionary] = []      # floating text: {text, x, y, age, colour}
 var round_finished := false
 
+# presentation-only feedback (config/feel.json, T-0102)
+var feel: Dictionary
+var reduced_motion := false
+var shake := 0.0
+var shake_offset := Vector2.ZERO
+var kick := 0.0
+var squash_t := 0.0
+var particles: Array[Dictionary] = []   # {x, y, vx, vy, age, life, kind, size}
+var last_combo_count := 0
+
 var autoplay := false
 var autoplay_seconds := 0.0
 
@@ -51,6 +61,9 @@ var paused := false
 
 func _ready() -> void:
 	rules = GameConfig.table("tower_rules")
+	feel = GameConfig.table("feel")
+	reduced_motion = bool(SaveData.get_setting("reduced_motion"))
+	AudioDirector.play_music("round")
 	block_type = GameConfig.block_type(String(SceneRouter.params.get("block_type", "blue")))
 	endless = bool(SceneRouter.params.get("endless", false))
 	state = TowerState.new(rules, {
@@ -161,6 +174,8 @@ func _process(delta: float) -> void:
 	var banked: int = state.tick(delta)
 	if banked > 0:
 		_on_combo_banked(banked)
+	_emit_combo_progress()
+	_update_feedback(delta)
 
 	view_y = lerpf(view_y, maxf(0.0, _top_y() - VIEW_BELOW_TOP), minf(1.0, delta * 4.0))
 	if autoplay:
@@ -194,23 +209,82 @@ func _update_falling(delta: float) -> void:
 
 
 func _on_resolved(ev: Dictionary) -> void:
+	ev["combo"] = state.combo_count
 	GameEvents.block_resolved.emit(ev)
+	var sh: Dictionary = feel["shake"]
 	match ev["result"]:
 		TowerState.RESULT_PERFECT:
 			_popup("PERFECT! +%d" % ev["residents"], Color.GOLD)
+			_add_shake(float(sh["perfect"]))
+			_kick(float(feel["camera_kick"]["perfect"]))
+			_squash()
+			_spawn_particles("sparkle", ev["x"], _top_y(), int(feel["particles"]["sparkle_count"]), 0.0)
 		TowerState.RESULT_STACK:
 			_popup("+%d" % ev["residents"], Color.WHITE)
+			var sloppy := absf(float(ev["offset"])) >= float(rules["stable_offset"])
+			_add_shake(float(sh["land_sloppy"] if sloppy else sh["land"]))
+			_squash()
+			_spawn_particles("dust", ev["x"] + signf(float(ev["offset"])) * 0.5, _top_y() - _block_h(), int(feel["particles"]["dust_count"]), signf(float(ev["offset"])))
 		TowerState.RESULT_COLLAPSE:
 			_spawn_debris(ev)
 			_popup("COLLAPSE -%d" % ev["lost_residents"], Color.ORANGE_RED)
+			_add_shake(float(sh["collapse_per_block"]) * int(ev["removed"]))
 		TowerState.RESULT_MISS:
 			_popup("MISS - %d lives left" % ev["lives"], Color.RED)
+			_add_shake(float(sh["miss"]))
 	if ev.get("banked", 0) > 0:
 		_on_combo_banked(int(ev["banked"]))
 	if ev.get("complete", false):
 		_popup("ROOF +%d%s" % [ev["roof_people"], "  TROPHY!" if ev["star"] else ""], Color.GOLD)
 	if state.is_over:
 		_finish_round()
+
+
+# --- feedback (presentation only) ------------------------------------------------
+
+func _emit_combo_progress() -> void:
+	if state.combo_count != last_combo_count:
+		last_combo_count = state.combo_count
+		GameEvents.combo_progress.emit(state.combo_count, state.drain_rate())
+
+
+func _add_shake(amount: float) -> void:
+	if not reduced_motion:
+		shake = minf(shake + amount, float(feel["shake"]["max"]))
+
+
+func _kick(amount: float) -> void:
+	if not reduced_motion:
+		kick += amount
+
+
+func _squash() -> void:
+	squash_t = float(feel["squash"]["time"])
+
+
+func _spawn_particles(kind: String, x: float, y: float, count: int, side: float) -> void:
+	var life := float(feel["particles"][kind + "_life"])
+	for i in range(count):
+		var a := randf_range(0.0, TAU)
+		var speed := randf_range(0.6, 1.8)
+		var vx := cos(a) * speed
+		if side != 0.0:
+			vx = absf(vx) * side
+		particles.append({"x": x, "y": y, "vx": vx, "vy": absf(sin(a)) * speed * (0.5 if kind == "dust" else 1.2),
+			"age": 0.0, "life": life * randf_range(0.7, 1.0), "kind": kind, "size": randf_range(0.5, 1.0)})
+
+
+func _update_feedback(delta: float) -> void:
+	shake = lerpf(shake, 0.0, minf(1.0, float(feel["shake"]["decay"]) * delta))
+	shake_offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * shake if shake > 0.2 else Vector2.ZERO
+	kick = lerpf(kick, 0.0, minf(1.0, float(feel["camera_kick"]["decay"]) * delta))
+	squash_t = maxf(0.0, squash_t - delta)
+	for p in particles:
+		p["age"] += delta
+		p["x"] += p["vx"] * delta
+		p["y"] += p["vy"] * delta
+		p["vy"] -= (1.5 if p["kind"] == "dust" else 3.0) * delta
+	particles = particles.filter(func(p): return p["age"] < p["life"])
 
 
 func _on_combo_banked(amount: int) -> void:
@@ -272,7 +346,9 @@ func _update_debris(delta: float) -> void:
 
 
 func _popup(text: String, colour: Color) -> void:
-	popups.append({"text": text, "x": state.top_x(), "y": _top_y() + 0.8, "age": 0.0, "colour": colour})
+	# stack simultaneous popups instead of drawing them on top of each other
+	var young := popups.filter(func(p): return p["age"] < 0.5).size()
+	popups.append({"text": text, "x": state.top_x(), "y": _top_y() + 0.8 + 0.4 * young, "age": 0.0, "colour": colour})
 
 
 func _update_popups(delta: float) -> void:
@@ -297,7 +373,7 @@ func _crane_y() -> float:
 
 
 func _to_screen(x: float, y: float) -> Vector2:
-	return Vector2(SCREEN.x * 0.5 + x * UNIT, GROUND_PX - (y - view_y) * UNIT)
+	return Vector2(SCREEN.x * 0.5 + x * UNIT, GROUND_PX - (y - view_y) * UNIT + kick) + shake_offset
 
 
 func _block_rect_at(x: float, bottom_y: float) -> Rect2:
@@ -322,7 +398,7 @@ func _autoplay_step() -> void:
 # --- drawing -----------------------------------------------------------------
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, SCREEN), Color("#1c2333"))
+	draw_rect(Rect2(Vector2(-64, -64), SCREEN + Vector2(128, 128)), Color("#1c2333"))
 	var ground := _to_screen(0.0, 0.0)
 	draw_rect(Rect2(0, ground.y, SCREEN.x, SCREEN.y), FOUNDATION_COLOUR)
 
@@ -331,7 +407,27 @@ func _draw() -> void:
 	for i in range(1, state.blocks.size()):
 		var b: Dictionary = state.blocks[i]
 		var x: float = b["x"] + sway_top * (float(i) / h)
-		_draw_block(_block_rect_at(x, (i - 1) * _block_h()), colour)
+		var r := _block_rect_at(x, (i - 1) * _block_h())
+		if i == state.height() and squash_t > 0.0:
+			# squash the newest block around its bottom centre, then spring back
+			var k := sin(squash_t / float(feel["squash"]["time"]) * PI) * float(feel["squash"]["amount"])
+			var pivot := Vector2(r.get_center().x, r.end.y)
+			draw_set_transform(pivot, 0.0, Vector2(1.0 + k, 1.0 - k))
+			_draw_block(Rect2(r.position - pivot, r.size), colour)
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		else:
+			_draw_block(r, colour)
+
+	for p in particles:
+		var pos := _to_screen(p["x"], p["y"])
+		var fade: float = 1.0 - p["age"] / p["life"]
+		if p["kind"] == "dust":
+			draw_circle(pos, (10.0 + 26.0 * (1.0 - fade)) * p["size"], Color(0.85, 0.85, 0.9, 0.45 * fade))
+		else:
+			var s: float = 12.0 * p["size"] * fade
+			var c := Color(1.0, 0.85, 0.3, fade)
+			draw_line(pos - Vector2(s, 0), pos + Vector2(s, 0), c, 3.0)
+			draw_line(pos - Vector2(0, s), pos + Vector2(0, s), c, 3.0)
 
 	for d in debris:
 		var r := _block_rect_at(d["x"], d["y"])
@@ -409,3 +505,10 @@ func _refresh_hud() -> void:
 	hud_height.text = "Height %d / %d" % [state.height(), goal] if goal > 0 else "Height %d" % state.height()
 	hud_combo.value = state.combo_ratio()
 	hud_combo.visible = state.combo_time > 0.0
+	if hud_combo.visible:
+		# pulse, and turn red when nearly empty
+		var cb: Dictionary = feel["combo_bar"]
+		var pulse := 1.0 + 0.06 * sin(t * TAU * float(cb["pulse_hz"]))
+		hud_combo.pivot_offset = hud_combo.size * 0.5
+		hud_combo.scale = Vector2(pulse, pulse)
+		hud_combo.modulate = Color(1.0, 0.45, 0.4) if state.combo_ratio() < float(cb["warn_below"]) else Color(1.0, 0.9, 0.5)
