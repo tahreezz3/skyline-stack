@@ -175,7 +175,7 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - priority: P1
 - needed_for: T-0101, T-0104, M1
 - requested: 2026-10-13 by opus55-planner
-- spec: After T-0104 produces a debug APK, play 10+ rounds on a real phone and answer the questions in `docs/08_TESTING.md` section 5 and the open questions at the end of `docs/balance/TUNING_LOG.md` (feel of the snap window, crane speed, collapse fairness, combo excitement). Write answers below this entry.
+- spec: **The debug APK is ready.** Build it with `tools/build_android.sh` (or ask an agent) and install it as described in `docs/BUILD_ANDROID.md` "Installing on a phone". First confirm that tapping drops the block (T-0104 needs this confirmation). Then play 10+ rounds on a real phone and answer the questions in `docs/08_TESTING.md` section 5 and the open questions at the end of `docs/balance/TUNING_LOG.md` (feel of the snap window, crane speed, collapse fairness, combo excitement). Write answers below this entry.
 
 ### HR-0018 · Review Spanish and German translations
 - status: open

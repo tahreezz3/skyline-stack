@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:38 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:43 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:38:20Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:43:43Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -24,13 +24,14 @@ _Generated 2026-10-13 04:38 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
 - **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
-## In-Progress (1)
+## In-Progress (0)
 
-- **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0 · _owner opus55-a7k2_
+- none
 
-## Review (2)
+## Review (3)
 
 - **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0 · _owner opus55-a7k2_
+- **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0 · _owner opus55-a7k2_
 - **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1 · _owner opus55-a7k2_
 
 ## Blocked (0)
