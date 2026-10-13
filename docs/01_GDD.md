@@ -29,6 +29,7 @@ Numbers in this document are defaults; the source of truth is `game/config/*.jso
 | Wobble window | last 5 blocks | `wobble_window` |
 | Wobble gain | 1.4 | `wobble_gain` |
 | Lives | 3 | `lives` |
+| Collapse costs a life | yes | `collapse_costs_life` |
 
 ### 3.1 Landing
 - **Perfect** (\|offset\| < snap window): the block snaps exactly onto the one below (offset becomes 0).
@@ -37,7 +38,8 @@ Numbers in this document are defaults; the source of truth is `game/config/*.jso
   Residents = `max(1, 4 − floor(min(1, |offset|/max_offset) × 4))`. Its signed offset enters the wobble window.
 - **Collapse** (max < \|offset\| < miss): the block topples. Then, while the block now on top has
   \|diff\| ≥ stable_offset, that block topples too (0.2 s apart). The foundation never falls.
-  Residents of fallen blocks are subtracted. Costs no life. Breaks the combo (the pool is banked).
+  Residents of fallen blocks are subtracted. **Costs a life** (`collapse_costs_life`, set in T-0101 because without it
+  no one could lose; see `docs/balance/TUNING_LOG.md`). Breaks the combo (the pool is banked).
 - **Miss** (\|offset\| ≥ miss): the block falls past the tower and off screen. Lose 1 life; at 0 lives the round
   ends. Breaks the combo (banked).
 
@@ -53,7 +55,8 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 ### 3.3 Combo ("super time")
 - A perfect sets the bar to 8 s and adds 1 to the combo count. While the bar is running, every landed block
   (perfect or stack) adds 1 to the count.
-- After each such block: `pool += count × 2 × ceil(height / 10)` (`combo.bonus_factor`, `combo.height_step`).
+- After each such block: `pool += min(count, 8) × 1 × min(ceil(height / 10), 4)`
+  (`combo.count_cap`, `combo.bonus_factor`, `combo.height_step`, `combo.height_mult_cap`).
 - The bar drains at `1 + 3 × min(1, count / 15)` seconds per second: it gets shorter as the streak grows.
 - When the bar empties, or a collapse/miss breaks it, the pool is paid into population, and the count and pool reset.
 - Note: playtesting may replace this with "next N blocks score double" (an idea from the team). Treat it as a tuning
@@ -61,7 +64,8 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 
 ### 3.4 Round goal
 - Each block type has a `target_height`. Reaching it completes the tower: the combo is banked, then a roof is
-  added: `roof_people`, or `star_roof_people` (the trophy roof) if population ≥ `star_population`.
+  added: `roof_people`, or `star_roof_people` (the trophy roof) if population ≥ `star_population`. The trophy is
+  decided before the roof bonus is added (`TowerState.is_star`).
 - Endless mode: `target_height = 0`, play until lives run out; crane speed keeps ramping to `speed_max`;
   its best is saved separately (`best_by_type.endless`).
 

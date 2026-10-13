@@ -18,12 +18,18 @@
 - Drive `TowerState` directly with chosen x positions; never depend on frame timing.
 - When you change a rule or a default, update or add the test in the same task.
 
-## 3. Looking at the game without a screen
+## 3. Balance simulation
+`godot --headless --path game --script res://tools/sim_balance.gd -- --rounds=500 [--set=combo.count_cap=6]`
+plays thousands of rounds with simulated players of five skill levels and prints completion, trophy, collapse,
+score and combo-share tables. Use it before and after any balance change; log the change in
+`docs/balance/TUNING_LOG.md`.
+
+## 4. Looking at the game without a screen
 `godot --path game --write-movie /tmp/frames/f.png --fixed-fps 30 --quit-after 600 -- --autoplay`
 writes PNG frames you can inspect (it opens a window briefly). Use `-- --tour` instead of `-- --autoplay` to
 capture every screen. Always look at frames after UI changes: a headless run cannot catch layout bugs.
 
-## 4. Human playtest questions (HR-0017)
+## 5. Human playtest questions (HR-0017)
 1. Is the perfect window too tight, too loose, or right? (Try 20 drops, count perfects.)
 2. Does the crane speed-up feel fair at height 10, 20, 30?
 3. When the tower collapses, does it feel fair and understandable?
@@ -31,7 +37,7 @@ capture every screen. Always look at frames after UI changes: a headless run can
 5. Does the sway make you change your timing, or just look nice?
 6. Anything confusing on screen?
 
-## 5. Definition of done (every task)
+## 6. Definition of done (every task)
 - Acceptance criteria in the task file are ticked.
 - `tools/check.sh` passes.
 - Docs updated if behaviour, data or architecture changed.

@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:27 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:32 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:26:19Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:32:41Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -26,12 +26,13 @@ _Generated 2026-10-13 04:27 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
 - **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
-## In-Progress (1)
+## In-Progress (0)
+
+- none
+
+## Review (2)
 
 - **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0 · _owner opus55-a7k2_
-
-## Review (1)
-
 - **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1 · _owner opus55-a7k2_
 
 ## Blocked (0)

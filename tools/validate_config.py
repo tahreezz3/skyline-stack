@@ -10,10 +10,10 @@ CONFIG = Path(__file__).resolve().parent.parent / "game" / "config"
 REQUIRED = {
     "tower_rules.json": [
         "snap_window", "max_offset", "miss_offset", "stable_offset", "collapse_interval_s", "residents_max",
-        "wobble_window", "wobble_gain", "lives", "fall_kill_depth",
+        "wobble_window", "wobble_gain", "lives", "collapse_costs_life", "fall_kill_depth",
         "block.width", "block.height",
         "combo.bar_seconds", "combo.drain_base", "combo.drain_extra", "combo.drain_full_at",
-        "combo.height_step", "combo.bonus_factor",
+        "combo.height_step", "combo.bonus_factor", "combo.count_cap", "combo.height_mult_cap",
         "crane.amplitude", "crane.speed", "crane.speed_per_block", "crane.speed_max", "crane.gap_blocks", "crane.gravity",
         "sway.speed", "sway.scale", "sway.max",
     ],

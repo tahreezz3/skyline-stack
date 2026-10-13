@@ -1,5 +1,5 @@
 {
-  "_doc": "Core stacking rules. Units: 1.0 = one block width. See docs/01_GDD.md section 3 and docs/03_DATA_SPEC.md. Starting values come from analysis of the reference game; retune them in playtests (task T-0101).",
+  "_doc": "Core stacking rules. Units: 1.0 = one block width. See docs/01_GDD.md section 3 and docs/03_DATA_SPEC.md. Tuned in T-0101 with game/tools/sim_balance.gd (see docs/balance/TUNING_LOG.md); final feel sign-off needs the human playtest HR-0017.",
   "snap_window": 0.06,
   "max_offset": 0.35,
   "miss_offset": 1.0,
@@ -9,6 +9,7 @@
   "wobble_window": 5,
   "wobble_gain": 1.4,
   "lives": 3,
+  "collapse_costs_life": true,
   "fall_kill_depth": 5.0,
   "block": {
     "width": 1.0,
@@ -20,7 +21,9 @@
     "drain_extra": 3.0,
     "drain_full_at": 15,
     "height_step": 10,
-    "bonus_factor": 2
+    "bonus_factor": 1,
+    "count_cap": 8,
+    "height_mult_cap": 4
   },
   "crane": {
     "amplitude": 1.6,

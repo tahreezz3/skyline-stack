@@ -30,6 +30,8 @@ var combo_pool: int = 0
 var max_combo: int = 0
 var is_over: bool = false
 var is_complete: bool = false
+## True when the tower was completed with the trophy roof (decided before the roof bonus is added).
+var is_star: bool = false
 
 
 func _init(p_rules: Dictionary, p_round_cfg: Dictionary = {}) -> void:
@@ -135,7 +137,9 @@ func _grow_combo() -> void:
 	combo_count += 1
 	max_combo = maxi(max_combo, combo_count)
 	var c: Dictionary = rules["combo"]
-	combo_pool += combo_count * int(c["bonus_factor"]) * ceili(float(height()) / float(c["height_step"]))
+	var counted := mini(combo_count, int(c.get("count_cap", 1 << 30)))
+	var height_mult := mini(ceili(float(height()) / float(c["height_step"])), int(c.get("height_mult_cap", 1 << 30)))
+	combo_pool += counted * int(c["bonus_factor"]) * height_mult
 
 
 ## Pay the combo pool into population and reset the combo. Returns the amount.
@@ -156,6 +160,7 @@ func _push_wobble(offset: float) -> void:
 
 ## Block landed too far off: it topples, and every unstable block under it
 ## topples too, until the top block is stable (|diff| < stable_offset).
+## Costs a life when rules.collapse_costs_life is true (T-0101 tuning).
 func _collapse(x: float, offset: float) -> Dictionary:
 	var banked := _bank_combo()
 	var fallen: Array[Dictionary] = [{"x": x, "diff": offset, "residents": 0, "index": height() + 1}]
@@ -168,8 +173,14 @@ func _collapse(x: float, offset: float) -> Dictionary:
 		if not wobble_offsets.is_empty():
 			wobble_offsets.pop_back()
 	population -= lost
+	if bool(rules.get("collapse_costs_life", false)):
+		lives = maxi(0, lives - 1)
+		if lives == 0:
+			is_over = true
 	return {
 		"result": RESULT_COLLAPSE,
+		"lives": lives,
+		"game_over": is_over,
 		"x": x,
 		"offset": offset,
 		"removed": fallen.size(),
@@ -196,4 +207,5 @@ func _complete() -> Dictionary:
 	population += roof
 	is_over = true
 	is_complete = true
+	is_star = star
 	return {"complete": true, "star": star, "roof_people": roof, "banked": banked}

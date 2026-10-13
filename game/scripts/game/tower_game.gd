@@ -227,7 +227,8 @@ func _on_resolved(ev: Dictionary) -> void:
 			_spawn_particles("dust", ev["x"] + signf(float(ev["offset"])) * 0.5, _top_y() - _block_h(), int(feel["particles"]["dust_count"]), signf(float(ev["offset"])))
 		TowerState.RESULT_COLLAPSE:
 			_spawn_debris(ev)
-			_popup("COLLAPSE -%d" % ev["lost_residents"], Color.ORANGE_RED)
+			var lives_text := "  ·  %d lives left" % ev["lives"] if bool(rules.get("collapse_costs_life", false)) else ""
+			_popup("COLLAPSE -%d%s" % [ev["lost_residents"], lives_text], Color.ORANGE_RED)
 			_add_shake(float(sh["collapse_per_block"]) * int(ev["removed"]))
 		TowerState.RESULT_MISS:
 			_popup("MISS - %d lives left" % ev["lives"], Color.RED)
@@ -296,7 +297,7 @@ func _finish_round() -> void:
 	round_finished = true
 	var summary := {
 		"complete": state.is_complete,
-		"star": state.is_complete and state.population >= int(block_type["star_population"]),
+		"star": state.is_star,
 		"population": state.population,
 		"height": state.height(),
 		"max_combo": state.max_combo,

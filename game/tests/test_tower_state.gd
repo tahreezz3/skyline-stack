@@ -1,4 +1,7 @@
 ## Rules of one tower round (scripts/core/tower_state.gd). See docs/01_GDD.md §3.
+## Uses a frozen rules fixture (tests/fixtures/tower_rules_v0.json) so these rule
+## tests don't break when designers retune config/tower_rules.json. Tuning-only
+## switches (collapse_costs_life, combo caps) are tested by enabling them explicitly.
 extends "res://tests/test_case.gd"
 
 const TowerState := preload("res://scripts/core/tower_state.gd")
@@ -7,7 +10,7 @@ var rules: Dictionary
 
 
 func before_all() -> void:
-	rules = ConfigLoader.load_json("res://config/tower_rules.json")
+	rules = ConfigLoader.load_json("res://tests/fixtures/tower_rules_v0.json")
 
 
 func fresh(round_cfg: Dictionary = {}):
@@ -159,9 +162,63 @@ func test_round_complete_with_trophy() -> void:
 	var s = fresh({"target_height": 1, "roof_people": 40, "star_population": 4, "star_roof_people": 60})
 	var ev: Dictionary = s.land(0.0)
 	check(ev["star"] and ev["roof_people"] == 60, "trophy roof when population reaches star value")
+	check(s.is_star, "is_star flag set")
+
+
+func test_trophy_decided_before_roof() -> void:
+	# population 4 before the roof; roof 40 would push it past 10, but the trophy must not count it
+	var s = fresh({"target_height": 1, "roof_people": 40, "star_population": 10, "star_roof_people": 60})
+	var ev: Dictionary = s.land(0.2)
+	check(not ev["star"] and not s.is_star and ev["roof_people"] == 40, "roof bonus does not count toward the trophy")
 
 
 # --- config sanity --------------------------------------------------------------
+
+func with_rules(changes: Dictionary):
+	var r := rules.duplicate(true)
+	for k in changes:
+		var parts := String(k).split(".")
+		var d: Dictionary = r
+		for i in range(parts.size() - 1):
+			d = d[parts[i]]
+		d[parts[-1]] = changes[k]
+	return TowerState.new(r)
+
+
+func test_collapse_costs_life_when_enabled() -> void:
+	var s = with_rules({"collapse_costs_life": true})
+	var ev: Dictionary = s.land(0.5)
+	check(ev["result"] == TowerState.RESULT_COLLAPSE and s.lives == 2 and ev["lives"] == 2, "collapse costs a life when enabled")
+	s.land(0.5)
+	ev = s.land(0.5)
+	check(ev["game_over"] and s.is_over, "third collapse ends the round")
+
+
+func test_combo_count_cap() -> void:
+	var s = with_rules({"combo.count_cap": 2})
+	s.land(0.0)   # count 1, h1: +1*2*1 = 2
+	s.land(0.0)   # count 2, h2: +2*2*1 = 4 -> 6
+	s.land(0.0)   # count 3 capped to 2, h3: +4 -> 10
+	check(s.combo_pool == 10, "count above cap counts as cap (pool %d)" % s.combo_pool)
+
+
+func test_combo_height_mult_cap() -> void:
+	var s = with_rules({"combo.height_mult_cap": 1})
+	for i in range(12):
+		s.land(0.0)
+	# without the cap blocks 11-12 would use multiplier 2
+	var expected := 0
+	for c in range(1, 13):
+		expected += c * 2 * 1
+	check(s.combo_pool == expected, "height multiplier capped at 1 (pool %d, expected %d)" % [s.combo_pool, expected])
+
+
+func test_live_config_invariants() -> void:
+	var live: Dictionary = ConfigLoader.load_json("res://config/tower_rules.json")
+	check(live["snap_window"] < live["stable_offset"] and live["stable_offset"] < live["max_offset"] and live["max_offset"] < live["miss_offset"], "live config thresholds ordered")
+	var s = TowerState.new(live)
+	check(s.land(0.0)["result"] == TowerState.RESULT_PERFECT, "live config: centre drop is perfect")
+
 
 func test_config_tables_load() -> void:
 	var blocks: Variant = ConfigLoader.load_json("res://config/block_types.json")

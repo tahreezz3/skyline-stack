@@ -1,0 +1,38 @@
+{
+  "_doc": "Frozen copy of the CP-000 tower rules used by tests/test_tower_state.gd so rule tests stay stable while config/tower_rules.json is retuned. Do not tune this file.",
+  "snap_window": 0.06,
+  "max_offset": 0.35,
+  "miss_offset": 1.0,
+  "stable_offset": 0.2,
+  "collapse_interval_s": 0.2,
+  "residents_max": 4,
+  "wobble_window": 5,
+  "wobble_gain": 1.4,
+  "lives": 3,
+  "fall_kill_depth": 5.0,
+  "block": {
+    "width": 1.0,
+    "height": 0.6
+  },
+  "combo": {
+    "bar_seconds": 8.0,
+    "drain_base": 1.0,
+    "drain_extra": 3.0,
+    "drain_full_at": 15,
+    "height_step": 10,
+    "bonus_factor": 2
+  },
+  "crane": {
+    "amplitude": 1.6,
+    "speed": 1.6,
+    "speed_per_block": 0.03,
+    "speed_max": 3.2,
+    "gap_blocks": 5,
+    "gravity": 30.0
+  },
+  "sway": {
+    "speed": 2.2,
+    "scale": 0.25,
+    "max": 0.45
+  }
+}

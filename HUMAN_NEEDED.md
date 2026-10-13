@@ -175,4 +175,4 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - priority: P1
 - needed_for: T-0101, T-0104, M1
 - requested: 2026-10-13 by opus55-planner
-- spec: After T-0104 produces a debug APK, play 10+ rounds on a real phone and answer the questions in `docs/08_TESTING.md` section 4 (feel of the snap window, crane speed, collapse fairness, combo excitement). Write answers below this entry.
+- spec: After T-0104 produces a debug APK, play 10+ rounds on a real phone and answer the questions in `docs/08_TESTING.md` section 5 and the open questions at the end of `docs/balance/TUNING_LOG.md` (feel of the snap window, crane speed, collapse fairness, combo excitement). Write answers below this entry.

@@ -117,6 +117,8 @@ func _on_block_resolved(ev: Dictionary) -> void:
 			play("land_sloppy" if sloppy else "land")
 		"collapse":
 			play("collapse")
+			if bool(GameConfig.table("tower_rules").get("collapse_costs_life", false)):
+				play("life_lost")
 		"miss":
 			play("miss")
 			play("life_lost")

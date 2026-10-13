@@ -15,18 +15,23 @@ All gameplay numbers live here. `tools/check.sh` validates that the files parse 
 | `residents_max` | int | residents for a perfect block |
 | `wobble_window` | int | number of recent offsets that make up the wobble |
 | `wobble_gain` | float | multiplier on the sum of recent offsets |
-| `lives` | int | misses allowed per round |
+| `lives` | int | lives per round |
+| `collapse_costs_life` | bool | a collapse also costs a life (misses always do) |
 | `fall_kill_depth` | float | how far below the top a missed block falls before it counts |
 | `block.width`, `block.height` | float | block size in world units |
 | `combo.bar_seconds` | float | bar length after a perfect |
 | `combo.drain_base`, `combo.drain_extra`, `combo.drain_full_at` | float, float, int | drain rate = base + extra × min(1, count / full_at) |
-| `combo.height_step`, `combo.bonus_factor` | int, int | pool += count × bonus_factor × ceil(height / height_step) |
+| `combo.height_step`, `combo.bonus_factor` | int, int | pool += min(count, count_cap) × bonus_factor × min(ceil(height / height_step), height_mult_cap) |
+| `combo.count_cap`, `combo.height_mult_cap` | int, int | caps that keep the combo from dominating long runs |
 | `crane.amplitude`, `crane.speed`, `crane.speed_per_block`, `crane.speed_max` | float | swing |
 | `crane.gap_blocks` | float | drop height above the top, in block heights |
 | `crane.gravity` | float | world units / s² |
 | `sway.speed`, `sway.scale`, `sway.max` | float | visual and hit-test sway |
 
 Invariant (tested): `snap_window < stable_offset < max_offset < miss_offset`.
+
+Rule tests use a frozen copy (`game/tests/fixtures/tower_rules_v0.json`), so retuning this file never breaks
+them. Check balance changes with `game/tools/sim_balance.gd` and record them in `docs/balance/TUNING_LOG.md`.
 
 ## `block_types.json`
 `types[]`: `id`, `name_key` (localisation key), `colour` (placeholder), `target_height`, `roof_people`,
