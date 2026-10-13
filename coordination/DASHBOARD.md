@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:03 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:10 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:03:08Z  config: ok · tests: ok · smoke: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:10:40Z  config: ok · tests: ok · smoke: ok · cleanroom: ok
 
 ## Milestones
 
@@ -12,13 +12,13 @@ _Generated 2026-10-13 04:03 UTC by `tools/dashboard.py`. Do not edit by hand._
 |---|---|---|
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `░░░░░░░░░░░░░░░░░░░░` | 0 / 6 |
-| M2 Game loop | `░░░░░░░░░░░░░░░░░░░░` | 0 / 7 |
+| M2 Game loop | `██████░░░░░░░░░░░░░░` | 2 / 7 |
 | M3 Art and audio | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M4 City meta | `░░░░░░░░░░░░░░░░░░░░` | 0 / 3 |
 | M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (8)
+## Ready to claim (6)
 
 - **T-0101** [Tune core stacking constants](../coordination/tasks/T-0101-tune-core-stacking-constants.md) · M1 P0
 - **T-0102** [Juice pass with placeholder effects](../coordination/tasks/T-0102-juice-pass-with-placeholder-effects.md) · M1 P1
@@ -26,8 +26,6 @@ _Generated 2026-10-13 04:03 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0
 - **T-0110** [Design the unique hook](../coordination/tasks/T-0110-design-the-unique-hook.md) · M1 P1
 - **T-0201** [Scene flow: boot, menu, select, round, results](../coordination/tasks/T-0201-scene-flow-boot-menu-select-round-result.md) · M2 P1
-- **T-0203** [Player level and progression rules](../coordination/tasks/T-0203-player-level-and-progression-rules.md) · M2 P1
-- **T-0204** [Save system v2](../coordination/tasks/T-0204-save-system-v2.md) · M2 P1
 
 ## In-Progress (0)
 
@@ -100,9 +98,11 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (4)
+## Done (6)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
 - T-0003 Placeholder tower round scene with autoplay
 - T-0004 Coordination tooling and dashboard
+- T-0203 Player level and progression rules
+- T-0204 Save system v2

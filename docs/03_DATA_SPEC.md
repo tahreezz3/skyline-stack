@@ -33,7 +33,25 @@ Invariant (tested): `snap_window < stable_offset < max_offset < miss_offset`.
 `star_population`, `star_roof_people`, `unlock_population`.
 
 ## `levels.json`
-`levels[]`: `level`, `population` (lifetime population needed), `unlocks` (block type ids).
+`levels[]`: `level`, `population` (lifetime population needed; must strictly increase).
+Block types unlock **only** through `block_types[].unlock_population` (single source of truth).
+
+## Save file (`user://save.json`, schema in `scripts/core/save_schema.gd`)
+Current version **2**:
+
+| Key | Meaning |
+|---|---|
+| `version` | schema version; older saves are migrated on load (`SaveSchema.migrate`) |
+| `stats.lifetime_population` | total population ever earned (drives level and unlocks) |
+| `stats.best_height`, `stats.best_population`, `stats.best_combo` | personal bests |
+| `stats.rounds_played`, `stats.towers_completed`, `stats.trophy_roofs` | counters |
+| `best_by_type.<id>` | `{population, height, star}` per block type |
+| `settings.music_volume`, `settings.sfx_volume` | 0..1 |
+| `settings.reduced_motion` | disables screen shake and camera kick |
+| `settings.language` | locale code, `""` = device language |
+
+Writes are atomic (`save.tmp.json` then rename); the previous file is kept as `save.bak.json`;
+an unreadable file is moved to `save.corrupt.json` and the game starts fresh.
 
 ## Planned tables
 - `city_map.json` (M4): grid size, plots, district unlock thresholds, placement rules.

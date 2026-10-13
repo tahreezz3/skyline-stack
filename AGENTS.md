@@ -31,7 +31,7 @@ another stopped. Follow this protocol exactly.
 - **Rules vs presentation.** Game rules go in `game/scripts/core/` as plain, deterministic, node-free scripts with tests.
   Scenes only render and forward input. See `docs/adr/ADR-0004-rules-presentation-split.md`.
 - **Numbers live in `game/config/*.json`**, never hard-coded. Document new fields in `docs/03_DATA_SPEC.md`.
-- **Every rule change gets a test** in `game/tests/run_tests.gd`. `tools/check.sh` must pass before you mark a task `review` or `done`.
+- **Every rule change gets a test** in a `game/tests/test_<area>.gd` suite (see `docs/08_TESTING.md`). `tools/check.sh` must pass before you mark a task `review` or `done`.
 - **Clean room.** Never copy files, text, art, audio or code from `../extracted/` or any other game.
   Use it only to read how something behaves. `tools/cleanroom_check.py` enforces part of this. Read `docs/07_LEGAL_CLEANROOM.md`.
 - **Need something from a human** (art, audio, a decision, an account)? Don't block or wait in chat. Add an entry to

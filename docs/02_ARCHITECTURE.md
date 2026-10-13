@@ -14,7 +14,8 @@ game/
     autoload/              global singletons (see below)
     core/                  pure rules: no Node, no rendering, deterministic, unit-tested
     game/                  scene scripts: input, rendering, animation, HUD
-  tests/run_tests.gd       headless rule tests
+  tests/run_tests.gd       headless runner: executes every tests/test_*.gd suite
+  tests/test_case.gd       base class for suites (check(), near())
   assets/                  integrated art/audio/fonts (copied from ../assets_inbox by integration tasks)
 ```
 
@@ -50,9 +51,15 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 
 | Signal | Payload | Emitted by |
 |---|---|---|
+| `block_released` | none | tower_game |
 | `block_resolved(ev)` | event dict from `TowerState.land()`: `result` = perfect/stack/collapse/miss, plus `x`, `offset`, `residents`, `height`, `removed`, `fallen`, `lost_residents`, `banked`, `lives`, `complete`, `star`, `roof_people` | tower_game |
+| `block_toppled` | none (one per falling block in a collapse) | tower_game |
 | `combo_banked(amount)` | int | tower_game |
-| `round_ended(summary)` | `{complete, star, population, height, max_combo, block_type}` | tower_game |
+| `round_ended(summary)` | `{complete, star, population, height, max_combo, block_type, endless}` | tower_game |
+| `level_up(from, to)` | ints | SaveData.record_round |
+| `block_type_unlocked(id)` | String | SaveData.record_round |
+| `setting_changed(key, value)` | String, Variant | SaveData.set_setting |
+| `ui_pressed` | none | UI buttons |
 
 Add new signals here when you add them to `game_events.gd`.
 

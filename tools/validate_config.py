@@ -60,11 +60,15 @@ def main() -> int:
                 if k not in t:
                     errors.append(f"block_types.json: type {t.get('id', '?')} missing '{k}'")
             ids.add(t.get("id"))
-        lv = data.get("levels.json", {})
-        for level in lv.get("levels", []):
-            for u in level.get("unlocks", []):
-                if u not in ids:
-                    errors.append(f"levels.json: level {level.get('level')} unlocks unknown type '{u}'")
+    lv = data.get("levels.json", {})
+    prev = -1
+    for level in lv.get("levels", []):
+        if "level" not in level or "population" not in level:
+            errors.append(f"levels.json: entry missing level/population: {level}")
+        elif level["population"] <= prev:
+            errors.append("levels.json: population thresholds must strictly increase")
+        else:
+            prev = level["population"]
     for e in errors:
         print("config error:", e)
     print("config: OK" if not errors else f"config: {len(errors)} error(s)")

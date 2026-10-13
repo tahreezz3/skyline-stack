@@ -9,7 +9,10 @@
 5. `tools/dashboard.py` regenerates the dashboard and records the check result.
 
 ## 2. Writing tests
-- One `test_*` method per behaviour in `game/tests/run_tests.gd`, using `check(cond, label)`.
+- Suites are files named `game/tests/test_<area>.gd` that extend `res://tests/test_case.gd`; the runner finds them
+  automatically. Prefer a new suite file per area so parallel sessions don't edit the same file.
+- One `test_*` method per behaviour, using `check(cond, label)`; optional `before_all()` for setup.
+- Tests that touch files must use their own `user://test_*` paths (see `test_save_io.gd`).
 - Drive `TowerState` directly with chosen x positions; never depend on frame timing.
 - When you change a rule or a default, update or add the test in the same task.
 

@@ -1,15 +1,45 @@
 {
-  "_doc": "Meta progression: lifetime population needed for each player level, and which block types are unlocked. Used from milestone M2 (T-0203). Starting values; retune.",
+  "_doc": "Meta progression: lifetime population needed for each player level. Block type unlocks come only from block_types.json unlock_population (single source of truth). Starting values; retune.",
   "levels": [
-    {"level": 1,  "population": 0,     "unlocks": ["blue"]},
-    {"level": 2,  "population": 150,   "unlocks": ["blue"]},
-    {"level": 3,  "population": 250,   "unlocks": ["blue", "red"]},
-    {"level": 4,  "population": 400,   "unlocks": ["blue", "red"]},
-    {"level": 5,  "population": 600,   "unlocks": ["blue", "red"]},
-    {"level": 6,  "population": 800,   "unlocks": ["blue", "red", "green"]},
-    {"level": 7,  "population": 1400,  "unlocks": ["blue", "red", "green"]},
-    {"level": 8,  "population": 1800,  "unlocks": ["blue", "red", "green"]},
-    {"level": 9,  "population": 2200,  "unlocks": ["blue", "red", "green", "yellow"]},
-    {"level": 10, "population": 3000,  "unlocks": ["blue", "red", "green", "yellow"]}
+    {
+      "level": 1,
+      "population": 0
+    },
+    {
+      "level": 2,
+      "population": 150
+    },
+    {
+      "level": 3,
+      "population": 250
+    },
+    {
+      "level": 4,
+      "population": 400
+    },
+    {
+      "level": 5,
+      "population": 600
+    },
+    {
+      "level": 6,
+      "population": 800
+    },
+    {
+      "level": 7,
+      "population": 1400
+    },
+    {
+      "level": 8,
+      "population": 1800
+    },
+    {
+      "level": 9,
+      "population": 2200
+    },
+    {
+      "level": 10,
+      "population": 3000
+    }
   ]
 }

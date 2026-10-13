@@ -59,6 +59,7 @@ func _parse_args() -> void:
 		if arg == "--autoplay":
 			autoplay = true
 			Engine.time_scale = 4.0
+			SaveData.persist = false
 		elif arg.begins_with("--seconds="):
 			autoplay_seconds = float(arg.get_slice("=", 1))
 

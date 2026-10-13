@@ -69,8 +69,9 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
 - The block falls with constant gravity from `gap_blocks` block heights above the top.
 - **[planned T-0105]** swing patterns (pauses, wind gusts at height, variable amplitude).
 
-## 4. Progression [planned, M2]
-- Lifetime population raises the player level (`levels.json`), which unlocks block types (`block_types.json`).
+## 4. Progression (rules implemented in `scripts/core/progression.gd`; UI in M2)
+- Lifetime population (sum of all rounds) raises the player level (`levels.json`).
+- Each block type unlocks when lifetime population reaches its `unlock_population` (`block_types.json`).
 - Tower select screen: choose an unlocked type; harder types are taller with bigger roof bonuses.
 
 ## 5. City map [planned, M4]
