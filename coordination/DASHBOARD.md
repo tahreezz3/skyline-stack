@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:32 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-13 04:38 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:32:41Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-13T04:38:20Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -13,22 +13,20 @@ _Generated 2026-10-13 04:32 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
-| M3 Art and audio | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
+| M3 Art and audio | `█████░░░░░░░░░░░░░░░` | 1 / 4 |
 | M4 City meta | `░░░░░░░░░░░░░░░░░░░░` | 0 / 3 |
 | M5 Services | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
-## Ready to claim (5)
+## Ready to claim (3)
 
-- **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0
-- **T-0304** [Localisation framework](../coordination/tasks/T-0304-localisation-framework.md) · M3 P2
 - **T-0401** [City map grid and placement](../coordination/tasks/T-0401-city-map-grid-and-placement.md) · M4 P1
 - **T-0501** [Rewarded and interstitial ads](../coordination/tasks/T-0501-rewarded-and-interstitial-ads.md) · M5 P1
 - **T-0503** [Analytics events](../coordination/tasks/T-0503-analytics-events.md) · M5 P2
 
-## In-Progress (0)
+## In-Progress (1)
 
-- none
+- **T-0104** [Android debug build on a real device](../coordination/tasks/T-0104-android-debug-build-on-a-real-device.md) · M1 P0 · _owner opus55-a7k2_
 
 ## Review (2)
 
@@ -54,7 +52,7 @@ _Generated 2026-10-13 04:32 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0603** [Store listing](../coordination/tasks/T-0603-store-listing.md) · M6 P1 · _waits on T-0301; needs HR-0001, HR-0012_
 - **T-0604** [Soft launch checklist](../coordination/tasks/T-0604-soft-launch-checklist.md) · M6 P1 · _waits on T-0601, T-0602, T-0603_
 
-## Needs a human (17 open of 17)
+## Needs a human (18 open of 18)
 
 Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
@@ -77,6 +75,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0015 | Ads and analytics accounts | account | P2 | - | - |
 | HR-0016 | Privacy policy and legal entity | legal | P1 | - | T-0504 |
 | HR-0017 | Device playtest of core feel | playtest | P1 | - | - |
+| HR-0018 | Review Spanish and German translations | design | P2 | - | - |
 
 ## Recent sessions
 
@@ -90,7 +89,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (13)
+## Done (14)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -105,3 +104,4 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 - T-0205 Results screen and stats
 - T-0206 Pause and app lifecycle
 - T-0207 Endless mode
+- T-0304 Localisation framework

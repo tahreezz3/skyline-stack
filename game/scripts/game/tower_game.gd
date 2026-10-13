@@ -120,7 +120,7 @@ func pause_game() -> void:
 		return
 	paused = true
 	get_tree().paused = true
-	pause_label.text = "Paused"
+	pause_label.text = tr("PAUSED")
 	pause_buttons.visible = true
 	pause_layer.visible = true
 
@@ -147,13 +147,13 @@ func _build_pause() -> void:
 	pause_layer.add_child(root)
 	var col := UI.screen(root)
 	(root.get_child(0) as ColorRect).color = Color(0, 0, 0, 0.6)
-	pause_label = UI.label("Paused", 72, UI.ACCENT)
+	pause_label = UI.label(tr("PAUSED"), 72, UI.ACCENT)
 	col.add_child(pause_label)
 	pause_buttons = VBoxContainer.new()
 	pause_buttons.add_theme_constant_override("separation", 24)
-	pause_buttons.add_child(UI.button("Resume", resume_game))
-	pause_buttons.add_child(UI.button("Restart", func() -> void: SceneRouter.go("game", SceneRouter.params)))
-	pause_buttons.add_child(UI.button("Quit to menu", func() -> void: SceneRouter.go("menu")))
+	pause_buttons.add_child(UI.button(tr("BTN_RESUME"), resume_game))
+	pause_buttons.add_child(UI.button(tr("BTN_RESTART"), func() -> void: SceneRouter.go("game", SceneRouter.params)))
+	pause_buttons.add_child(UI.button(tr("BTN_QUIT_MENU"), func() -> void: SceneRouter.go("menu")))
 	col.add_child(pause_buttons)
 
 
@@ -214,29 +214,29 @@ func _on_resolved(ev: Dictionary) -> void:
 	var sh: Dictionary = feel["shake"]
 	match ev["result"]:
 		TowerState.RESULT_PERFECT:
-			_popup("PERFECT! +%d" % ev["residents"], Color.GOLD)
+			_popup(tr("POP_PERFECT") % ev["residents"], Color.GOLD)
 			_add_shake(float(sh["perfect"]))
 			_kick(float(feel["camera_kick"]["perfect"]))
 			_squash()
 			_spawn_particles("sparkle", ev["x"], _top_y(), int(feel["particles"]["sparkle_count"]), 0.0)
 		TowerState.RESULT_STACK:
-			_popup("+%d" % ev["residents"], Color.WHITE)
+			_popup(tr("POP_STACK") % ev["residents"], Color.WHITE)
 			var sloppy := absf(float(ev["offset"])) >= float(rules["stable_offset"])
 			_add_shake(float(sh["land_sloppy"] if sloppy else sh["land"]))
 			_squash()
 			_spawn_particles("dust", ev["x"] + signf(float(ev["offset"])) * 0.5, _top_y() - _block_h(), int(feel["particles"]["dust_count"]), signf(float(ev["offset"])))
 		TowerState.RESULT_COLLAPSE:
 			_spawn_debris(ev)
-			var lives_text := "  ·  %d lives left" % ev["lives"] if bool(rules.get("collapse_costs_life", false)) else ""
-			_popup("COLLAPSE -%d%s" % [ev["lost_residents"], lives_text], Color.ORANGE_RED)
+			var lives_text: String = tr("POP_LIVES_LEFT") % ev["lives"] if bool(rules.get("collapse_costs_life", false)) else ""
+			_popup(tr("POP_COLLAPSE") % ev["lost_residents"] + lives_text, Color.ORANGE_RED)
 			_add_shake(float(sh["collapse_per_block"]) * int(ev["removed"]))
 		TowerState.RESULT_MISS:
-			_popup("MISS - %d lives left" % ev["lives"], Color.RED)
+			_popup(tr("POP_MISS") % ev["lives"], Color.RED)
 			_add_shake(float(sh["miss"]))
 	if ev.get("banked", 0) > 0:
 		_on_combo_banked(int(ev["banked"]))
 	if ev.get("complete", false):
-		_popup("ROOF +%d%s" % [ev["roof_people"], "  TROPHY!" if ev["star"] else ""], Color.GOLD)
+		_popup(tr("POP_ROOF") % ev["roof_people"] + (tr("POP_TROPHY") if ev["star"] else ""), Color.GOLD)
 	if state.is_over:
 		_finish_round()
 
@@ -290,7 +290,7 @@ func _update_feedback(delta: float) -> void:
 
 func _on_combo_banked(amount: int) -> void:
 	GameEvents.combo_banked.emit(amount)
-	_popup("COMBO BONUS +%d" % amount, Color.AQUA)
+	_popup(tr("POP_COMBO_BONUS") % amount, Color.AQUA)
 
 
 func _finish_round() -> void:
@@ -306,7 +306,7 @@ func _finish_round() -> void:
 	}
 	GameEvents.round_ended.emit(summary)
 	var record: Dictionary = SaveData.record_round(summary)
-	hud_message.text = "TOWER COMPLETE!" if state.is_complete else "GAME OVER"
+	hud_message.text = tr("HUD_TOWER_COMPLETE") if state.is_complete else tr("HUD_GAME_OVER")
 	hud_message.visible = true
 	if autoplay:
 		print("AUTOPLAY_SUMMARY ", JSON.stringify(summary))
@@ -500,10 +500,10 @@ func _hud_label(layer: CanvasLayer, pos: Vector2, font_size: int) -> Label:
 
 
 func _refresh_hud() -> void:
-	hud_population.text = "Population %d" % state.population
-	hud_lives.text = "Lives %d" % state.lives
+	hud_population.text = tr("HUD_POPULATION") % state.population
+	hud_lives.text = tr("HUD_LIVES") % state.lives
 	var goal: int = state.target_height()
-	hud_height.text = "Height %d / %d" % [state.height(), goal] if goal > 0 else "Height %d" % state.height()
+	hud_height.text = tr("HUD_HEIGHT_GOAL") % [state.height(), goal] if goal > 0 else tr("HUD_HEIGHT") % state.height()
 	hud_combo.value = state.combo_ratio()
 	hud_combo.visible = state.combo_time > 0.0
 	if hud_combo.visible:

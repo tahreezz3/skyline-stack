@@ -7,19 +7,34 @@ const UI := preload("res://scripts/game/ui_kit.gd")
 
 func _ready() -> void:
 	var col := UI.screen(self, 20)
-	col.add_child(UI.label("Settings", 56, UI.ACCENT))
+	col.add_child(UI.label(tr("SETTINGS_TITLE"), 56, UI.ACCENT))
 	col.add_child(UI.spacer(24))
-	_slider(col, "Music volume", "music_volume")
-	_slider(col, "Sound volume", "sfx_volume")
+	_slider(col, tr("SET_MUSIC"), "music_volume")
+	_slider(col, tr("SET_SFX"), "sfx_volume")
 	var motion := CheckButton.new()
-	motion.text = "Reduced motion (no screen shake)"
+	motion.text = tr("SET_REDUCED_MOTION")
+	motion.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART   # long translations must not widen the screen
+	motion.custom_minimum_size = Vector2(1, 0)
 	motion.add_theme_font_size_override("font_size", 30)
 	motion.button_pressed = bool(SaveData.get_setting("reduced_motion"))
 	motion.focus_mode = Control.FOCUS_NONE
 	motion.toggled.connect(func(on: bool) -> void: SaveData.set_setting("reduced_motion", on))
 	col.add_child(motion)
+	col.add_child(UI.label(tr("SET_LANGUAGE"), 30, UI.TEXT, HORIZONTAL_ALIGNMENT_LEFT))
+	var lang := OptionButton.new()
+	lang.add_theme_font_size_override("font_size", 30)
+	lang.custom_minimum_size = Vector2(0, 80)
+	lang.focus_mode = Control.FOCUS_NONE
+	var names := {"": tr("LANG_AUTO"), "en": "English", "es": "Español", "de": "Deutsch"}
+	for code in SaveData.LANGUAGES:
+		lang.add_item(names[code])
+	lang.selected = SaveData.LANGUAGES.find(String(SaveData.get_setting("language")))
+	lang.item_selected.connect(func(i: int) -> void:
+		SaveData.set_setting("language", SaveData.LANGUAGES[i])
+		SceneRouter.go("settings"))   # rebuild texts in the new language
+	col.add_child(lang)
 	col.add_child(UI.spacer(40))
-	col.add_child(UI.button("Back", on_back))
+	col.add_child(UI.button(tr("BTN_BACK"), on_back))
 
 
 func _slider(col: VBoxContainer, title: String, key: String) -> void:

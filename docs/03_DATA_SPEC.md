@@ -76,4 +76,11 @@ an unreadable file is moved to `save.corrupt.json` and the game starts fresh.
 ## Planned tables
 - `city_map.json` (M4): grid size, plots, district unlock thresholds, placement rules.
 - `economy.json` (M5): population → coins rate, ad reward amounts, interstitial cadence.
-- `localisation/*.csv` (M3): Godot translation CSVs, keys like `block_blue`.
+
+## `localisation/strings.csv`
+Godot translation CSV: header `keys,en,es,de`, one row per UI string. Code uses `tr("KEY")`; block names use
+`block_types[].name_key`. Godot imports it into `strings.<lang>.translation` (generated, git-ignored) listed in
+`project.godot` `[internationalization]`. To add a language: add a column, add the generated file to that list,
+add the code to `SaveData.LANGUAGES`, and request a native review in HUMAN_NEEDED.
+`tests/test_localisation.gd` fails on missing keys, empty cells, mismatched `%d/%s` placeholders, or literal text
+passed to `UI.label`/`UI.button`. Preview: `godot --path game -- --lang=de`.

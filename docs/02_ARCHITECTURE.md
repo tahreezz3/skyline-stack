@@ -70,6 +70,11 @@ Add new signals here when you add them to `game_events.gd`.
 - Block i (i ≥ 1) sits with its bottom at `(i − 1) × block.height`.
 - The scene converts with `UNIT = 160` px per unit and a camera offset `view_y` that follows the tower top.
 
+## Localisation
+All user-facing text goes through `tr("KEY")` with keys in `game/localisation/strings.csv` (see 03_DATA_SPEC.md).
+`SaveData.apply_language()` sets the locale from `settings.language` (or the device language), falling back to
+English. Screens build their text in `_ready()`, so changing language reloads the current screen.
+
 ## Conventions
 - GDScript style: Godot official style guide, static types where the type is known, `snake_case`.
 - Scripts that other scripts use are referenced with `preload()` constants (not `class_name`) to keep headless

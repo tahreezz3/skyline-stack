@@ -18,8 +18,21 @@ var data: Dictionary = SaveSchema.defaults()
 var persist := true
 
 
+## Locales with translations in localisation/strings.csv ("" = follow the device).
+const LANGUAGES := ["", "en", "es", "de"]
+
+
 func _ready() -> void:
 	load_save()
+	apply_language()
+
+
+## Apply settings.language, falling back to the device language, then English.
+func apply_language() -> void:
+	var lang := String(get_setting("language"))
+	if lang == "":
+		lang = OS.get_locale_language()
+	TranslationServer.set_locale(lang if lang in LANGUAGES else "en")
 
 
 func load_save() -> void:
@@ -66,6 +79,8 @@ func get_setting(key: String) -> Variant:
 func set_setting(key: String, value: Variant) -> void:
 	data["settings"][key] = value
 	write_save()
+	if key == "language":
+		apply_language()
 	GameEvents.setting_changed.emit(key, value)
 
 

@@ -1,0 +1,67 @@
+keys,en,es,de
+TITLE,SKYLINE STACK,SKYLINE STACK,SKYLINE STACK
+SUBTITLE_WORKING,working title,título provisional,Arbeitstitel
+LEVEL_N,Level %d,Nivel %d,Stufe %d
+NEXT_LEVEL,%d / %d population to next level,%d / %d habitantes para el siguiente nivel,%d / %d Einwohner bis zur nächsten Stufe
+MAX_LEVEL,Max level,Nivel máximo,Höchste Stufe
+BTN_PLAY,Play,Jugar,Spielen
+BTN_ENDLESS,Endless,Infinito,Endlos
+BTN_SETTINGS,Settings,Ajustes,Einstellungen
+MENU_STATS,"Best tower %d storeys · Best round %d people
+Rounds %d · Towers completed %d · Trophy roofs %d","Mejor torre %d pisos · Mejor partida %d personas
+Partidas %d · Torres terminadas %d · Tejados trofeo %d","Bester Turm %d Etagen · Beste Runde %d Leute
+Runden %d · Türme fertig %d · Trophäendächer %d"
+SELECT_TITLE,Choose a tower,Elige una torre,Wähle einen Turm
+LIFETIME_POP,Lifetime population %d,Población total %d,Gesamtbevölkerung %d
+TOWER_INFO,"%s
+%d storeys · roof +%d","%s
+%d pisos · tejado +%d","%s
+%d Etagen · Dach +%d"
+TOWER_LOCKED,"%s  🔒
+Unlocks at %d population","%s  🔒
+Se desbloquea con %d habitantes","%s  🔒
+Freigeschaltet ab %d Einwohnern"
+TOWER_BEST, · best %d, · récord %d, · Rekord %d
+BTN_BACK,Back,Atrás,Zurück
+block_blue,Blue Tower,Torre azul,Blauer Turm
+block_red,Red Tower,Torre roja,Roter Turm
+block_green,Green Tower,Torre verde,Grüner Turm
+block_yellow,Yellow Tower,Torre amarilla,Gelber Turm
+RES_COMPLETE,TOWER COMPLETE!,¡TORRE TERMINADA!,TURM FERTIG!
+RES_GAME_OVER,GAME OVER,FIN DE LA PARTIDA,SPIEL VORBEI
+RES_ENDLESS,ENDLESS RUN OVER,FIN DEL MODO INFINITO,ENDLOSLAUF VORBEI
+RES_TROPHY,🏆 Trophy roof!,🏆 ¡Tejado trofeo!,🏆 Trophäendach!
+RES_POPULATION,Population %d,Población %d,Bevölkerung %d
+RES_HEIGHT,Height %d,Altura %d,Höhe %d
+NEW_BEST,  NEW BEST,  NUEVO RÉCORD,  NEUER REKORD
+RES_BEST_COMBO,Best combo %d,Mejor combo %d,Beste Kombo %d
+RES_LEVEL_UP,Level up! Level %d,¡Subes de nivel! Nivel %d,Aufgestiegen! Stufe %d
+RES_UNLOCKED,New tower unlocked: %s,Nueva torre desbloqueada: %s,Neuer Turm freigeschaltet: %s
+BTN_DOUBLE_AD,"Double reward (ad, coming in M5)","Doble recompensa (anuncio, próximamente)","Doppelte Belohnung (Werbung, bald)"
+BTN_PLAY_AGAIN,Play again,Jugar otra vez,Nochmal spielen
+BTN_CHOOSE_TOWER,Choose tower,Elegir torre,Turm wählen
+BTN_MENU,Menu,Menú,Menü
+SETTINGS_TITLE,Settings,Ajustes,Einstellungen
+SET_MUSIC,Music volume,Volumen de la música,Musiklautstärke
+SET_SFX,Sound volume,Volumen de los efectos,Effektlautstärke
+SET_REDUCED_MOTION,Reduced motion (no screen shake),Movimiento reducido (sin temblor de pantalla),Weniger Bewegung (kein Bildschirmwackeln)
+SET_LANGUAGE,Language,Idioma,Sprache
+LANG_AUTO,Device language,Idioma del dispositivo,Gerätesprache
+HUD_POPULATION,Population %d,Población %d,Bevölkerung %d
+HUD_LIVES,Lives %d,Vidas %d,Leben %d
+HUD_HEIGHT_GOAL,Height %d / %d,Altura %d / %d,Höhe %d / %d
+HUD_HEIGHT,Height %d,Altura %d,Höhe %d
+POP_PERFECT,PERFECT! +%d,¡PERFECTO! +%d,PERFEKT! +%d
+POP_STACK,+%d,+%d,+%d
+POP_COLLAPSE,COLLAPSE -%d,¡DERRUMBE! -%d,EINSTURZ -%d
+POP_LIVES_LEFT,  ·  %d lives left,  ·  quedan %d vidas,  ·  noch %d Leben
+POP_MISS,MISS - %d lives left,FALLO - quedan %d vidas,DANEBEN - noch %d Leben
+POP_ROOF,ROOF +%d,TEJADO +%d,DACH +%d
+POP_TROPHY,  TROPHY!,  ¡TROFEO!,  TROPHÄE!
+POP_COMBO_BONUS,COMBO BONUS +%d,BONUS COMBO +%d,KOMBO-BONUS +%d
+HUD_TOWER_COMPLETE,TOWER COMPLETE!,¡TORRE TERMINADA!,TURM FERTIG!
+HUD_GAME_OVER,GAME OVER,FIN DE LA PARTIDA,SPIEL VORBEI
+PAUSED,Paused,En pausa,Pausiert
+BTN_RESUME,Resume,Continuar,Weiter
+BTN_RESTART,Restart,Reiniciar,Neu starten
+BTN_QUIT_MENU,Quit to menu,Salir al menú,Zum Menü

@@ -29,6 +29,11 @@ window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://localisation/strings.en.translation", "res://localisation/strings.es.translation", "res://localisation/strings.de.translation")
+locale/fallback="en"
+
 [rendering]
 
 renderer/rendering_method="mobile"

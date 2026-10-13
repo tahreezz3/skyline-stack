@@ -30,6 +30,8 @@ another stopped. Follow this protocol exactly.
 - **Stay inside your task's scope.** Found something else? Create a new task with `python3 tools/new_task.py` instead of doing it.
 - **Rules vs presentation.** Game rules go in `game/scripts/core/` as plain, deterministic, node-free scripts with tests.
   Scenes only render and forward input. See `docs/adr/ADR-0004-rules-presentation-split.md`.
+- **No literal UI text.** Use `tr("KEY")` and add the key to `game/localisation/strings.csv` for every language
+  (draft translations are fine; flag them for review in HUMAN_NEEDED).
 - **Numbers live in `game/config/*.json`**, never hard-coded. Document new fields in `docs/03_DATA_SPEC.md`.
   Balance changes: run `game/tools/sim_balance.gd` before and after, and log them in `docs/balance/TUNING_LOG.md`.
 - **Every rule change gets a test** in a `game/tests/test_<area>.gd` suite (see `docs/08_TESTING.md`). `tools/check.sh` must pass before you mark a task `review` or `done`.

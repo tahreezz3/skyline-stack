@@ -39,6 +39,9 @@ func _ready() -> void:
 			autoplay_seconds = float(arg.get_slice("=", 1))
 		elif arg == "--tour":
 			tour = true
+		elif arg.begins_with("--lang="):
+			# debug: preview a language without changing the save (e.g. for screenshots)
+			TranslationServer.set_locale(arg.get_slice("=", 1))
 	if tour:
 		_run_tour.call_deferred()
 
