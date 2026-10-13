@@ -81,6 +81,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 ## Recent sessions
 
 - [Session 2026-10-13 · opus55-planner · foundation](../coordination/sessions/2026-10-13_opus55-planner_foundation.md)
+- [Session 2026-10-13 · opus55-a7k2 · M1/M2 build-out](../coordination/sessions/2026-10-13_opus55-a7k2_m1-m2-build.md)
 
 ## Checkpoints
 

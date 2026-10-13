@@ -37,7 +37,10 @@ godot --path game -e                # open in the editor
 | `game/` | The Godot project. Rules in `game/scripts/core`, scene code in `game/scripts/game`, numbers in `game/config`. |
 | `tools/` | `check.sh`, `dashboard.py`, `new_task.py`, `cleanroom_check.py`. |
 
-## Current checkpoint
+## Current state
 
-**CP-000 Foundation**: rules engine with 38 passing tests, playable placeholder
-tower round, docs, coordination system. See `coordination/checkpoints/CP-000-foundation.md`.
+Last checkpoint: **CP-000 Foundation** (`coordination/checkpoints/CP-000-foundation.md`).
+Since then: the full game loop (menu, tower select, round, results, city map, settings, pause, endless), progression
+and saves, juice and placeholder audio, EN/ES/DE localisation, analytics and ads against test backends, a balance
+simulator with a first tuning pass, and an Android debug build. 656 automated checks. Remaining work waits on
+humans; see `HUMAN_NEEDED.md` and the dashboard. Latest session log: `coordination/sessions/`.
