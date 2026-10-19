@@ -41,12 +41,16 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - spec: "Skyline Stack" is a working title only. Choose the final name. Check it is free on Google Play and the App Store and has no trademark conflict. It must not resemble the reference game's name.
 
 ### HR-0002 · Art direction choice
-- status: open
+- status: answered
 - type: decision
 - priority: P0
 - needed_for: T-0301, HR-0004..HR-0007, M3
 - requested: 2026-10-13 by opus55-planner
 - spec: Pick one direction from `docs/06_ART_AUDIO_SPEC.md` section 2 (A: flat pastel vector, B: chunky low-poly look rendered to 2D, C: hand-drawn storybook), or describe your own. Everything visual waits on this.
+- answer (owner, 2026-10-19): "Modern simple shapes with good details; an art style that looks 3D, with effects,
+  animation and design. The game level itself is 2D and fixed, not rotatable. Details in low-poly simple shapes
+  with a good modern aesthetic." Recorded as the **Modern low-poly 2.5D** direction in `docs/06_ART_AUDIO_SPEC.md`
+  section 2; rendering approach in `docs/adr/ADR-0006-low-poly-3d-presentation.md`.
 
 ### HR-0003 · Approve the unique hook
 - status: open
