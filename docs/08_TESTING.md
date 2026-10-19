@@ -19,6 +19,12 @@
 - Drive `TowerState` directly with chosen x positions; never depend on frame timing.
 - When you change a rule or a default, update or add the test in the same task.
 
+### UI tests must click, not emit
+Test buttons with a real click: `SceneRouter._click(button.get_global_rect().get_center())` pushes a mouse press and
+release through the viewport (canvas coordinates). Emitting `button.pressed` directly skips input handling and
+missed a real bug (T-0507: the "No thanks" button froze after a focus loss paused the game under the prompt). Tour
+steps `decline` and `decline_real` cover that flow with real clicks and a simulated app switch.
+
 ## 3. Balance simulation
 `godot --headless --path game --script res://tools/sim_balance.gd -- --rounds=500 [--set=combo.count_cap=6]`
 plays thousands of rounds with simulated players of five skill levels and prints completion, trophy, collapse,

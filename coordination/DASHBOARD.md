@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-19 05:13 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 05:23 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T05:13:25Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T05:23:43Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -15,16 +15,16 @@ _Generated 2026-10-19 05:13 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M2 Game loop | `████████████████████` | 8 / 8 |
 | M3 Art and audio | `███████████████░░░░░` | 10 / 13 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
-| M5 Services | `███████░░░░░░░░░░░░░` | 2 / 6 |
+| M5 Services | `██████░░░░░░░░░░░░░░` | 2 / 7 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
 
 ## Ready to claim (0)
 
 - none
 
-## In-Progress (0)
+## In-Progress (1)
 
-- none
+- **T-0507** [Out-of-lives 'No thanks' button does nothing](../coordination/tasks/T-0507-out-of-lives-no-thanks-button-does-nothi.md) · M5 P0 · _owner opus55-a7k2_
 
 ## Review (3)
 

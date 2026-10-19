@@ -103,7 +103,9 @@ English. Screens build their text in `_ready()`, so changing language reloads th
 `main_menu → (settings | city_map) → tower_select → tower_game → results → (tower_game | tower_select | main_menu)`; the menu's
 Endless button goes straight to `tower_game` with `{endless: true}`. `SceneRouter.go(name, params)` fades and
 switches; the next screen reads `SceneRouter.params`. Every screen implements `on_back()` (Android back / Escape).
-In a round, back or focus loss opens the pause overlay (`get_tree().paused`); resuming counts down 3 s.
+In a round, back or focus loss opens the pause overlay (`get_tree().paused`); resuming counts down 3 s. Pausing is
+refused while the "Out of lives" continue prompt or the results are up (`tower_game.can_pause()`); the prompt's
+layer runs with `PROCESS_MODE_ALWAYS`, and back on the prompt means "No thanks".
 
 Screens are built in code with `scripts/game/ui_kit.gd` (placeholder styling until T-0303).
 Debug modes (user args after `--`): `--autoplay [--seconds=N]` plays a round and quits on the results screen;

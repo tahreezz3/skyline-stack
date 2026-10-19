@@ -53,6 +53,8 @@ var last_combo_count := 0
 var view3d = null                      # low-poly 3D renderer (ADR-0006); null = 2D fallback
 var continues_used := 0
 var offering_continue := false
+var continue_layer: CanvasLayer
+var pause_btn: Button
 
 var autoplay := false
 var autoplay_seconds := 0.0
@@ -115,13 +117,16 @@ func _on_tap() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
-		if not round_finished and not autoplay:
-			pause_game()
+		if not autoplay:
+			pause_game()     # refuses while the continue prompt or results are up (T-0507)
 		SaveData.write_save()
 
 
 func on_back() -> void:
 	if round_finished:
+		return
+	if offering_continue:
+		_decline_continue()      # back on the "Out of lives" prompt = "No thanks"
 		return
 	if paused:
 		SceneRouter.go("menu")
@@ -129,8 +134,14 @@ func on_back() -> void:
 		pause_game()
 
 
+## Never pause underneath the continue prompt or after the round ended: the paused tree would
+## freeze the prompt's buttons and hide the pause menu behind it (owner bug T-0507).
+func can_pause() -> bool:
+	return not round_finished and not offering_continue
+
+
 func pause_game() -> void:
-	if paused:
+	if paused or not can_pause():
 		return
 	paused = true
 	get_tree().paused = true
@@ -270,9 +281,12 @@ func _on_round_over() -> void:
 		_finish_round()
 		return
 	offering_continue = true
+	pause_btn.visible = false
 	var layer := CanvasLayer.new()
 	layer.layer = 20
+	layer.process_mode = Node.PROCESS_MODE_ALWAYS     # the prompt must work even if something paused the tree
 	add_child(layer)
+	continue_layer = layer
 	var root := Control.new()
 	layer.add_child(root)
 	var col := UI.screen(root)
@@ -281,17 +295,28 @@ func _on_round_over() -> void:
 	col.add_child(UI.label(tr("CONTINUE_OFFER") % int(cfg["continue_lives"]), 32))
 	col.add_child(UI.button(tr("BTN_WATCH_CONTINUE"), func() -> void:
 		layer.queue_free()
+		continue_layer = null
 		continues_used += 1
 		var earned: bool = await Ads.show_rewarded("continue")
 		offering_continue = false
+		get_tree().paused = false
 		if earned and state.revive(int(cfg["continue_lives"])):
 			_popup(tr("POP_EXTRA_LIFE") % int(cfg["continue_lives"]), Color.GREEN_YELLOW)
+			pause_btn.visible = true
 		else:
 			_finish_round()))
-	col.add_child(UI.button(tr("BTN_NO_THANKS"), func() -> void:
-		layer.queue_free()
-		offering_continue = false
-		_finish_round()))
+	col.add_child(UI.button(tr("BTN_NO_THANKS"), _decline_continue))
+
+
+func _decline_continue() -> void:
+	if not offering_continue:
+		return
+	offering_continue = false
+	if continue_layer:
+		continue_layer.queue_free()
+		continue_layer = null
+	get_tree().paused = false
+	_finish_round()
 
 
 # --- feedback (presentation only) ------------------------------------------------
@@ -370,7 +395,8 @@ func _finish_round() -> void:
 	if autoplay:
 		print("AUTOPLAY_SUMMARY ", JSON.stringify(summary))
 		print("AUTOPLAY_FRAMING violations=%d" % framing_violations)
-	await get_tree().create_timer(RESULTS_DELAY_S).timeout
+	# process_always: reaches the results screen even if the tree got paused meanwhile
+	await get_tree().create_timer(RESULTS_DELAY_S, true).timeout
 	SceneRouter.go("results", {"summary": summary, "record": record})
 
 
@@ -569,7 +595,7 @@ func _build_hud() -> void:
 	hud_combo.position = Vector2(420, 32)
 	hud_combo.size = Vector2(276, 28)
 	layer.add_child(hud_combo)
-	var pause_btn := Button.new()
+	pause_btn = Button.new()
 	pause_btn.text = "II"
 	pause_btn.position = Vector2(620, 80)
 	pause_btn.size = Vector2(76, 76)

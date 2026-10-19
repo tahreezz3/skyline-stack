@@ -52,7 +52,7 @@ func _ready() -> void:
 func _run_tour() -> void:
 	var fake_summary := {"complete": true, "star": true, "population": 123, "height": 10, "max_combo": 7, "block_type": "blue", "endless": false}
 	var fake_record := {"new_best_population": true, "new_best_height": false, "level_before": 1, "level_after": 2, "unlocked": ["red"]}
-	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["game", {"block_type": "blue"}], ["continue", {}], ["game", {"block_type": "blue"}], ["combo_audio", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
+	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["game", {"block_type": "blue"}], ["continue", {}], ["game", {"block_type": "blue"}], ["combo_audio", {}], ["game", {"block_type": "blue"}], ["decline", {}], ["game", {"block_type": "blue"}], ["decline_real", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
 	# The tour never writes the save; it fills the city with sample towers in memory so the screen has content.
 	SaveData.persist = false
 	SaveData.data["city"] = {"plots": {
@@ -97,6 +97,47 @@ func _run_tour() -> void:
 			await get_tree().create_timer(0.3, true, false, true).timeout
 			var stopped: bool = not AudioDirector._tick_player.playing
 			print("TOUR combo_audio ", "ok" if ticking and frozen and stopped else "FAILED (ticking=%s frozen=%s stopped=%s)" % [ticking, frozen, stopped])
+		elif step[0] == "decline":
+			# owner bug: game over -> continue prompt -> REAL mouse click on "No thanks" must lead to results
+			var g := get_tree().current_scene
+			for i in range(3):
+				g._on_resolved(g.state.land(9.0))
+			await get_tree().create_timer(0.8, true, false, true).timeout
+			var btn: Button = null
+			for b in g.find_children("*", "Button", true, false):
+				if b.text == tr("BTN_NO_THANKS"):
+					btn = b
+			var found := btn != null
+			if found:
+				_click(btn.get_global_rect().get_center())
+			await get_tree().create_timer(2.5, true, false, true).timeout
+			var at_results: bool = get_tree().current_scene != null and get_tree().current_scene.scene_file_path == SCENES["results"]
+			print("TOUR decline ", "ok" if found and at_results else "FAILED (button=%s scene=%s)" % [found, get_tree().current_scene.scene_file_path if get_tree().current_scene else "none"])
+		elif step[0] == "decline_real":
+			# full real play: tap when the crane is far from the tower so blocks miss, let them fall,
+			# then click "No thanks" on the continue prompt
+			var g := get_tree().current_scene
+			var waited := 0.0
+			var btn: Button = null
+			while waited < 40.0 and btn == null:
+				if g.falling.is_empty() and not g.state.is_over and absf(g.crane_x - g.state.top_x()) > 1.15:
+					_click(Vector2(360, 700))
+				await get_tree().process_frame
+				waited += get_process_delta_time()
+				for b in g.find_children("*", "Button", true, false):
+					if b.text == tr("BTN_NO_THANKS") and b.is_visible_in_tree():
+						btn = b
+			# owner bug T-0507: losing focus (app switch, notification) while the prompt is up used to
+			# pause the game underneath it and freeze its buttons
+			g._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)    # player switches apps / a notification appears
+			await get_tree().process_frame
+			g._notification(NOTIFICATION_APPLICATION_FOCUS_IN)
+			await get_tree().create_timer(0.5, true, false, true).timeout
+			if btn and is_instance_valid(btn):
+				_click(btn.get_global_rect().get_center())
+			await get_tree().create_timer(3.0, true, false, true).timeout
+			var at_results: bool = get_tree().current_scene != null and get_tree().current_scene.scene_file_path == SCENES["results"]
+			print("TOUR decline_real ", "ok" if at_results else "FAILED (scene=%s)" % (get_tree().current_scene.scene_file_path if get_tree().current_scene else "none"))
 		elif step[0] == "analytics":
 			SaveData.data["settings"]["analytics_consent"] = "unknown"
 			var dropped: bool = not Analytics.track("level_up", {"from_level": 1, "to_level": 2})
@@ -164,3 +205,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
 		back()
 		get_viewport().set_input_as_handled()
+
+
+## Send a real left click (press + release) at a canvas position, like a player's tap.
+func _click(pos: Vector2) -> void:
+	for pressed in [true, false]:
+		var e := InputEventMouseButton.new()
+		e.button_index = MOUSE_BUTTON_LEFT
+		e.pressed = pressed
+		e.position = pos
+		e.global_position = pos
+		get_viewport().push_input(e, true)   # position is in canvas coordinates
+		await get_tree().process_frame
