@@ -13,7 +13,7 @@ You don't need to be a programmer to contribute. This page walks you through it.
    - [Godot 4.7](https://godotengine.org/download) (standard version, not .NET) to see your art in the game.
    - [Blender](https://www.blender.org) 4.x for the 3D models.
 3. **Clone the repository:** GitHub Desktop → *File → Clone repository* → `skyline-stack`; or
-   `git clone https://github.com/<owner>/skyline-stack.git`.
+   `git clone https://github.com/tahreezz3/skyline-stack.git`.
 
 Large files (models, images, audio, fonts) are stored with **Git LFS**. GitHub Desktop does this for you. With
 command-line git, make sure you ran `git lfs install` before cloning.
@@ -74,8 +74,11 @@ Small fixes later? Same branch, new commit, push: the pull request updates autom
 
 ## For the owner
 
-- Branch protection on `main` (GitHub → Settings → Branches): require a pull request before merging, so art and code
-  land through reviews.
+- Repository: https://github.com/tahreezz3/skyline-stack (private). Clone URL:
+  `https://github.com/tahreezz3/skyline-stack.git`.
+- Branch protection on `main` isn't available for private repos on a free GitHub plan (it needs GitHub Pro). Until
+  then the team agreement is: **humans work on branches and open pull requests; nobody force-pushes `main`**. With Pro:
+  Settings → Branches → protect `main`, require a pull request before merging.
 - The reverse-engineering workspace (`../extracted/`) is outside this repository and must never be added to it.
   `tools/cleanroom_check.py` (run by `tools/check.sh`) fails if any file here matches a file there.
 - AI agent sessions keep following `AGENTS.md`; they should pull before starting and push their commits so the artist
