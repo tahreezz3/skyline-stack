@@ -56,7 +56,8 @@ never trace it or copy it into the game.* The current in-game placeholders follo
   the same crossing speed (see `docs/balance/TUNING_LOG.md`).
 
 ### 2.1d Sun and foreground detail (T-0312)
-- **Lo-fi sun:** a soft pink disc with a warm glow and retro horizontal bands in its lower half, low in the sky to
+- **Lo-fi sun:** a dreamy disc, soft pink at the top melting through orchid into violet, with a wide lavender
+  bloom, a soft pink halo and gentle retro horizontal bands in its lower half, low in the sky to
   the right of the tower, behind the painterly clouds. It sinks and fades as the tower climbs into night
   (`sky_backdrop.gdshader`, driven by `tower_view_3d.gd`). A pink rim light from the sun's side catches the
   buildings, turning cool at night.

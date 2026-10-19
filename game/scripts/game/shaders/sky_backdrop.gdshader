@@ -14,11 +14,14 @@ uniform float scroll = 0.0;   // camera height, so clouds drift past as the towe
 
 // lo-fi sun (T-0312): pink disc with retro bands in its lower half; sets and fades towards night
 uniform vec2 sun_pos = vec2(0.56, 0.6);          // in quad UV (visible area is roughly x 0.39-0.61, y 0.3-0.7)
-uniform float sun_size = 0.03;
+uniform float sun_size = 0.032;
 uniform float sun_amount : hint_range(0.0, 1.0) = 1.0;
-uniform vec3 sun_top : source_color = vec3(1.0, 0.85, 0.62);
-uniform vec3 sun_bottom : source_color = vec3(1.0, 0.45, 0.62);
-uniform vec3 sun_glow : source_color = vec3(1.0, 0.62, 0.7);
+// dreamy palette (owner feedback): soft pink on top melting into violet at the bottom
+uniform vec3 sun_top : source_color = vec3(1.0, 0.78, 0.9);
+uniform vec3 sun_mid : source_color = vec3(0.9, 0.52, 0.92);
+uniform vec3 sun_bottom : source_color = vec3(0.55, 0.38, 1.0);
+uniform vec3 sun_glow : source_color = vec3(0.86, 0.6, 1.0);
+uniform vec3 sun_halo : source_color = vec3(1.0, 0.66, 0.88);
 
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
@@ -49,15 +52,21 @@ void fragment() {
 	// sun: soft glow, then the disc; lower half cut by retro bands that thicken towards the bottom
 	vec2 sd = (UV - sun_pos) / sun_size;
 	float r = length(sd);
-	c += sun_glow * exp(-r * 0.9) * 0.45 * sun_amount;
-	float disc = smoothstep(1.0, 0.94, r);
+	// two-layer glow: a wide lavender bloom and a soft pink halo hugging the disc
+	c += sun_glow * exp(-r * 0.55) * 0.38 * sun_amount;
+	c += sun_halo * exp(-max(r - 1.0, 0.0) * 3.0) * 0.22 * sun_amount;
+	float shimmer = 0.97 + 0.03 * sin(TIME * 0.8);   // the faintest breathing
+	float disc = smoothstep(1.0, 0.86, r) * shimmer;   // soft, dreamy edge
 	float band = 1.0;
 	if (sd.y > 0.1) {
 		float stripe = fract(sd.y * 3.2);
-		float gap = mix(0.08, 0.42, clamp(sd.y, 0.0, 1.0));
-		band = smoothstep(gap - 0.04, gap, stripe);
+		float gap = mix(0.06, 0.36, clamp(sd.y, 0.0, 1.0));
+		band = mix(0.25, 1.0, smoothstep(gap - 0.05, gap, stripe));   // gentle bands: the sky shows through softly
 	}
-	vec3 sun_col = mix(sun_top, sun_bottom, clamp(sd.y * 0.5 + 0.5, 0.0, 1.0));
+	// pink at the top, orchid through the middle, violet from just below the centre (the part the city
+	// doesn't hide)
+	float k = clamp(sd.y * 0.62 + 0.55, 0.0, 1.0);
+	vec3 sun_col = k < 0.5 ? mix(sun_top, sun_mid, k * 2.0) : mix(sun_mid, sun_bottom, (k - 0.5) * 2.0);
 	c = mix(c, sun_col, disc * band * sun_amount);
 
 	// painterly clouds: stretched fbm, banded so they read as soft puffs with lit tops

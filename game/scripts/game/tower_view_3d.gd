@@ -518,7 +518,7 @@ func _update_time_of_day(delta: float) -> void:
 	# the lo-fi sun sinks and fades as the tower climbs into night (T-0312)
 	var sun_amount := 1.0 - smoothstep(0.35, 0.8, night)
 	backdrop_mat.set_shader_parameter("sun_amount", sun_amount)
-	backdrop_mat.set_shader_parameter("sun_pos", Vector2(0.578, 0.52 + night * 0.2))   # right of the tower; sinks behind the city
+	backdrop_mat.set_shader_parameter("sun_pos", Vector2(0.578, 0.5 + night * 0.22))   # right of the tower; sinks behind the city
 	rim.light_energy = 0.4 * sun_amount + 0.12 * night
 	rim.light_color = Color("#ff8fb3").lerp(Color("#8f9bff"), night)
 	for l in lamp_lights:
