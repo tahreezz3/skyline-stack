@@ -67,7 +67,7 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
   option for T-0101, not a fixed rule.
 
 ### 3.4 Round goal
-- Each block type has a `target_height`. Reaching it completes the tower: the combo is banked, then a roof is
+- Each block type has a `target_height` (blue 20, red 30, green 40, yellow 50 since T-0208). Reaching it completes the tower: the combo is banked, then a roof is
   added: `roof_people`, or `star_roof_people` (the trophy roof) if population ≥ `star_population`. The trophy is
   decided before the roof bonus is added (`TowerState.is_star`).
 - Endless mode: `target_height = 0`, play until lives run out; crane speed keeps ramping to `speed_max`;

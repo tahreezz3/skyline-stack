@@ -7,39 +7,39 @@
     },
     {
       "level": 2,
-      "population": 150
+      "population": 350
     },
     {
       "level": 3,
-      "population": 250
+      "population": 700
     },
     {
       "level": 4,
-      "population": 400
+      "population": 1100
     },
     {
       "level": 5,
-      "population": 600
+      "population": 1600
     },
     {
       "level": 6,
-      "population": 800
+      "population": 2000
     },
     {
       "level": 7,
-      "population": 1400
+      "population": 3000
     },
     {
       "level": 8,
-      "population": 1800
+      "population": 3800
     },
     {
       "level": 9,
-      "population": 2200
+      "population": 4500
     },
     {
       "level": 10,
-      "population": 3000
+      "population": 6000
     }
   ]
 }

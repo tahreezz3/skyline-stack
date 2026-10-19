@@ -8,6 +8,18 @@ The simulator models a player aiming at the swaying top with a normal landing er
 growing with crane speed and sway). It measures what the rules *do*; it cannot judge how they *feel*.
 Feel sign-off comes from the human playtest (HR-0017).
 
+## 2026-10-19 · T-0208 · opus55-a7k2 · towers start at 20 storeys
+Owner: "10 blocks is too easy, start from 20".
+| Tower | height | roof / trophy roof | trophy at (pre-roof) | unlock at (lifetime) |
+|---|---|---|---|---|
+| blue | 10 → **20** | 30/50 → 60/100 | 68 → 176 | 0 |
+| red | 20 → **30** | 60/100 → 100/160 | 165 → 316 | 250 → 700 |
+| green | 30 → **40** | 100/160 → 150/230 | 305 → 482 | 800 → 2000 |
+| yellow | 40 → **50** | 140/220 → 200/300 | 450 → 648 | 2200 → 4500 |
+Player levels scaled to match (`levels.json`: 0, 350, 700, 1100, 1600, 2000, 3000, 3800, 4500, 6000).
+Simulator (`sim_report.md`): blue is now a real challenge: casual players finish 76%, novices 19%; good players
+earn trophies ~50% on every tower; rounds last 35–77 s; about 3–5 rounds to unlock each next tower.
+
 ## 2026-10-19 · T-0310 · opus55-a7k2 · zoomed camera, narrower crane swing
 The camera zoomed in (owner request), so the crane swing had to fit a narrower screen.
 | Key | Before | After |

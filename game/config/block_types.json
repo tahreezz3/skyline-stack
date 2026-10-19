@@ -1,14 +1,14 @@
 {
-  "_doc": "Tower (block) types. target_height = blocks needed to finish the tower; roof_people = roof bonus; star_population = population needed for the trophy roof; star_roof_people = trophy roof bonus. unlock_population = lifetime population needed to unlock. colour = family colour (UI buttons; the 3D view uses a pastel of it for siding); accent = window frames, awning stripes, shop wall tint. Trophy thresholds set in T-0101 so a 'good' simulated player earns the trophy about half the time (docs/balance/TUNING_LOG.md).",
+  "_doc": "Tower (block) types. target_height = blocks needed to finish the tower; roof_people = roof bonus; star_population = population needed for the trophy roof; star_roof_people = trophy roof bonus. unlock_population = lifetime population needed to unlock. colour = family colour (UI buttons; the 3D view uses a pastel of it for siding); accent = window frames, awning stripes, shop wall tint. Heights start at 20 (T-0208). Trophy thresholds set so a 'good' simulated player earns the trophy about half the time (docs/balance/TUNING_LOG.md).",
   "types": [
     {
       "id": "blue",
       "name_key": "block_blue",
       "colour": "#4a90d9",
-      "target_height": 10,
-      "roof_people": 30,
-      "star_population": 68,
-      "star_roof_people": 50,
+      "target_height": 20,
+      "roof_people": 60,
+      "star_population": 176,
+      "star_roof_people": 100,
       "unlock_population": 0,
       "accent": "#d9825b"
     },
@@ -16,33 +16,33 @@
       "id": "red",
       "name_key": "block_red",
       "colour": "#d9534a",
-      "target_height": 20,
-      "roof_people": 60,
-      "star_population": 165,
-      "star_roof_people": 100,
-      "unlock_population": 250,
+      "target_height": 30,
+      "roof_people": 100,
+      "star_population": 316,
+      "star_roof_people": 160,
+      "unlock_population": 700,
       "accent": "#3f9a9c"
     },
     {
       "id": "green",
       "name_key": "block_green",
       "colour": "#5cb85c",
-      "target_height": 30,
-      "roof_people": 100,
-      "star_population": 305,
-      "star_roof_people": 160,
-      "unlock_population": 800,
+      "target_height": 40,
+      "roof_people": 150,
+      "star_population": 482,
+      "star_roof_people": 230,
+      "unlock_population": 2000,
       "accent": "#d9825b"
     },
     {
       "id": "yellow",
       "name_key": "block_yellow",
       "colour": "#e6b800",
-      "target_height": 40,
-      "roof_people": 140,
-      "star_population": 450,
-      "star_roof_people": 220,
-      "unlock_population": 2200,
+      "target_height": 50,
+      "roof_people": 200,
+      "star_population": 648,
+      "star_roof_people": 300,
+      "unlock_population": 4500,
       "accent": "#4a7fc1"
     }
   ]
