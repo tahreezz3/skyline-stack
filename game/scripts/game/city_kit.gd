@@ -15,8 +15,11 @@ const Kit := preload("res://scripts/game/building_kit.gd")
 
 const ROAD_NEAR := 5.3
 const ROAD_FAR := 1.3
-const PASTELS := ["#f2c6a0", "#a9c8e8", "#f5e1a4", "#c6e2c3", "#e8b4b8", "#d9cdf0", "#f7d9c4", "#b7d7d8", "#efe6d8", "#c9d3e6"]
-const ACCENTS := ["#d9825b", "#3f9a9c", "#4a7fc1", "#c95f6e", "#5e9e5a"]
+## Cozy lo-fi palette (T-0310): muted warm walls, deep warm roofs, soft accents.
+const PASTELS := ["#e9a27c", "#f0c987", "#d99aa5", "#a8c3a0", "#c9b6d9", "#f2dcc2", "#9fb7c9", "#d8a48f", "#b5a1c7", "#e7c3a3"]
+const ACCENTS := ["#c4664f", "#3f8f8a", "#5a6fae", "#b8576a", "#6b8f4e"]
+const ROOF_TILES := ["#a8524a", "#7a5a8c", "#4f7a6b", "#c27a45", "#8c5a4a"]
+const LEAVES := ["#7fae7a", "#5f9466", "#e0a35a", "#d9774f", "#9cb86b"]
 
 
 ## The street: back sidewalk (tower side), curb, road with markings and a zebra
@@ -25,7 +28,7 @@ static func street(width: float) -> ArrayMesh:
 	var b := Kit.Builder.new()
 	var hw := width * 0.5
 	# Top faces all sit at different heights (no z-fighting, T-0307).
-	b.box("sidewalk", Vector3(-hw, -2.0, -40.0), Vector3(hw, -0.035, ROAD_FAR - 0.12))            # back sidewalk
+	b.box("sidewalk", Vector3(-hw, -2.0, -1.8), Vector3(hw, -0.035, ROAD_FAR - 0.12))             # back sidewalk (ends behind the tower)
 	b.box("curb", Vector3(-hw, -2.0, ROAD_FAR - 0.12), Vector3(hw, -0.03, ROAD_FAR))              # curb stone
 	b.box("asphalt", Vector3(-hw, -2.0, ROAD_FAR), Vector3(hw, -0.09, ROAD_NEAR))                 # road
 	b.box("curb", Vector3(-hw, -2.0, ROAD_NEAR), Vector3(hw, -0.03, ROAD_NEAR + 0.12))
@@ -59,7 +62,7 @@ static func street(width: float) -> ArrayMesh:
 
 ## One generic city building into builder `b`: body, cornice, window grid on the front
 ## (+Z) and both sides, optional shop awning and rooftop props. `detail` 0..1.
-static func _building(b: Kit.Builder, rng: RandomNumberGenerator, x0: float, z_front: float, w: float, d: float, h: float, detail: float) -> void:
+static func _building(b: Kit.Builder, rng: RandomNumberGenerator, x0: float, z_front: float, w: float, d: float, h: float, detail: float, gable := false) -> void:
 	var colour := Color(PASTELS[rng.randi() % PASTELS.size()])
 	var accent := Color(ACCENTS[rng.randi() % ACCENTS.size()])
 	var x1 := x0 + w
@@ -68,6 +71,17 @@ static func _building(b: Kit.Builder, rng: RandomNumberGenerator, x0: float, z_f
 	b.box("body", Vector3(x0, -2.0, zb), Vector3(x1, h - 0.06, z_front))
 	b.color = Color.WHITE
 	b.box("trim", Vector3(x0 - 0.04, h - 0.08, zb - 0.04), Vector3(x1 + 0.04, h, z_front + 0.04))     # cornice
+	if gable:                                              # pitched tiled roof, ridge along x
+		var rh := minf(d * 0.45, 0.55)
+		var zm := (z_front + zb) * 0.5
+		b.color = Color(ROOF_TILES[rng.randi() % ROOF_TILES.size()])
+		var o := 0.06
+		b.quad("body", Vector3(x0 - o, h, z_front + o), Vector3(x1 + o, h, z_front + o), Vector3(x1 + o, h + rh, zm), Vector3(x0 - o, h + rh, zm), Vector3(0, 0.7, 0.7))
+		b.quad("body", Vector3(x1 + o, h, zb - o), Vector3(x0 - o, h, zb - o), Vector3(x0 - o, h + rh, zm), Vector3(x1 + o, h + rh, zm), Vector3(0, 0.7, -0.7))
+		b.color = colour
+		b.tri("body", Vector3(x0, h, z_front), Vector3(x0, h, zb), Vector3(x0, h + rh, zm), Vector3.LEFT)
+		b.tri("body", Vector3(x1, h, zb), Vector3(x1, h, z_front), Vector3(x1, h + rh, zm), Vector3.RIGHT)
+		b.color = Color.WHITE
 	var floor_h := rng.randf_range(0.36, 0.46)
 	var cols := maxi(1, int(w / 0.3))
 	var col_w := w / cols
@@ -98,7 +112,7 @@ static func _building(b: Kit.Builder, rng: RandomNumberGenerator, x0: float, z_f
 			b.quad("accent", Vector3(u0, 0.43, z_front + 0.22), Vector3(u1, 0.43, z_front + 0.22), Vector3(u1, 0.53, z_front), Vector3(u0, 0.53, z_front), Vector3(0, 0.8, 0.6))
 			b.quad("accent", Vector3(u0, 0.39, z_front + 0.22), Vector3(u1, 0.39, z_front + 0.22), Vector3(u1, 0.43, z_front + 0.22), Vector3(u0, 0.43, z_front + 0.22), Vector3.BACK)
 		b.color = Color.WHITE
-	if detail > 0.2:                                       # rooftop props
+	if detail > 0.2 and not gable:                         # rooftop props
 		var r := rng.randf()
 		var cx := x0 + w * rng.randf_range(0.25, 0.75)
 		var cz := z_front - d * rng.randf_range(0.3, 0.7)
@@ -112,10 +126,16 @@ static func _building(b: Kit.Builder, rng: RandomNumberGenerator, x0: float, z_f
 
 
 ## A row of buildings side by side along x, fronts at z_front. Returns one mesh.
-static func city_row(rng_seed: int, x_from: float, x_to: float, z_front: float, depth: float, min_h: float, max_h: float, detail: float, gap_at_origin := 0.0) -> ArrayMesh:
+## `gap_chance`: chance of leaving a gap (with a tree or two) instead of a building,
+## so rows breathe; `gable_chance`: chance of a pitched tiled roof.
+static func city_row(rng_seed: int, x_from: float, x_to: float, z_front: float, depth: float, min_h: float, max_h: float, detail: float, gap_at_origin := 0.0, gap_chance := 0.0, gable_chance := 0.0, ground := Color(0, 0, 0, 0)) -> ArrayMesh:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	var b := Kit.Builder.new()
+	if ground.a > 0.0:                                      # the row's own strip of ground (lawn / paving)
+		b.color = ground
+		b.box("body", Vector3(x_from - 2.0, -2.0, z_front - depth - 1.2), Vector3(x_to + 2.0, -0.05, z_front + 1.4))
+		b.color = Color.WHITE
 	var x := x_from
 	while x < x_to:
 		var w := rng.randf_range(0.9, 1.7)
@@ -123,8 +143,49 @@ static func city_row(rng_seed: int, x_from: float, x_to: float, z_front: float, 
 			x = gap_at_origin      # keep the space behind the tower clear
 			continue
 		var zf := z_front - rng.randf_range(0.0, 0.35)
-		_building(b, rng, x, zf, w - 0.06, depth * rng.randf_range(0.8, 1.1), rng.randf_range(min_h, max_h), detail)
+		if rng.randf() < gap_chance:
+			for k in range(rng.randi_range(1, 2)):
+				_tree(b, rng, Vector3(x + w * rng.randf_range(0.25, 0.75), 0.0, zf - rng.randf_range(0.1, 0.6)), rng.randf_range(0.5, 0.9))
+			x += w
+			continue
+		var h := rng.randf_range(min_h, max_h)
+		_building(b, rng, x, zf, w - 0.06, depth * rng.randf_range(0.8, 1.1), h, detail, h < 2.2 and rng.randf() < gable_chance)
 		x += w
+	return b.commit()
+
+
+## Low-poly tree (trunk + two faceted cones), vertex-coloured, written into a builder.
+static func _tree(b: Kit.Builder, rng: RandomNumberGenerator, at: Vector3, size: float) -> void:
+	b.color = Color("#8a6243")
+	b.frustum("body", at + Vector3(0, -0.1, 0), 0.04 * size, 0.035 * size, 0.4 * size, 5)
+	b.color = Color(LEAVES[rng.randi() % LEAVES.size()])
+	b.cone("body", at + Vector3(0, 0.25 * size, 0), 0.32 * size, 0.55 * size, 6)
+	b.cone("body", at + Vector3(0, 0.55 * size, 0), 0.24 * size, 0.45 * size, 6, 0.5)
+	b.color = Color.WHITE
+
+
+## Cozy street furniture by the tower: a wooden bench and a planter with flowers.
+static func bench() -> ArrayMesh:
+	var b := Kit.Builder.new()
+	b.box("wood", Vector3(-0.2, 0.07, -0.05), Vector3(0.2, 0.085, 0.05))       # seat
+	b.box("wood", Vector3(-0.2, 0.1, -0.06), Vector3(0.2, 0.16, -0.045))       # backrest
+	for sx in [-0.17, 0.17]:
+		b.box("iron", Vector3(sx - 0.01, 0.0, -0.05), Vector3(sx + 0.01, 0.07, 0.05))
+		b.box("iron", Vector3(sx - 0.01, 0.07, -0.065), Vector3(sx + 0.01, 0.165, -0.05))
+	return b.commit()
+
+
+static func planter() -> ArrayMesh:
+	var b := Kit.Builder.new()
+	b.box("pot", Vector3(-0.16, 0.0, -0.09), Vector3(0.16, 0.11, 0.09))
+	b.box("soil", Vector3(-0.14, 0.11, -0.07), Vector3(0.14, 0.115, 0.07))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 5
+	for i in range(5):
+		var c := Vector3(-0.1 + i * 0.05, 0.14 + rng.randf_range(0.0, 0.03), rng.randf_range(-0.03, 0.03))
+		b.blob("leaf", c, 0.045)
+		if i % 2 == 0:
+			b.blob("flower", c + Vector3(0.01, 0.04, 0.02), 0.018)
 	return b.commit()
 
 

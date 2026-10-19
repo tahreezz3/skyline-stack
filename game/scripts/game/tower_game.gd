@@ -20,7 +20,7 @@ const RESULTS_DELAY_S := 1.2
 const UNIT := 160.0                     # screen pixels per world unit (one block width)
 const SCREEN := Vector2(720, 1280)
 const GROUND_PX := 1120.0               # screen y of world y=0 when the camera is at the bottom
-const VIEW_BELOW_TOP := 3.0             # world units kept visible under the stack top
+const VIEW_BELOW_TOP := 3.2             # world units kept visible under the stack top
 const FOUNDATION_COLOUR := Color("#5a5a66")
 
 var rules: Dictionary

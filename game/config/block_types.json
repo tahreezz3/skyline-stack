@@ -7,7 +7,7 @@
       "colour": "#4a90d9",
       "target_height": 10,
       "roof_people": 30,
-      "star_population": 62,
+      "star_population": 68,
       "star_roof_people": 50,
       "unlock_population": 0,
       "accent": "#d9825b"
@@ -18,7 +18,7 @@
       "colour": "#d9534a",
       "target_height": 20,
       "roof_people": 60,
-      "star_population": 150,
+      "star_population": 165,
       "star_roof_people": 100,
       "unlock_population": 250,
       "accent": "#3f9a9c"
@@ -29,7 +29,7 @@
       "colour": "#5cb85c",
       "target_height": 30,
       "roof_people": 100,
-      "star_population": 280,
+      "star_population": 305,
       "star_roof_people": 160,
       "unlock_population": 800,
       "accent": "#d9825b"
@@ -40,7 +40,7 @@
       "colour": "#e6b800",
       "target_height": 40,
       "roof_people": 140,
-      "star_population": 410,
+      "star_population": 450,
       "star_roof_people": 220,
       "unlock_population": 2200,
       "accent": "#4a7fc1"

@@ -8,6 +8,16 @@ The simulator models a player aiming at the swaying top with a normal landing er
 growing with crane speed and sway). It measures what the rules *do*; it cannot judge how they *feel*.
 Feel sign-off comes from the human playtest (HR-0017).
 
+## 2026-10-19 · T-0310 · opus55-a7k2 · zoomed camera, narrower crane swing
+The camera zoomed in (owner request), so the crane swing had to fit a narrower screen.
+| Key | Before | After |
+|---|---|---|
+| `crane.amplitude` | 1.6 | 1.25 |
+| `crane.speed` / `speed_per_block` / `speed_max` | 1.6 / 0.03 / 3.2 | 2.05 / 0.0384 / 4.1 (×1.28: same speed when crossing the tower) |
+| trophy `star_population` blue/red/green/yellow | 62 / 150 / 280 / 410 | 68 / 165 / 305 / 450 |
+Collapse and completion rates are unchanged in the simulator. Drops come a little more often, so combos pay slightly
+more; trophy thresholds rose ~10% to keep "good" players at about 50–65% trophies (`sim_report.md`).
+
 ## 2026-10-19 · T-0106 · opus55-a7k2 · stable first storey
 Added `first_block_zone = 0.62`: an off-centre first block on the foundation no longer adds wobble or risks a
 collapse (owner request). Slightly more forgiving at the start of every round; no other values changed.

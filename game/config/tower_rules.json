@@ -27,10 +27,10 @@
     "height_mult_cap": 4
   },
   "crane": {
-    "amplitude": 1.6,
-    "speed": 1.6,
-    "speed_per_block": 0.03,
-    "speed_max": 3.2,
+    "amplitude": 1.25,
+    "speed": 2.05,
+    "speed_per_block": 0.0384,
+    "speed_max": 4.1,
     "gap_blocks": 5,
     "gravity": 30.0
   },

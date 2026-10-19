@@ -41,6 +41,20 @@ never trace it or copy it into the game.* The current in-game placeholders follo
 - Camera: low street-level angle (6° pitch); the ground line sits low on screen, so the foreground is just the street.
   No grass or trees in the foreground.
 
+### 2.1c Mood: cozy lo-fi (owner feedback, T-0310)
+- Golden-hour periwinkle-to-peach sky with pink clouds at the ground, pink-violet dusk mid-tower, deep indigo night
+  with warm windows. Haze is lavender-peach, never a flat orange wash.
+- The city is **small, far and spacious**: three rows scaled down with distance (the camera is orthographic, so
+  distance alone doesn't shrink anything), each on its own lawn strip, with gaps, little trees (some autumn colours)
+  and pitched tiled roofs. Lots of sky; the tower is always the focus.
+- Muted warm palette for the city (terracotta, mustard, dusty rose, sage, lavender, cream); some windows glow softly
+  even by day. Warm violet-grey asphalt, warm sidewalks.
+- Cozy details by the tower: a planter with flowers, a wooden bench, and a **ginger cat** on the bench that watches
+  the swinging block, swishes its tail, blinks, perks its tail up on a perfect and hops when the tower collapses
+  (`scripts/game/cat.gd`). Calm traffic (three slow cars).
+- Camera zoomed in (6.5 units visible instead of 8) so the buildings read; the crane swing was narrowed to fit, at
+  the same crossing speed (see `docs/balance/TUNING_LOG.md`).
+
 ### 2.2 Colour and materials
 - Flat colour per material (no photo textures). One small palette texture or vertex colours are fine.
 - Tower families: **blue** `#4a90d9`, **red** `#d9534a`, **green** `#5cb85c`, **gold** `#e6b800`. Siding is a pastel

@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-19 03:52 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 04:02 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T03:52:11Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T04:02:29Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -13,7 +13,7 @@ _Generated 2026-10-19 03:52 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `██████████░░░░░░░░░░` | 4 / 8 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
-| M3 Art and audio | `█████████████░░░░░░░` | 6 / 9 |
+| M3 Art and audio | `██████████████░░░░░░` | 7 / 10 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
@@ -92,7 +92,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (24)
+## Done (25)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -115,6 +115,7 @@ Delivered / answered: HR-0002
 - T-0307 Fix flicker on the tower base (landings, window resize)
 - T-0308 Detailed angled buildings: shop-front ground storey, richer storeys, painterly sky
 - T-0309 City setting: street in front, city skyline behind, lower camera
+- T-0310 Cozy lo-fi look: zoom in, spacious distant city, warm palette, a cat
 - T-0401 City map grid and placement
 - T-0501 Rewarded and interstitial ads
 - T-0503 Analytics events

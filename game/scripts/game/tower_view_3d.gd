@@ -10,20 +10,22 @@ extends Node3D
 const LowPoly := preload("res://scripts/game/low_poly.gd")
 const Kit := preload("res://scripts/game/building_kit.gd")
 const City := preload("res://scripts/game/city_kit.gd")
+const Cat := preload("res://scripts/game/cat.gd")
 
 const PITCH_DEG := 6.0              # low street-level angle: little foreground (owner feedback, T-0309)
 const BUILDING_YAW_DEG := 38.0
 const CAM_DIST := 20.0             # ortho: distance doesn't change size; closer keeps the shadow range tight
-const VIEW_UNITS := 8.0            # visible world height (1280 px / 160 px per unit)
-const CENTER_ABOVE_VIEW := 3.5     # ground 3.5 units below screen centre: only the street shows below the tower
+const VIEW_UNITS := 6.5            # visible world height: zoomed in so the buildings read (T-0310)
+const CENTER_ABOVE_VIEW := 2.75    # ground this far below screen centre: only the street shows below the tower
 const PX_TO_UNITS := 1.0 / 160.0
 const MAX_SHARDS := 256
 
-## Sky keyframes by height:
+## Sky keyframes by height, cozy lo-fi palette (T-0310): golden hour at the ground,
+## pink-violet dusk in the middle, deep indigo night with warm windows at the top.
 ## [top, bottom, cloud warm, cloud light, cloud amount, sun colour, sun energy, ambient colour, ambient energy]
-const SKY_DAY := [Color("#2fa3e6"), Color("#ffe3bd"), Color("#f7b08c"), Color("#fff0a8"), 0.85, Color("#fff0d6"), 1.15, Color("#a9b6ef"), 0.42]
-const SKY_DUSK := [Color("#3c3a8e"), Color("#ff9a66"), Color("#e8738a"), Color("#ffc68a"), 0.75, Color("#ffa66b"), 0.9, Color("#8f86d8"), 0.34]
-const SKY_NIGHT := [Color("#070b24"), Color("#262f6a"), Color("#2f3a6e"), Color("#4a5690"), 0.35, Color("#9fb4ff"), 0.35, Color("#4b5aa6"), 0.24]
+const SKY_DAY := [Color("#8e9fe6"), Color("#ffc9a3"), Color("#f2a3ad"), Color("#ffe3bf"), 0.8, Color("#ffd7a8"), 1.05, Color("#b9a8e6"), 0.46]
+const SKY_DUSK := [Color("#5b4a9f"), Color("#ff9a74"), Color("#d96f8f"), Color("#ffb88a"), 0.75, Color("#ff9f73"), 0.85, Color("#8f78c9"), 0.36]
+const SKY_NIGHT := [Color("#15153a"), Color("#3c2f6b"), Color("#3a3366"), Color("#56497f"), 0.35, Color("#a9b0ff"), 0.32, Color("#5b4fa0"), 0.26]
 
 var game: Node2D
 var block_h := 0.6
@@ -51,6 +53,7 @@ var roof_node: MeshInstance3D
 var layers: Array[Dictionary] = []      # {node, mat, base: Color, haze, parallax, z, horizon}
 var rings: Array[Dictionary] = []       # {node, mat, age}
 var cars: Array[Dictionary] = []        # {node, speed}
+var cat: Node3D
 var mat_city: StandardMaterial3D        # vertex-coloured city walls / awnings
 var mat_lamp: StandardMaterial3D        # street-light heads, glow at night
 var mat_headlight: StandardMaterial3D
@@ -186,9 +189,9 @@ func _build_camera_and_light() -> void:
 	# distance haze: far city rows fade into the sky colour (depth fog; the playfield stays clear)
 	env.fog_enabled = true
 	env.fog_mode = Environment.FOG_MODE_DEPTH
-	env.fog_depth_begin = CAM_DIST + 1.5
-	env.fog_depth_end = CAM_DIST + 55.0
-	env.fog_depth_curve = 0.8
+	env.fog_depth_begin = CAM_DIST + 3.0
+	env.fog_depth_end = CAM_DIST + 75.0
+	env.fog_depth_curve = 1.3          # gentle near, stronger far: colours survive in the near rows
 	env.fog_light_color = SKY_DAY[1]
 	env.fog_sky_affect = 0.0
 	env.glow_enabled = true
@@ -218,15 +221,15 @@ func _build_environment_layers() -> void:
 	glass_dark.metallic = 0.25
 	mats["glass_dark"] = glass_dark
 	mats["roof"] = _lit(Color("#9aa3b5"))
-	mats["sidewalk"] = _lit(Color("#ddd7cb"))
-	mats["curb"] = _lit(Color("#efebe3"))
-	mats["asphalt"] = _lit(Color("#4d5465"), 0.95)
-	mats["marking"] = _lit(Color("#f4f2ea"))
-	mats["plinth"] = _lit(Color("#b9bfcb"))
+	mats["sidewalk"] = _lit(Color("#e6d3bd"))
+	mats["curb"] = _lit(Color("#f1e4d3"))
+	mats["asphalt"] = _lit(Color("#5a5168"), 0.95)       # warm violet-grey asphalt
+	mats["marking"] = _lit(Color("#f6eddf"))
+	mats["plinth"] = _lit(Color("#c8b5a6"))
 	mat_lamp = _glow(Color("#fff1c9"), 0.0)
-	mat_city_glass = _glow(Color("#9fb6d3"), 0.0)
-	mat_city_glass.emission = Color("#ffd27a")
-	mat_city_glass_dark = _lit(Color("#93a8c6"), 0.4)
+	mat_city_glass = _glow(Color("#c9a37a"), 0.35)
+	mat_city_glass.emission = Color("#ffc977")
+	mat_city_glass_dark = _lit(Color("#9b9fc0"), 0.4)
 	mat_headlight = _glow(Color("#fff6d8"), 0.6)
 
 	# street in front of the tower (world-fixed)
@@ -234,43 +237,51 @@ func _build_environment_layers() -> void:
 	street.mesh = City.street(80.0)
 	_dress(street)
 	add_child(street)
-	# neighbouring buildings framing the tower at the screen edges (world-fixed, behind the playfield)
-	for spec in [[-4.4, 1.3, 3.4, 31], [2.75, 1.65, 2.6, 32]]:
-		var nb := MeshInstance3D.new()
-		nb.mesh = City.city_row(spec[3], spec[0], spec[0] + spec[1], -1.05, 1.6, spec[2], spec[2] + 0.01, 1.0)
-		_dress_city(nb)
-		add_child(nb)
-	# city rows behind: they rise slower than the camera (parallax), so you climb above the city
-	# kept low and hazy so the sky shows and the tower stays the brightest, sharpest thing on screen
-	_add_city_layer(City.city_row(41, -14.0, 14.0, -3.4, 1.6, 0.9, 2.2, 0.9, 1.2), -3.4, 0.1)
-	_add_city_layer(City.city_row(42, -18.0, 18.0, -10.0, 2.0, 1.6, 3.6, 0.6), -10.0, 0.3)
-	_add_city_layer(City.city_row(43, -30.0, 30.0, -26.0, 3.0, 2.5, 6.5, 0.25), -26.0, 0.55)
-	var sea_st := SurfaceTool.new()
-	sea_st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	LowPoly.box(sea_st, Vector3(-120, -3.0, -1.0), Vector3(120, 0.0, 1.0))
-	var sea := ArrayMesh.new()
-	sea_st.commit(sea)
-	_add_layer(sea, Color("#2aa7b0"), -70.0, 0.0, 0.85, 0.0)
+	# the city, far back and spacious (gaps with trees, some pitched roofs), hazy and blurred so the tower
+	# stays the focus; rows rise slower than the camera (parallax) so you climb above the rooftops
+	# The camera is orthographic, so distance alone doesn't shrink anything: each row is scaled down
+	# (smaller = farther away) on top of the haze, blur and parallax.
+	# Each row has its own lawn strip and sits where perspective would put it on screen (`base_v`, units
+	# above the street's ground line): nearer rows lower, farther rows higher and smaller.
+	_add_city_layer(City.city_row(41, -16.0, 16.0, -7.0, 1.4, 1.2, 2.6, 0.9, 1.6, 0.4, 0.6, Color("#9cbf86")), -7.0, 0.14, 0.5, 0.22)
+	_add_city_layer(City.city_row(42, -30.0, 30.0, -16.0, 1.8, 1.6, 3.6, 0.55, 0.0, 0.3, 0.35, Color("#8fb08a")), -16.0, 0.34, 0.36, 0.5)
+	_add_city_layer(City.city_row(43, -60.0, 60.0, -34.0, 2.5, 2.5, 6.0, 0.25, 0.0, 0.2, 0.0, Color("#93a49a")), -34.0, 0.6, 0.25, 0.78)
+	_add_layer(LowPoly.ridge(140.0, 26, 0.8, 2.2, 11, 2.0), Color("#a58fc9"), -70.0, 1.0, 0.85, 0.0)   # soft violet hills
 
-	# street lights on the near edge of the back sidewalk, and traffic
+	# cozy corner by the tower: a planter, a bench with the cat on it, warm street lights, light traffic
+	var pl := MeshInstance3D.new()
+	pl.mesh = City.planter()
+	_dress(pl, {"pot": mats["accent"], "soil": _lit(Color("#6b4a3a")), "leaf": _lit(Color("#6f9e5f")), "flower": _lit(Color("#f2a7b8"))})
+	pl.position = Vector3(-1.02, -0.035, 0.55)
+	add_child(pl)
+	var bn := MeshInstance3D.new()
+	bn.mesh = City.bench()
+	_dress(bn, {"wood": _lit(Color("#b07a52")), "iron": _lit(Color("#4a4458"))})
+	bn.position = Vector3(1.12, -0.035, 0.7)
+	bn.scale = Vector3.ONE * 1.4
+	add_child(bn)
+	cat = Cat.new()
+	add_child(cat)
+	cat.scale = Vector3.ONE * 1.7                              # toy scale: readable and cute
+	cat.place(Vector3(1.02, -0.035 + 0.085 * 1.4, 0.7), -0.35) # sitting on the bench seat, turned towards the tower
 	var light_mesh := City.street_light()
-	for lx in [-1.9, 1.9, -5.5, 5.5]:
+	for lx in [-1.75, 1.75, -5.5, 5.5]:
 		var l := MeshInstance3D.new()
 		l.mesh = light_mesh
-		_dress(l, {"pole": mats["roof"], "lamp": mat_lamp})
+		_dress(l, {"pole": _lit(Color("#4a4458")), "lamp": mat_lamp})
 		l.position = Vector3(lx, -0.035, City.ROAD_FAR - 0.3)
 		add_child(l)
-	var lanes := [[City.ROAD_FAR + 1.0, 1.1], [City.ROAD_NEAR - 1.0, -1.4]]
-	for i in range(5):
+	var lanes := [[City.ROAD_FAR + 1.0, 0.7], [City.ROAD_NEAR - 1.0, -0.85]]
+	for i in range(3):
 		var lane: Array = lanes[i % 2]
 		var c := MeshInstance3D.new()
 		c.mesh = City.car(70 + i)
-		var paint := _lit(Color(City.PASTELS[(i * 3) % City.PASTELS.size()]).darkened(0.1), 0.5)
+		var paint := _lit(Color(City.PASTELS[(i * 3) % City.PASTELS.size()]).darkened(0.08), 0.5)
 		_dress(c, {"body": paint, "wheel": _lit(Color("#2a2d36")), "emissive": mat_headlight, "tail": _glow(Color("#ff4a4a"), 1.2)})
-		c.position = Vector3(-7.0 + i * 3.1, -0.09, float(lane[0]))
+		c.position = Vector3(-7.0 + i * 5.3, -0.09, float(lane[0]))
 		c.rotation.y = 0.0 if float(lane[1]) > 0.0 else PI
 		add_child(c)
-		cars.append({"node": c, "speed": float(lane[1]) * (0.85 + 0.1 * i)})
+		cars.append({"node": c, "speed": float(lane[1]) * (0.9 + 0.1 * i)})
 
 
 ## City rows: vertex-coloured walls and awnings, shared glass (some windows light up at night).
@@ -278,13 +289,14 @@ func _dress_city(mi: MeshInstance3D) -> void:
 	_dress(mi, {"body": mat_city, "accent": mat_city, "glass": mat_city_glass, "glass_dark": mat_city_glass_dark})
 
 
-func _add_city_layer(mesh: Mesh, z: float, parallax: float) -> void:
+func _add_city_layer(mesh: Mesh, z: float, parallax: float, scale := 1.0, base_v := 0.0) -> void:
 	var mi := MeshInstance3D.new()
 	mi.mesh = mesh
+	mi.scale = Vector3.ONE * scale
 	_dress_city(mi)
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mi)
-	layers.append({"node": mi, "mat": null, "base": Color.WHITE, "haze": 0.0, "parallax": parallax, "z": z, "horizon": 0.0, "world": true})
+	layers.append({"node": mi, "mat": null, "base": Color.WHITE, "haze": 0.0, "parallax": parallax, "z": z, "horizon": 0.0, "world": true, "scale": scale, "base_v": base_v})
 
 
 func _build_actors() -> void:
@@ -381,6 +393,7 @@ func sync(delta: float) -> void:
 	_update_particles()
 	_update_rings(delta)
 	_update_cars(delta)
+	cat.tick(delta, float(game.crane_x) if game.falling.is_empty() else float(game.falling["x"]))
 
 
 func _update_cars(delta: float) -> void:
@@ -405,7 +418,12 @@ func _update_camera(_delta: float) -> void:
 		var n: MeshInstance3D = l["node"]
 		var lift := (cam_y - CENTER_ABOVE_VIEW) * float(l["parallax"])
 		if l.get("world", false):
-			n.position = Vector3(0, lift, 0)           # mesh already built at its real depth
+			# mesh built at its real depth; when scaled down, shift it back so it stays at that depth, then
+			# lift/lower it so its base lands `base_v` above the ground line on screen
+			var z := float(l["z"])
+			var sp := sin(deg_to_rad(PITCH_DEG))
+			var y_base := (float(l["base_v"]) + z * sp) / cos(deg_to_rad(PITCH_DEG))
+			n.position = Vector3(0, y_base + lift, z * (1.0 - float(l.get("scale", 1.0))))
 		else:
 			n.position = Vector3(0, float(l["horizon"]) + float(l["z"]) * tan_p + lift, float(l["z"]))
 	backdrop_mat.set_shader_parameter("scroll", (cam_y - CENTER_ABOVE_VIEW) * 0.01)
@@ -446,12 +464,12 @@ func _update_time_of_day(delta: float) -> void:
 		if l["mat"] != null:
 			(l["mat"] as StandardMaterial3D).albedo_color = (l["base"] as Color).darkened(night * 0.45)
 	mat_city.albedo_color = Color.WHITE.darkened(night * 0.5)
-	mat_city_glass.albedo_color = Color("#9fb6d3").lerp(Color("#1d2744"), night)
-	mat_city_glass.emission_energy_multiplier = clampf((night - 0.35) * 3.0, 0.0, 1.8)
-	mat_city_glass_dark.albedo_color = Color("#93a8c6").lerp(Color("#1a2238"), night)
+	mat_city_glass.albedo_color = Color("#c9a37a").lerp(Color("#2a2140"), night)
+	mat_city_glass.emission_energy_multiplier = 0.35 + clampf((night - 0.3) * 3.0, 0.0, 1.6)   # cozy: lit even by day
+	mat_city_glass_dark.albedo_color = Color("#9b9fc0").lerp(Color("#1f1a33"), night)
 	mat_lamp.emission_energy_multiplier = clampf((night - 0.25) * 4.0, 0.0, 3.0)
 	mat_headlight.emission_energy_multiplier = 0.6 + night * 2.5
-	env.fog_light_color = bottom
+	env.fog_light_color = bottom.lerp(_sky(0), 0.3).lightened(0.1)   # lavender-peach haze, not a flat orange wash
 
 
 func _update_tower(st) -> void:
