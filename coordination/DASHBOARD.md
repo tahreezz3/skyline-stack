@@ -1,17 +1,17 @@
 # Project dashboard
 
-_Generated 2026-10-19 02:58 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 03:05 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T02:58:10Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T03:05:57Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
 | Milestone | Progress | Done / total |
 |---|---|---|
 | M0 Foundation | `████████████████████` | 4 / 4 |
-| M1 Core feel | `███████░░░░░░░░░░░░░` | 2 / 6 |
+| M1 Core feel | `██████████░░░░░░░░░░` | 4 / 8 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
 | M3 Art and audio | `███████████░░░░░░░░░` | 4 / 7 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
@@ -92,7 +92,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (20)
+## Done (22)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -100,6 +100,8 @@ Delivered / answered: HR-0002
 - T-0004 Coordination tooling and dashboard
 - T-0102 Juice pass with placeholder effects
 - T-0103 AudioDirector autoload with placeholder sounds
+- T-0106 First block on the foundation never wobbles
+- T-0107 Combo ticking keeps playing when paused or after leaving the round
 - T-0201 Scene flow: boot, menu, select, round, results
 - T-0202 Block type selection and unlocks
 - T-0203 Player level and progression rules

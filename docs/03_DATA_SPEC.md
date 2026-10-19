@@ -10,6 +10,7 @@ All gameplay numbers live here. `tools/check.sh` validates that the files parse 
 | `snap_window` | float | \|offset\| below this is a perfect snap |
 | `max_offset` | float | \|offset\| above this collapses; also the scale for residents |
 | `miss_offset` | float | \|offset\| at or above this misses the tower (no overlap) |
+| `first_block_zone` | float | first storey: landings this close to the foundation centre are stable (no wobble, never collapse) |
 | `stable_offset` | float | during a collapse, blocks with \|diff\| below this stop the collapse |
 | `collapse_interval_s` | float | visual delay between toppling blocks |
 | `residents_max` | int | residents for a perfect block |

@@ -3,6 +3,7 @@
   "snap_window": 0.06,
   "max_offset": 0.35,
   "miss_offset": 1.0,
+  "first_block_zone": 0.62,
   "stable_offset": 0.2,
   "collapse_interval_s": 0.2,
   "residents_max": 4,

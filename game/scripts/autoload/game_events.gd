@@ -27,5 +27,7 @@ signal setting_changed(key: String, value: Variant)
 signal city_tower_placed(tower: Dictionary, city_population: int)
 ## An ad finished (Ads autoload). format = rewarded | interstitial.
 signal ad_finished(format: String, placement: String, completed: bool)
+## SceneRouter is about to leave the current screen for `to` (fires before the fade).
+signal screen_changing(to: String)
 ## Any UI button pressed (for the click sound).
 signal ui_pressed

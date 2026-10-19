@@ -52,7 +52,7 @@ func _ready() -> void:
 func _run_tour() -> void:
 	var fake_summary := {"complete": true, "star": true, "population": 123, "height": 10, "max_combo": 7, "block_type": "blue", "endless": false}
 	var fake_record := {"new_best_population": true, "new_best_height": false, "level_before": 1, "level_after": 2, "unlocked": ["red"]}
-	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["game", {"block_type": "blue"}], ["continue", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
+	var steps := [["menu", {}], ["select", {}], ["game", {"block_type": "red"}], ["pause", {}], ["game", {"block_type": "blue"}], ["continue", {}], ["game", {"block_type": "blue"}], ["combo_audio", {}], ["results", {"summary": fake_summary, "record": fake_record}], ["settings", {}], ["city", {}], ["city_place", {}], ["analytics", {}]]
 	# The tour never writes the save; it fills the city with sample towers in memory so the screen has content.
 	SaveData.persist = false
 	SaveData.data["city"] = {"plots": {
@@ -83,6 +83,20 @@ func _run_tour() -> void:
 			Ads.backend = "none"
 			var ok: bool = found and not g.state.is_over and g.state.lives == 1
 			print("TOUR continue ", "ok" if ok else "FAILED (button=%s over=%s lives=%d)" % [found, g.state.is_over, g.state.lives])
+		elif step[0] == "combo_audio":
+			# owner bug T-0107: start a combo, pause -> ticking must freeze; quit to menu -> it must stop
+			var g := get_tree().current_scene
+			g._on_resolved(g.state.land(g.state.top_x()))     # perfect -> combo starts
+			await get_tree().create_timer(0.3, true, false, true).timeout
+			var ticking: bool = AudioDirector.is_combo_ticking()
+			g.pause_game()
+			await get_tree().create_timer(0.3, true, false, true).timeout
+			var frozen: bool = not AudioDirector.is_combo_ticking()
+			await go("menu")
+			get_tree().paused = false
+			await get_tree().create_timer(0.3, true, false, true).timeout
+			var stopped: bool = not AudioDirector._tick_player.playing
+			print("TOUR combo_audio ", "ok" if ticking and frozen and stopped else "FAILED (ticking=%s frozen=%s stopped=%s)" % [ticking, frozen, stopped])
 		elif step[0] == "analytics":
 			SaveData.data["settings"]["analytics_consent"] = "unknown"
 			var dropped: bool = not Analytics.track("level_up", {"from_level": 1, "to_level": 2})
@@ -120,6 +134,7 @@ func go(screen: String, p: Dictionary = {}) -> void:
 	assert(SCENES.has(screen), "Unknown screen " + screen)
 	_busy = true
 	params = p
+	GameEvents.screen_changing.emit(screen)
 	get_tree().paused = false
 	var tw := create_tween()
 	tw.tween_property(_fade, "color:a", 1.0, FADE_S)

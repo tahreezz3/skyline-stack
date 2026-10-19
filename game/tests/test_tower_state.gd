@@ -213,6 +213,36 @@ func test_combo_height_mult_cap() -> void:
 	check(s.combo_pool == expected, "height multiplier capped at 1 (pool %d, expected %d)" % [s.combo_pool, expected])
 
 
+func test_first_block_in_zone_never_wobbles() -> void:
+	var s = with_rules({"first_block_zone": 0.62})
+	var ev: Dictionary = s.land(0.3)
+	check(ev["result"] == TowerState.RESULT_STACK and near(s.top_x(), 0.3), "off-centre first block stays where it landed")
+	check(near(s.wobble(), 0.0), "first block inside the zone adds no wobble")
+	check(near(float(s.blocks[1]["diff"]), 0.0), "first block counts as stable")
+	ev = s.land(0.5)   # 0.2 off the first block: normal rules from here on
+	check(near(s.wobble(), 1.4 * 0.2), "second block measured against the first block")
+
+
+func test_first_block_zone_beyond_max_offset() -> void:
+	var s = with_rules({"first_block_zone": 0.62})
+	var ev: Dictionary = s.land(0.55)   # past max_offset (0.35) but on the foundation pad
+	check(ev["result"] == TowerState.RESULT_STACK and s.height() == 1, "lands on the pad instead of collapsing")
+	check(ev["residents"] == 1, "far from centre still houses fewer residents")
+	ev = s.land(0.55 + 0.9)            # way off: collapse
+	check(s.height() == 1, "the first block never falls in a collapse")
+
+
+func test_first_block_outside_zone_collapses() -> void:
+	var s = with_rules({"first_block_zone": 0.62})
+	check(s.land(0.8)["result"] == TowerState.RESULT_COLLAPSE, "outside the zone (but not a full miss) topples off")
+
+
+func test_first_block_perfect_still_snaps() -> void:
+	var s = with_rules({"first_block_zone": 0.62})
+	var ev: Dictionary = s.land(0.03)
+	check(ev["result"] == TowerState.RESULT_PERFECT and s.combo_count == 1, "perfect on the foundation still starts a combo")
+
+
 func test_live_config_invariants() -> void:
 	var live: Dictionary = ConfigLoader.load_json("res://config/tower_rules.json")
 	check(live["snap_window"] < live["stable_offset"] and live["stable_offset"] < live["max_offset"] and live["max_offset"] < live["miss_offset"], "live config thresholds ordered")

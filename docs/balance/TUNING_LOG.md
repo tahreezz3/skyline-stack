@@ -8,6 +8,10 @@ The simulator models a player aiming at the swaying top with a normal landing er
 growing with crane speed and sway). It measures what the rules *do*; it cannot judge how they *feel*.
 Feel sign-off comes from the human playtest (HR-0017).
 
+## 2026-10-19 · T-0106 · opus55-a7k2 · stable first storey
+Added `first_block_zone = 0.62`: an off-centre first block on the foundation no longer adds wobble or risks a
+collapse (owner request). Slightly more forgiving at the start of every round; no other values changed.
+
 ## 2026-10-13 · T-0101 · opus55-a7k2 · first data-driven pass
 
 ### Problems found in the CP-000 values (`sim_report_before.md`)

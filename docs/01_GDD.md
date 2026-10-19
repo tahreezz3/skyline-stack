@@ -32,6 +32,10 @@ Numbers in this document are defaults; the source of truth is `game/config/*.jso
 | Collapse costs a life | yes | `collapse_costs_life` |
 
 ### 3.1 Landing
+- **First storey on the foundation:** if its centre lands within `first_block_zone` (0.62, the visible foundation
+  pad) it stays where it landed and counts as perfectly stable: it adds no wobble and never falls in a collapse.
+  Residents and the perfect snap still follow the normal rules (owner request, T-0106). Further out it topples off
+  (collapse) or misses.
 - **Perfect** (\|offset\| < snap window): the block snaps exactly onto the one below (offset becomes 0).
   4 residents. Starts or refills the combo bar. Pushes 0 into the wobble window, which calms the tower.
 - **Stack** (snap ≤ \|offset\| ≤ max): the block stays where it landed.

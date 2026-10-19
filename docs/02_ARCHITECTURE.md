@@ -66,6 +66,7 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 | `round_started(block_type, endless)` | String, bool | tower_game |
 | `city_tower_placed(tower, city_population)` | Dictionary, int | city_map |
 | `ad_finished(format, placement, completed)` | String, String, bool | Ads |
+| `screen_changing(to)` | String | SceneRouter.go, before the fade (AudioDirector stops gameplay loops) |
 | `ui_pressed` | none | UI buttons |
 
 Add new signals here when you add them to `game_events.gd`.

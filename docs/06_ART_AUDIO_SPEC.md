@@ -88,6 +88,9 @@ loop, plus a combo layer). Mix: SFX bus, Music bus, UI bus, each with a settings
 | tower complete | `sfx_tower_complete` |
 | any UI button | `sfx_ui_tap` |
 
+Pause and screen changes: gameplay sounds (SFX pool, combo ticking) use pausable players, so they freeze while
+paused and resume with the game; leaving a screen stops them. Music and UI clicks keep playing in the pause menu.
+
 Until files exist in `game/assets/audio/`, each plays a procedural placeholder. `tests/test_audio.gd` fails if this
 list and HR-0008 drift apart.
 

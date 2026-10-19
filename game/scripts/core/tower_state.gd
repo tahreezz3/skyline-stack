@@ -79,9 +79,14 @@ func land(x: float) -> Dictionary:
 	var offset := x - below_x
 	var dist := absf(offset)
 
+	# The first storey lands on the wide foundation: anywhere inside the building zone it is
+	# accepted and counts as perfectly stable (no wobble, never part of a collapse).
+	var on_foundation := height() == 0 and rules.has("first_block_zone")
+	var zone_ok := on_foundation and dist <= float(rules["first_block_zone"])
+
 	if dist >= float(rules["miss_offset"]):
 		return _miss(x)
-	if dist > float(rules["max_offset"]):
+	if dist > float(rules["max_offset"]) and not zone_ok:
 		return _collapse(x, offset)
 
 	var perfect := dist < float(rules["snap_window"])
@@ -90,9 +95,10 @@ func land(x: float) -> Dictionary:
 		offset = 0.0
 
 	var residents := residents_for(offset, rules)
-	blocks.append({"x": x, "diff": offset, "residents": residents})
+	var stability_offset := 0.0 if zone_ok else offset   # what wobble and collapse checks see
+	blocks.append({"x": x, "diff": stability_offset, "residents": residents})
 	population += residents
-	_push_wobble(offset)
+	_push_wobble(stability_offset)
 
 	if perfect:
 		combo_time = float(rules["combo"]["bar_seconds"])

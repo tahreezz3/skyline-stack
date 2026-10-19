@@ -44,9 +44,9 @@ func _ready() -> void:
 	_feel = GameConfig.table("feel")["audio"]
 	_ensure_buses()
 	for i in range(POOL_SIZE):
-		_pool.append(_make_player("SFX"))
-	_ui_player = _make_player("UI")
-	_tick_player = _make_player("SFX")
+		_pool.append(_make_player("SFX", Node.PROCESS_MODE_PAUSABLE))
+	_ui_player = _make_player("UI")                                     # pause-menu clicks must still play
+	_tick_player = _make_player("SFX", Node.PROCESS_MODE_PAUSABLE)      # combo ticking freezes with the game
 	_music_player = _make_player("Music")
 	_apply_volumes()
 	GameEvents.block_released.connect(func() -> void: play("release"))
@@ -56,6 +56,8 @@ func _ready() -> void:
 		_tick_player.stop()
 		play("combo_bank"))
 	GameEvents.round_ended.connect(func(_s: Dictionary) -> void: _tick_player.stop())
+	# Leaving a screen ends everything tied to it (e.g. quitting a round mid-combo from the pause menu).
+	GameEvents.screen_changing.connect(func(_to: String) -> void: stop_gameplay_sounds())
 	GameEvents.ui_pressed.connect(func() -> void: play("ui", 1.0, _ui_player))
 	GameEvents.setting_changed.connect(func(_k: String, _v: Variant) -> void: _apply_volumes())
 
@@ -139,8 +141,22 @@ func _on_combo_progress(count: int, drain_rate: float) -> void:
 		_tick_player.play()
 
 
-func _make_player(bus: String) -> AudioStreamPlayer:
+## Stop loops and gameplay one-shots (not music or UI clicks).
+func stop_gameplay_sounds() -> void:
+	_tick_player.stop()
+	for p in _pool:
+		p.stop()
+
+
+func is_combo_ticking() -> bool:
+	return _tick_player.playing and _tick_player.can_process()
+
+
+## Players default to PROCESS_MODE_ALWAYS (this autoload runs during pause); gameplay
+## players are PAUSABLE so they freeze while the game is paused and resume after.
+func _make_player(bus: String, mode := Node.PROCESS_MODE_ALWAYS) -> AudioStreamPlayer:
 	var p := AudioStreamPlayer.new()
+	p.process_mode = mode
 	p.bus = bus
 	add_child(p)
 	return p
