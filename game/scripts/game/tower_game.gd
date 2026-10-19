@@ -20,7 +20,7 @@ const RESULTS_DELAY_S := 1.2
 const UNIT := 160.0                     # screen pixels per world unit (one block width)
 const SCREEN := Vector2(720, 1280)
 const GROUND_PX := 1120.0               # screen y of world y=0 when the camera is at the bottom
-const VIEW_BELOW_TOP := 3.2             # world units kept visible under the stack top
+const HUD_MARGIN_PX := 170.0            # keep the crane hook below the HUD at the top of the screen
 const FOUNDATION_COLOUR := Color("#5a5a66")
 
 var rules: Dictionary
@@ -30,7 +30,10 @@ var state
 
 var t := 0.0
 var view_y := 0.0
+var view_x := 0.0                       # camera follows the tower sideways as it drifts (T-0108)
 var crane_x := 0.0
+var crane_center := 0.0                 # the crane swings around the (smoothed) tower top
+var framing_violations := 0             # autoplay check: crane/tower left the screen
 var sway_top := 0.0
 var falling: Dictionary = {}            # {x, y, vy, missed, miss_x}
 var debris: Array[Dictionary] = []      # toppled blocks: {x, y, vx, vy, rot, vrot, delay}
@@ -172,7 +175,10 @@ func _process(delta: float) -> void:
 	t += delta
 	var crane: Dictionary = rules["crane"]
 	var speed := minf(float(crane["speed"]) + float(crane["speed_per_block"]) * state.height(), float(crane["speed_max"]))
-	crane_x = float(crane["amplitude"]) * sin(t * speed)
+	# The crane's swing centre glides after the tower top, so a drifting tower never walks off screen
+	# and the swing stays symmetric around it (same difficulty wherever the tower is).
+	crane_center = move_toward(crane_center, state.top_x(), float(crane["follow_speed"]) * delta)
+	crane_x = crane_center + float(crane["amplitude"]) * sin(t * speed)
 
 	var sway: Dictionary = rules["sway"]
 	var amp := clampf(state.wobble() * float(sway["scale"]), -float(sway["max"]), float(sway["max"]))
@@ -188,9 +194,12 @@ func _process(delta: float) -> void:
 	_emit_combo_progress()
 	_update_feedback(delta)
 
-	view_y = lerpf(view_y, maxf(0.0, _top_y() - VIEW_BELOW_TOP), minf(1.0, delta * 4.0))
+	view_y = lerpf(view_y, _desired_view_y(), minf(1.0, delta * 6.0))
+	view_x = lerpf(view_x, crane_center, minf(1.0, delta * 3.0))
 	if autoplay:
 		_autoplay_step()
+		if t > 1.5:          # let the camera settle after the scene starts
+			_check_framing()
 	if view3d:
 		view3d.sync(delta)
 	_refresh_hud()
@@ -360,6 +369,7 @@ func _finish_round() -> void:
 	hud_message.visible = true
 	if autoplay:
 		print("AUTOPLAY_SUMMARY ", JSON.stringify(summary))
+		print("AUTOPLAY_FRAMING violations=%d" % framing_violations)
 	await get_tree().create_timer(RESULTS_DELAY_S).timeout
 	SceneRouter.go("results", {"summary": summary, "record": record})
 
@@ -424,7 +434,29 @@ func _crane_y() -> float:
 
 
 func _to_screen(x: float, y: float) -> Vector2:
-	return Vector2(SCREEN.x * 0.5 + x * UNIT, GROUND_PX - (y - view_y) * UNIT + kick) + shake_offset
+	return Vector2(SCREEN.x * 0.5 + (x - view_x) * UNIT, GROUND_PX - (y - view_y) * UNIT + kick) + shake_offset
+
+
+## Camera height that keeps the crane hook just below the HUD (and so the stack top in view).
+func _desired_view_y() -> float:
+	var hook_y := _crane_y() + 0.15
+	if view3d:
+		return maxf(0.0, view3d.view_y_for_top_point(hook_y, HUD_MARGIN_PX))
+	# 2D fallback: hook at HUD_MARGIN_PX from the top of a 1280 px screen
+	return maxf(0.0, hook_y - (GROUND_PX - HUD_MARGIN_PX) / UNIT)
+
+
+## Autoplay framing check: crane hook and tower top must stay on screen.
+func _check_framing() -> void:
+	if view3d == null or round_finished:
+		return
+	var size := get_viewport().get_visible_rect().size
+	var hook: Vector2 = view3d.world_to_screen(crane_x, _crane_y() + 0.15)
+	var top: Vector2 = view3d.world_to_screen(state.top_x(), _top_y())
+	for p in [hook, top]:
+		if p.x < 0.0 or p.x > size.x or p.y < 0.0 or p.y > size.y:
+			framing_violations += 1
+			return
 
 
 func _block_rect_at(x: float, bottom_y: float) -> Rect2:
@@ -437,6 +469,7 @@ func _block_rect_at(x: float, bottom_y: float) -> Rect2:
 func _autoplay_step() -> void:
 	if autoplay_seconds > 0.0 and t > autoplay_seconds and not round_finished:
 		print("AUTOPLAY_TIMEOUT height=%d population=%d" % [state.height(), state.population])
+		print("AUTOPLAY_FRAMING violations=%d" % framing_violations)
 		get_tree().quit(0)
 		return
 	if round_finished:

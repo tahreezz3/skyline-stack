@@ -14,7 +14,7 @@ REQUIRED = {
         "block.width", "block.height",
         "combo.bar_seconds", "combo.drain_base", "combo.drain_extra", "combo.drain_full_at",
         "combo.height_step", "combo.bonus_factor", "combo.count_cap", "combo.height_mult_cap",
-        "crane.amplitude", "crane.speed", "crane.speed_per_block", "crane.speed_max", "crane.gap_blocks", "crane.gravity",
+        "crane.amplitude", "crane.speed", "crane.speed_per_block", "crane.speed_max", "crane.gap_blocks", "crane.gravity", "crane.follow_speed",
         "sway.speed", "sway.scale", "sway.max",
     ],
     "block_types.json": ["types"],

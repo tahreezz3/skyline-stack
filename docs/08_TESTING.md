@@ -4,7 +4,8 @@
 1. `tools/validate_config.py`: config files parse; required keys exist; thresholds are ordered.
 2. Rule tests: `godot --headless --path game --script res://tests/run_tests.gd` (exit 0 = pass).
 3. Smoke test: `godot --headless --path game -- --autoplay --seconds=60`: a bot plays a round; it must print
-   `AUTOPLAY_SUMMARY` or `AUTOPLAY_TIMEOUT` with no `SCRIPT ERROR` lines.
+   `AUTOPLAY_SUMMARY` or `AUTOPLAY_TIMEOUT` with no `SCRIPT ERROR` lines, and `AUTOPLAY_FRAMING violations=0`
+   (crane hook and tower top stayed on screen every frame). Long check: add `--endless --seconds=200`.
 4. UI tour: `godot --headless --path game -- --tour` visits menu, select, round, pause, results; must print `TOUR_DONE`
    with no script errors.
 5. `tools/cleanroom_check.py`.

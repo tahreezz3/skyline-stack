@@ -20,6 +20,7 @@ run_step() {   # name, command...
   # any GDScript error in any Godot step is a failure, even if the process exited 0
   if echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|Failed to load script'; then rc=1; fi
   if [ "$name" = "smoke" ] && ! echo "$out" | grep -qE 'AUTOPLAY_(SUMMARY|TIMEOUT)'; then rc=1; fi
+  if [ "$name" = "smoke" ] && echo "$out" | grep -qE 'AUTOPLAY_FRAMING violations=[1-9]'; then rc=1; fi
   if [ "$name" = "ui-tour" ] && { echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|TOUR .* FAILED' || ! echo "$out" | grep -q 'TOUR_DONE'; }; then rc=1; fi
   local v=true; [ $rc -ne 0 ] && { v=false; ok_all=0; echo "!! $name FAILED"; }
   steps_json="${steps_json}\"$name\": $v, "

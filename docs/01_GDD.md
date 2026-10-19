@@ -74,7 +74,10 @@ takes 3–4 of them down "until the tower is stable again". Careful players lose
   its best is saved separately (`best_by_type.endless`).
 
 ### 3.5 Crane
-- `crane_x = amplitude × sin(t × speed)`, speed = `min(speed + speed_per_block × height, speed_max)`.
+- `crane_x = centre + amplitude × sin(t × speed)`, speed = `min(speed + speed_per_block × height, speed_max)`.
+  The swing `centre` glides towards the tower top at `crane.follow_speed`, and the camera follows it sideways, so a
+  drifting tower never leaves the screen and the swing stays symmetric around it (T-0108). The camera height keeps
+  the crane hook just below the HUD.
 - The block falls with constant gravity from `gap_blocks` block heights above the top.
 - **[planned T-0105]** swing patterns (pauses, wind gusts at height, variable amplitude).
 

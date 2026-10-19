@@ -1,17 +1,17 @@
 # Project dashboard
 
-_Generated 2026-10-19 04:50 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 05:06 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T04:50:05Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T05:06:42Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
 | Milestone | Progress | Done / total |
 |---|---|---|
 | M0 Foundation | `████████████████████` | 4 / 4 |
-| M1 Core feel | `██████████░░░░░░░░░░` | 4 / 8 |
+| M1 Core feel | `███████████░░░░░░░░░` | 5 / 9 |
 | M2 Game loop | `████████████████████` | 8 / 8 |
 | M3 Art and audio | `███████████████░░░░░` | 9 / 12 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
@@ -92,7 +92,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (28)
+## Done (29)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -102,6 +102,7 @@ Delivered / answered: HR-0002
 - T-0103 AudioDirector autoload with placeholder sounds
 - T-0106 First block on the foundation never wobbles
 - T-0107 Combo ticking keeps playing when paused or after leaving the round
+- T-0108 Keep crane and tower on screen as the tower grows
 - T-0201 Scene flow: boot, menu, select, round, results
 - T-0202 Block type selection and unlocks
 - T-0203 Player level and progression rules

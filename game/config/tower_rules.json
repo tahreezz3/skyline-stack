@@ -32,6 +32,7 @@
     "speed_per_block": 0.0384,
     "speed_max": 4.1,
     "gap_blocks": 5,
+    "follow_speed": 1.2,
     "gravity": 30.0
   },
   "sway": {

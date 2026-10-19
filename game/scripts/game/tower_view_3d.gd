@@ -18,7 +18,7 @@ const BUILDING_YAW_DEG := 38.0
 const CAM_DIST := 20.0             # ortho: distance doesn't change size; closer keeps the shadow range tight
 const VIEW_UNITS := 6.5            # visible world height: zoomed in so the buildings read (T-0310)
 const CENTER_ABOVE_VIEW := 2.75    # ground this far below screen centre: only the street shows below the tower
-const PX_TO_UNITS := 1.0 / 160.0
+const PX_TO_UNITS := VIEW_UNITS / 1280.0   # screen pixels -> world units at the current zoom
 const MAX_SHARDS := 256
 
 ## Sky keyframes by height, cozy lo-fi palette (T-0310): golden hour at the ground,
@@ -414,6 +414,15 @@ func _on_block_resolved(ev: Dictionary) -> void:
 
 # --- per frame ------------------------------------------------------------------
 
+## view_y (tower_game's camera height) that puts world height `y` `margin_px` below the
+## top of the screen (used to keep the crane hook under the HUD).
+func view_y_for_top_point(y: float, margin_px: float) -> float:
+	var half := VIEW_UNITS * 0.5
+	var units_per_px := VIEW_UNITS / 1280.0
+	var centre := y - (half - margin_px * units_per_px)
+	return centre - CENTER_ABOVE_VIEW
+
+
 ## Screen position (canvas pixels) of a playfield point, for 2D popups.
 func world_to_screen(x: float, y: float) -> Vector2:
 	return camera.unproject_position(Vector3(x, y, 0))
@@ -445,7 +454,7 @@ func _update_cars(delta: float) -> void:
 func _update_camera(_delta: float) -> void:
 	cam_y = float(game.view_y) + CENTER_ABOVE_VIEW
 	var shake: Vector2 = game.shake_offset * PX_TO_UNITS
-	var target := Vector3(shake.x, cam_y + float(game.kick) * PX_TO_UNITS - shake.y, 0)
+	var target := Vector3(float(game.view_x) + shake.x, cam_y + float(game.kick) * PX_TO_UNITS - shake.y, 0)
 	var back := Vector3(0, sin(deg_to_rad(PITCH_DEG)), cos(deg_to_rad(PITCH_DEG))) * CAM_DIST
 	camera.position = target + back
 	# background layers: placed so their base sits on the horizon, then drift up slower than the camera

@@ -26,6 +26,7 @@ All gameplay numbers live here. `tools/check.sh` validates that the files parse 
 | `combo.count_cap`, `combo.height_mult_cap` | int, int | caps that keep the combo from dominating long runs |
 | `crane.amplitude`, `crane.speed`, `crane.speed_per_block`, `crane.speed_max` | float | swing |
 | `crane.gap_blocks` | float | drop height above the top, in block heights |
+| `crane.follow_speed` | float | units/s the crane's swing centre glides towards the tower top (keeps a drifting tower on screen) |
 | `crane.gravity` | float | world units / s² |
 | `sway.speed`, `sway.scale`, `sway.max` | float | visual and hit-test sway |
 
