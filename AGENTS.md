@@ -14,6 +14,12 @@ another stopped. Follow this protocol exactly.
 4. Skim `docs/00_VISION.md` and `docs/04_ROADMAP.md`. Read `docs/02_ARCHITECTURE.md` before touching code.
 5. Run `tools/check.sh`. If it fails on a clean checkout, fixing that is your first task.
 
+### Working with the human team (shared GitHub repo)
+- `git pull` before you start and `git push` when you finish, so humans see your work.
+- Humans (e.g. the artist) work on branches and open pull requests (`docs/COLLABORATION.md`). Don't rewrite or
+  force-push shared history.
+- Art arrives in `assets_inbox/` through those pull requests; integrating it is task T-0301.
+
 ## 2. Pick and claim a task
 
 - Tasks live in `coordination/tasks/T-XXXX-slug.md`, one file per task, with a frontmatter header.

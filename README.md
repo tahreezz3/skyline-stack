@@ -29,7 +29,9 @@ godot --path game -e                # open in the editor
 
 | Path | What |
 |---|---|
-| `AGENTS.md` | **Start here if you are an AI agent or a new teammate.** Onboarding and working protocol. |
+| `docs/COLLABORATION.md` | **Start here if you are an artist or a new human teammate**: setup, where files go, Git workflow. |
+| `AGENTS.md` | **Start here if you are an AI agent.** Onboarding and working protocol. |
+| `art_source/` | Artists' working files (`.blend`, `.psd`), stored with Git LFS. |
 | `HUMAN_NEEDED.md` | Everything that needs a human: art, audio, decisions, accounts. Exact file names and drop folders. |
 | `assets_inbox/` | Where humans drop requested files. |
 | `docs/` | Vision, game design, architecture, data spec, roadmap, art/audio spec, legal, testing, ADRs. |
