@@ -42,7 +42,8 @@ var feel: Dictionary
 var reduced_motion := false
 var shake := 0.0
 var shake_offset := Vector2.ZERO
-var kick := 0.0
+var kick := 0.0                         # displayed camera kick (px), eased towards kick_target
+var kick_target := 0.0
 var squash_t := 0.0
 var particles: Array[Dictionary] = []   # {x, y, vx, vy, age, life, kind, size}
 var last_combo_count := 0
@@ -299,7 +300,7 @@ func _add_shake(amount: float) -> void:
 
 func _kick(amount: float) -> void:
 	if not reduced_motion:
-		kick += amount
+		kick_target += amount
 
 
 func _squash() -> void:
@@ -320,8 +321,14 @@ func _spawn_particles(kind: String, x: float, y: float, count: int, side: float)
 
 func _update_feedback(delta: float) -> void:
 	shake = lerpf(shake, 0.0, minf(1.0, float(feel["shake"]["decay"]) * delta))
-	shake_offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * shake if shake > 0.2 else Vector2.ZERO
-	kick = lerpf(kick, 0.0, minf(1.0, float(feel["camera_kick"]["decay"]) * delta))
+	# Smooth wobble (a few incommensurate sines) instead of a fresh random offset every frame:
+	# per-frame random jumps read as flicker, especially on the static base.
+	var f := float(feel["shake"].get("frequency", 1.0))
+	var wobble := Vector2(sin(t * 31.0 * f) * 0.6 + sin(t * 17.3 * f) * 0.4, cos(t * 27.7 * f) * 0.6 + sin(t * 13.1 * f) * 0.4)
+	shake_offset = wobble * shake if shake > 0.2 else Vector2.ZERO
+	# ease in and out: an instant camera jump reads as a flicker of the whole scene
+	kick_target = lerpf(kick_target, 0.0, minf(1.0, float(feel["camera_kick"]["decay"]) * delta))
+	kick = lerpf(kick, kick_target, minf(1.0, 14.0 * delta))
 	squash_t = maxf(0.0, squash_t - delta)
 	for p in particles:
 		p["age"] += delta

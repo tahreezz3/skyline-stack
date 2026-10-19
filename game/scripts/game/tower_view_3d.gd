@@ -9,7 +9,7 @@ extends Node3D
 const LowPoly := preload("res://scripts/game/low_poly.gd")
 
 const PITCH_DEG := 14.0
-const CAM_DIST := 60.0
+const CAM_DIST := 20.0             # ortho: distance doesn't change size; closer keeps the shadow range tight
 const VIEW_UNITS := 8.0            # visible world height (1280 px / 160 px per unit)
 const CENTER_ABOVE_VIEW := 3.0     # same layout as the 2D view: ground 3 units below screen centre
 const PX_TO_UNITS := 1.0 / 160.0
@@ -54,7 +54,8 @@ var last_crane_x := 0.0
 var swing := 0.0
 var cam_y := 0.0
 var night := 0.0
-var combo_glow := 0.0
+var combo_glow := 0.0          # eased 0..1; never switched instantly (instant changes read as flicker)
+var combo_target := 0.0
 
 
 func setup(p_game: Node2D) -> void:
@@ -65,7 +66,7 @@ func setup(p_game: Node2D) -> void:
 	_build_environment_layers()
 	_build_actors()
 	GameEvents.block_resolved.connect(_on_block_resolved)
-	GameEvents.combo_progress.connect(func(count: int, _rate: float) -> void: combo_glow = 1.0 if count > 0 else 0.0)
+	GameEvents.combo_progress.connect(func(count: int, _rate: float) -> void: combo_target = 1.0 if count > 0 else 0.0)
 
 
 # --- construction -------------------------------------------------------------
@@ -128,9 +129,15 @@ func _build_camera_and_light() -> void:
 
 	sun = DirectionalLight3D.new()
 	sun.shadow_enabled = true
-	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
-	sun.directional_shadow_max_distance = 80.0
-	sun.shadow_blur = 1.5
+	# Stable, crisp shadows: split shadow maps are stabilised against camera movement, a short
+	# range keeps texels small, and crisp edges fit the low-poly style (no shimmering soft fringe).
+	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+	sun.directional_shadow_max_distance = 36.0
+	sun.directional_shadow_split_1 = 0.5
+	sun.directional_shadow_blend_splits = true
+	sun.shadow_blur = 0.6   # light softening antialiases small contact shadows
+	sun.shadow_bias = 0.15
+	sun.shadow_normal_bias = 3.0
 	add_child(sun)
 	sun.look_at_from_position(Vector3(-4, 9, 7), Vector3.ZERO)
 
@@ -170,7 +177,7 @@ func _build_environment_layers() -> void:
 	plaza.mesh = LowPoly.plaza(60.0)
 	plaza.set_surface_override_material(0, _lit(Color("#6fa25f")))
 	plaza.set_surface_override_material(1, _lit(Color("#b8b2a6")))
-	plaza.set_surface_override_material(2, _lit(Color("#555b66")))
+	plaza.set_surface_override_material(2, _lit(Color("#8b909b")))
 	add_child(plaza)
 	var tree_mesh := LowPoly.tree(1.0)
 	var lamp_mesh := LowPoly.lamp()
@@ -324,6 +331,7 @@ func _lerp_any(a: Variant, b: Variant, w: float) -> Variant:
 func _update_time_of_day(delta: float) -> void:
 	var target := clampf((cam_y - 9.0) / 20.0, 0.0, 1.0)
 	night = lerpf(night, target, minf(1.0, delta * 1.5))
+	combo_glow = move_toward(combo_glow, combo_target, delta * 2.5)   # ~0.4 s fade in/out
 	var top: Color = _sky(0)
 	var bottom: Color = _sky(1)
 	backdrop_mat.set_shader_parameter("top_color", top)
@@ -334,7 +342,8 @@ func _update_time_of_day(delta: float) -> void:
 	sun.light_energy = _sky(3)
 	env.ambient_light_energy = _sky(4)
 	env.ambient_light_color = Color("#bcd4ff").lerp(bottom, 0.4)
-	mat_glass.emission_energy_multiplier = clampf((night - 0.3) * 3.5, 0.0, 2.6) + combo_glow * 0.6
+	# combo adds a gentle warm glow, weaker by day so windows don't flash gold in sunlight
+	mat_glass.emission_energy_multiplier = clampf((night - 0.3) * 3.5, 0.0, 2.6) + combo_glow * lerpf(0.18, 0.5, night)
 	for l in layers:
 		(l["mat"] as StandardMaterial3D).albedo_color = (l["base"] as Color).lerp(bottom, float(l["haze"])).darkened(night * 0.45)
 

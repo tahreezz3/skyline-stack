@@ -172,11 +172,12 @@ static func plaza(width: float) -> ArrayMesh:
 	box(ground, Vector3(-width * 0.5, -3.0, -8.0), Vector3(width * 0.5, -0.06, 2.0))
 	_commit(mesh, ground, "body")
 	var paving := _st()
-	box(paving, Vector3(-2.2, -0.06, -1.6), Vector3(2.2, -0.02, 1.3))    # plaza paving
+	# Every top face sits at its own height: coplanar overlapping faces z-fight (flicker).
+	box(paving, Vector3(-2.2, -0.06, -1.6), Vector3(2.2, -0.035, 1.3))   # plaza paving, top -0.035
 	_commit(mesh, paving, "trim")
 	var plinth := _st()
-	box(plinth, Vector3(-0.62, -0.02, -0.58), Vector3(0.62, 0.0, 0.58))  # foundation the first storey sits on
-	box(plinth, Vector3(-0.75, -0.06, -0.7), Vector3(0.75, -0.02, 0.7))
+	box(plinth, Vector3(-0.75, -0.06, -0.7), Vector3(0.75, -0.015, 0.7))  # lower step, top -0.015
+	box(plinth, Vector3(-0.62, -0.015, -0.58), Vector3(0.62, 0.0, 0.58))  # foundation the first storey sits on
 	_commit(mesh, plinth, "body2")
 	return mesh
 

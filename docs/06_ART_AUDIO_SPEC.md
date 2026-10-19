@@ -40,7 +40,9 @@ This document holds the shared direction those requests follow.
   sparkle burst plus an expanding ring on a perfect, blocks tumbling in 3D during a collapse, and a soft camera kick.
 - Particles are tiny low-poly shards (tetrahedra and cubes), not soft sprites.
 - The carried block swings slightly on its rope (secondary motion). Idle elements drift: clouds, blinking antenna lights.
-- Motion is snappy (ease-out, under 0.3 s) for feedback, slow and floaty for ambience. Reduced-motion setting
+- Motion is snappy (ease-out, under 0.3 s) for feedback, slow and floaty for ambience.
+- **Never switch a visible property instantly** (glow, colour, camera position): always ease it, even over 0.1 s.
+  Instant switches on gameplay events read as flicker (T-0307). Reduced-motion setting
   disables shake and kick.
 
 ### 2.5 UI aesthetic
