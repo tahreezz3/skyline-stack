@@ -31,6 +31,16 @@ never trace it or copy it into the game.* The current in-game placeholders follo
   not from texture noise. Slight bevels or chamfers on major edges only.
 - No outlines and no cartoon ink lines.
 
+### 2.1b Setting: a city street (owner feedback, T-0309)
+- The tower stands on the sidewalk of a city street. In front: curb, asphalt road with dashed centre line and edge
+  lines, a zebra crossing in front of the tower, cars driving both ways, street lights. Neighbouring buildings frame
+  the tower at the screen edges.
+- Behind: three rows of city buildings (near shop fronts with awnings, a middle row, a far skyline) kept **low and
+  hazy** (depth fog + background blur) so the sky shows and the tower stays the brightest, sharpest thing on screen.
+  As the tower climbs, the rows rise slower than the camera, so the player climbs above the city.
+- Camera: low street-level angle (6° pitch); the ground line sits low on screen, so the foreground is just the street.
+  No grass or trees in the foreground.
+
 ### 2.2 Colour and materials
 - Flat colour per material (no photo textures). One small palette texture or vertex colours are fine.
 - Tower families: **blue** `#4a90d9`, **red** `#d9534a`, **green** `#5cb85c`, **gold** `#e6b800`. Siding is a pastel
@@ -68,9 +78,10 @@ never trace it or copy it into the game.* The current in-game placeholders follo
 | Ground storey | `block_<family>_base.glb` | ≤ 1200 tris | same footprint and height; shop front on all four sides |
 | Roof / trophy roof | `block_<family>_roof.glb`, `..._roof_trophy.glb` | ≤ 600 tris | sits on top of the last storey; trophy version has emissive parts |
 | Crane hook | `crane_hook.glb` | ≤ 200 tris | attachment point at origin |
-| Plaza and props | `env_plaza.glb`, `env_tree_*.glb`, `env_lamp.glb` | ≤ 2k tris total | |
-| Background layers | `env_hills_*.glb`, `env_skyline.glb` | ≤ 3k tris each | wide strips, about 60 units |
-| Clouds | `env_cloud_*.glb` | ≤ 150 tris each | |
+| Street | `env_street_tile.glb` | ≤ 500 tris | 4-unit tileable strip: sidewalk, curb, road, markings |
+| City buildings, shop fronts | `env_city_building_*.glb`, `env_shopfront_*.glb` | ≤ 1500 tris each | front +Z; vary 1–7 units tall |
+| Cars | `env_car_*.glb` | ≤ 400 tris | front +x |
+| Street light | `env_street_light.glb` | ≤ 150 tris | arm over +Z |
 
 Conventions: 1 Blender unit = 1 world unit; Y up in Godot (Blender's glTF export converts Z up); apply all
 transforms; flat shading; materials named `body`, `body_dark`, `body2`, `wall2`, `trim`, `accent`, `glass`, `pot`,

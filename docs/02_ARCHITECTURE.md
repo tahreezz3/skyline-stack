@@ -75,8 +75,10 @@ Add new signals here when you add them to `game_events.gd`.
 The round is drawn by `scripts/game/tower_view_3d.gd`: low-poly meshes (`scripts/game/low_poly.gd`) under a fixed
 orthographic `Camera3D` pitched 14° down. It reads `tower_game`'s state every frame (`view3d.sync()`) and never
 changes it. Gameplay objects all sit on z = 0 in rules units, so the 3D picture lines up with the 2D rules.
-Behind them: a sky backdrop shader on a camera-parented quad (`scripts/game/shaders/sky_backdrop.gdshader`),
-parallax ridges, skyline and clouds that sink as the tower rises, and a plaza with props. Time of day follows the
+Behind them: a sky backdrop shader on a camera-parented quad (`scripts/game/shaders/sky_backdrop.gdshader`) and the
+city from `scripts/game/city_kit.gd`: the street in front (road, crossing, curbs, cars, street lights), framing
+neighbours, and three vertex-coloured city rows with parallax and depth fog. Buildings come from
+`scripts/game/building_kit.gd`. Time of day follows the
 camera height (day, then dusk, then night with emissive windows and stars). Popups and the HUD stay 2D;
 `view3d.world_to_screen()` positions popups. `feel.json` `"view": "2d"` switches back to the old `_draw()` renderer.
 

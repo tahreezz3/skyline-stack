@@ -25,6 +25,9 @@ class Builder:
 	var surfaces: Dictionary = {}
 	var order: Array[String] = []
 	var xf := Transform3D.IDENTITY
+	## Vertex colour for following triangles (used by city rows for per-building colours;
+	## materials ignore it unless vertex_color_use_as_albedo is on).
+	var color := Color.WHITE
 
 	func st(name: String) -> SurfaceTool:
 		if not surfaces.has(name):
@@ -35,7 +38,9 @@ class Builder:
 		return surfaces[name]
 
 	func tri(name: String, a: Vector3, b: Vector3, c: Vector3, outward: Vector3) -> void:
-		LowPoly.tri(st(name), xf * a, xf * b, xf * c, xf.basis * outward)
+		var s := st(name)
+		s.set_color(color)
+		LowPoly.tri(s, xf * a, xf * b, xf * c, xf.basis * outward)
 
 	func quad(name: String, a: Vector3, b: Vector3, c: Vector3, d: Vector3, outward: Vector3) -> void:
 		tri(name, a, b, c, outward)

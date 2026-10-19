@@ -9,12 +9,13 @@ extends Node3D
 
 const LowPoly := preload("res://scripts/game/low_poly.gd")
 const Kit := preload("res://scripts/game/building_kit.gd")
+const City := preload("res://scripts/game/city_kit.gd")
 
-const PITCH_DEG := 14.0
+const PITCH_DEG := 6.0              # low street-level angle: little foreground (owner feedback, T-0309)
 const BUILDING_YAW_DEG := 38.0
 const CAM_DIST := 20.0             # ortho: distance doesn't change size; closer keeps the shadow range tight
 const VIEW_UNITS := 8.0            # visible world height (1280 px / 160 px per unit)
-const CENTER_ABOVE_VIEW := 3.0     # same layout as the 2D view: ground 3 units below screen centre
+const CENTER_ABOVE_VIEW := 3.5     # ground 3.5 units below screen centre: only the street shows below the tower
 const PX_TO_UNITS := 1.0 / 160.0
 const MAX_SHARDS := 256
 
@@ -49,6 +50,12 @@ var falling_node: MeshInstance3D
 var roof_node: MeshInstance3D
 var layers: Array[Dictionary] = []      # {node, mat, base: Color, haze, parallax, z, horizon}
 var rings: Array[Dictionary] = []       # {node, mat, age}
+var cars: Array[Dictionary] = []        # {node, speed}
+var mat_city: StandardMaterial3D        # vertex-coloured city walls / awnings
+var mat_lamp: StandardMaterial3D        # street-light heads, glow at night
+var mat_headlight: StandardMaterial3D
+var mat_city_glass: StandardMaterial3D      # background windows: sky-tinted by day, some glow at night
+var mat_city_glass_dark: StandardMaterial3D
 var dust_mm: MultiMesh
 var spark_mm: MultiMesh
 
@@ -135,9 +142,9 @@ func _build_camera_and_light() -> void:
 	# soft background blur (like the reference's depth of field); the playfield stays sharp
 	var attrs := CameraAttributesPractical.new()
 	attrs.dof_blur_far_enabled = true
-	attrs.dof_blur_far_distance = CAM_DIST + 14.0
-	attrs.dof_blur_far_transition = 30.0
-	attrs.dof_blur_amount = 0.07
+	attrs.dof_blur_far_distance = CAM_DIST + 6.0
+	attrs.dof_blur_far_transition = 20.0
+	attrs.dof_blur_amount = 0.08
 	camera.attributes = attrs
 	add_child(camera)
 	camera.current = true
@@ -176,6 +183,14 @@ func _build_camera_and_light() -> void:
 	env.ambient_light_color = SKY_DAY[7]
 	env.ambient_light_energy = SKY_DAY[8]
 	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR   # keeps the flat colours saturated
+	# distance haze: far city rows fade into the sky colour (depth fog; the playfield stays clear)
+	env.fog_enabled = true
+	env.fog_mode = Environment.FOG_MODE_DEPTH
+	env.fog_depth_begin = CAM_DIST + 1.5
+	env.fog_depth_end = CAM_DIST + 55.0
+	env.fog_depth_curve = 0.8
+	env.fog_light_color = SKY_DAY[1]
+	env.fog_sky_affect = 0.0
 	env.glow_enabled = true
 	# glow only on genuinely emissive parts (windows at night, sparks), never on sunlit white trim
 	env.glow_intensity = 0.8
@@ -197,43 +212,79 @@ func _add_layer(mesh: Mesh, colour: Color, z: float, horizon: float, parallax: f
 
 
 func _build_environment_layers() -> void:
-	# far to near; horizon = world y (at z = 0 framing) where the layer's base sits on screen
+	mat_city = _lit(Color.WHITE)
+	mat_city.vertex_color_use_as_albedo = true
+	var glass_dark := _lit(Color("#2b3a57"), 0.25)
+	glass_dark.metallic = 0.25
+	mats["glass_dark"] = glass_dark
+	mats["roof"] = _lit(Color("#9aa3b5"))
+	mats["sidewalk"] = _lit(Color("#ddd7cb"))
+	mats["curb"] = _lit(Color("#efebe3"))
+	mats["asphalt"] = _lit(Color("#4d5465"), 0.95)
+	mats["marking"] = _lit(Color("#f4f2ea"))
+	mats["plinth"] = _lit(Color("#b9bfcb"))
+	mat_lamp = _glow(Color("#fff1c9"), 0.0)
+	mat_city_glass = _glow(Color("#9fb6d3"), 0.0)
+	mat_city_glass.emission = Color("#ffd27a")
+	mat_city_glass_dark = _lit(Color("#93a8c6"), 0.4)
+	mat_headlight = _glow(Color("#fff6d8"), 0.6)
+
+	# street in front of the tower (world-fixed)
+	var street := MeshInstance3D.new()
+	street.mesh = City.street(80.0)
+	_dress(street)
+	add_child(street)
+	# neighbouring buildings framing the tower at the screen edges (world-fixed, behind the playfield)
+	for spec in [[-4.4, 1.3, 3.4, 31], [2.75, 1.65, 2.6, 32]]:
+		var nb := MeshInstance3D.new()
+		nb.mesh = City.city_row(spec[3], spec[0], spec[0] + spec[1], -1.05, 1.6, spec[2], spec[2] + 0.01, 1.0)
+		_dress_city(nb)
+		add_child(nb)
+	# city rows behind: they rise slower than the camera (parallax), so you climb above the city
+	# kept low and hazy so the sky shows and the tower stays the brightest, sharpest thing on screen
+	_add_city_layer(City.city_row(41, -14.0, 14.0, -3.4, 1.6, 0.9, 2.2, 0.9, 1.2), -3.4, 0.1)
+	_add_city_layer(City.city_row(42, -18.0, 18.0, -10.0, 2.0, 1.6, 3.6, 0.6), -10.0, 0.3)
+	_add_city_layer(City.city_row(43, -30.0, 30.0, -26.0, 3.0, 2.5, 6.5, 0.25), -26.0, 0.55)
 	var sea_st := SurfaceTool.new()
 	sea_st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	LowPoly.box(sea_st, Vector3(-80, -3.0, -1.0), Vector3(80, 0.0, 1.0))
+	LowPoly.box(sea_st, Vector3(-120, -3.0, -1.0), Vector3(120, 0.0, 1.0))
 	var sea := ArrayMesh.new()
 	sea_st.commit(sea)
-	# `horizon` ≈ screen height (in units above the ground) of the layer's top/base; the plaza's far
-	# edge sits at about 1.9, so the sea starts just above it, with the city across the bay behind
-	_add_layer(LowPoly.skyline(60.0, 23), Color("#8f9cc4"), -90.0, 2.25, 0.8, 0.68, 0.38)       # low city across the bay
-	_add_layer(sea, Color("#2aa7b0"), -60.0, 2.3, 0.82, 0.2)                                   # sea
+	_add_layer(sea, Color("#2aa7b0"), -70.0, 0.0, 0.85, 0.0)
 
-	var plaza := MeshInstance3D.new()
-	plaza.mesh = LowPoly.plaza(60.0)
-	plaza.set_surface_override_material(0, _lit(Color("#8fbf72")))
-	plaza.set_surface_override_material(1, _lit(Color("#e6e1d6")))
-	plaza.set_surface_override_material(2, _lit(Color("#b9bfcb")))
-	add_child(plaza)
-	var tree_mesh := LowPoly.tree(1.0)
-	var lamp_mesh := LowPoly.lamp()
-	var leaf := _lit(Color("#5a9c4f"))
-	var bark := _lit(Color("#8a6243"))
-	var steel := _lit(Color("#5d6470"))
-	for spot in [Vector3(-1.75, 0, -2.0), Vector3(-2.15, 0, -0.9), Vector3(1.8, 0, -2.3), Vector3(2.1, 0, -1.0), Vector3(-1.2, 0, -3.4), Vector3(1.3, 0, -3.6)]:
-		var tr := MeshInstance3D.new()
-		tr.mesh = tree_mesh
-		tr.set_surface_override_material(0, bark)
-		tr.set_surface_override_material(1, leaf)
-		tr.position = spot
-		tr.scale = Vector3.ONE * (0.9 + 0.25 * absf(sin(spot.x * 3.1)))
-		add_child(tr)
-	for lx in [-1.4, 1.4]:
+	# street lights on the near edge of the back sidewalk, and traffic
+	var light_mesh := City.street_light()
+	for lx in [-1.9, 1.9, -5.5, 5.5]:
 		var l := MeshInstance3D.new()
-		l.mesh = lamp_mesh
-		l.set_surface_override_material(0, steel)
-		l.set_surface_override_material(1, mats["glass"])   # lamps light up with the windows
-		l.position = Vector3(lx, 0, 0.7)
+		l.mesh = light_mesh
+		_dress(l, {"pole": mats["roof"], "lamp": mat_lamp})
+		l.position = Vector3(lx, -0.035, City.ROAD_FAR - 0.3)
 		add_child(l)
+	var lanes := [[City.ROAD_FAR + 1.0, 1.1], [City.ROAD_NEAR - 1.0, -1.4]]
+	for i in range(5):
+		var lane: Array = lanes[i % 2]
+		var c := MeshInstance3D.new()
+		c.mesh = City.car(70 + i)
+		var paint := _lit(Color(City.PASTELS[(i * 3) % City.PASTELS.size()]).darkened(0.1), 0.5)
+		_dress(c, {"body": paint, "wheel": _lit(Color("#2a2d36")), "emissive": mat_headlight, "tail": _glow(Color("#ff4a4a"), 1.2)})
+		c.position = Vector3(-7.0 + i * 3.1, -0.09, float(lane[0]))
+		c.rotation.y = 0.0 if float(lane[1]) > 0.0 else PI
+		add_child(c)
+		cars.append({"node": c, "speed": float(lane[1]) * (0.85 + 0.1 * i)})
+
+
+## City rows: vertex-coloured walls and awnings, shared glass (some windows light up at night).
+func _dress_city(mi: MeshInstance3D) -> void:
+	_dress(mi, {"body": mat_city, "accent": mat_city, "glass": mat_city_glass, "glass_dark": mat_city_glass_dark})
+
+
+func _add_city_layer(mesh: Mesh, z: float, parallax: float) -> void:
+	var mi := MeshInstance3D.new()
+	mi.mesh = mesh
+	_dress_city(mi)
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mi)
+	layers.append({"node": mi, "mat": null, "base": Color.WHITE, "haze": 0.0, "parallax": parallax, "z": z, "horizon": 0.0, "world": true})
 
 
 func _build_actors() -> void:
@@ -329,6 +380,17 @@ func sync(delta: float) -> void:
 	_update_debris()
 	_update_particles()
 	_update_rings(delta)
+	_update_cars(delta)
+
+
+func _update_cars(delta: float) -> void:
+	for c in cars:
+		var n: Node3D = c["node"]
+		n.position.x += float(c["speed"]) * delta
+		if n.position.x > 9.0:
+			n.position.x = -9.0
+		elif n.position.x < -9.0:
+			n.position.x = 9.0
 
 
 func _update_camera(_delta: float) -> void:
@@ -341,7 +403,11 @@ func _update_camera(_delta: float) -> void:
 	var tan_p := tan(deg_to_rad(PITCH_DEG))
 	for l in layers:
 		var n: MeshInstance3D = l["node"]
-		n.position = Vector3(0, float(l["horizon"]) + float(l["z"]) * tan_p + (cam_y - CENTER_ABOVE_VIEW) * float(l["parallax"]), float(l["z"]))
+		var lift := (cam_y - CENTER_ABOVE_VIEW) * float(l["parallax"])
+		if l.get("world", false):
+			n.position = Vector3(0, lift, 0)           # mesh already built at its real depth
+		else:
+			n.position = Vector3(0, float(l["horizon"]) + float(l["z"]) * tan_p + lift, float(l["z"]))
 	backdrop_mat.set_shader_parameter("scroll", (cam_y - CENTER_ABOVE_VIEW) * 0.01)
 
 
@@ -377,7 +443,15 @@ func _update_time_of_day(delta: float) -> void:
 	# combo adds a gentle warm glow, weaker by day so windows don't flash gold in sunlight
 	(mats["glass"] as StandardMaterial3D).emission_energy_multiplier = clampf((night - 0.3) * 3.5, 0.0, 2.6) + combo_glow * lerpf(0.18, 0.5, night)
 	for l in layers:
-		(l["mat"] as StandardMaterial3D).albedo_color = (l["base"] as Color).lerp(bottom, float(l["haze"])).darkened(night * 0.45)
+		if l["mat"] != null:
+			(l["mat"] as StandardMaterial3D).albedo_color = (l["base"] as Color).darkened(night * 0.45)
+	mat_city.albedo_color = Color.WHITE.darkened(night * 0.5)
+	mat_city_glass.albedo_color = Color("#9fb6d3").lerp(Color("#1d2744"), night)
+	mat_city_glass.emission_energy_multiplier = clampf((night - 0.35) * 3.0, 0.0, 1.8)
+	mat_city_glass_dark.albedo_color = Color("#93a8c6").lerp(Color("#1a2238"), night)
+	mat_lamp.emission_energy_multiplier = clampf((night - 0.25) * 4.0, 0.0, 3.0)
+	mat_headlight.emission_energy_multiplier = 0.6 + night * 2.5
+	env.fog_light_color = bottom
 
 
 func _update_tower(st) -> void:

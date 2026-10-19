@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-19 03:23 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 03:52 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T03:23:02Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T03:52:11Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -13,7 +13,7 @@ _Generated 2026-10-19 03:23 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `██████████░░░░░░░░░░` | 4 / 8 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
-| M3 Art and audio | `████████████░░░░░░░░` | 5 / 8 |
+| M3 Art and audio | `█████████████░░░░░░░` | 6 / 9 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
@@ -63,7 +63,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0003 | Approve the unique hook | decision | P1 | - | - |
 | HR-0004 | Building storey models (4 families × 4 parts, low-poly 3D) | art | P1 | 0/16 | T-0301 |
 | HR-0005 | Crane hook model | art | P2 | 0/1 | - |
-| HR-0006 | Environment models (plaza, props, background layers, clouds) | art | P1 | 0/9 | T-0301 |
+| HR-0006 | City environment models (street, buildings, cars, props) | art | P1 | 0/11 | T-0301 |
 | HR-0007 | Effect look-dev (optional polish) | art | P2 | 0/1 | - |
 | HR-0008 | Sound effects set | audio | P1 | 0/12 | T-0302 |
 | HR-0009 | Music loops | music | P2 | 0/3 | T-0302 |
@@ -92,7 +92,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (23)
+## Done (24)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -114,6 +114,7 @@ Delivered / answered: HR-0002
 - T-0306 Low-poly environment: sky by height, parallax hills and skyline, clouds
 - T-0307 Fix flicker on the tower base (landings, window resize)
 - T-0308 Detailed angled buildings: shop-front ground storey, richer storeys, painterly sky
+- T-0309 City setting: street in front, city skyline behind, lower camera
 - T-0401 City map grid and placement
 - T-0501 Rewarded and interstitial ads
 - T-0503 Analytics events

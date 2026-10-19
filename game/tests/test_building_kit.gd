@@ -5,6 +5,7 @@ extends "res://tests/test_case.gd"
 
 const Kit := preload("res://scripts/game/building_kit.gd")
 const LowPoly := preload("res://scripts/game/low_poly.gd")
+const City := preload("res://scripts/game/city_kit.gd")
 const YAW := deg_to_rad(38.0)
 
 
@@ -84,3 +85,35 @@ func test_faces_point_outward() -> void:
 		if n[i].dot(centroid - Vector3(0, 0.3, 0)) < -0.001:
 			ok = false
 	check(ok, "storey core faces point outward")
+
+
+# --- city (T-0309) ------------------------------------------------------------
+
+func test_street_layout() -> void:
+	var m := City.street(20.0)
+	var names := _names(m)
+	for n in ["sidewalk", "curb", "asphalt", "marking", "plinth"]:
+		check(n in names, "street has %s" % n)
+	check(_coplanar_overlaps([m]) == 0, "street has no overlapping top faces")
+	check(City.ROAD_FAR > 0.75, "road starts in front of the foundation pad")
+
+
+func test_city_rows_and_props_build() -> void:
+	var row := City.city_row(1, -6.0, 6.0, -3.0, 1.5, 1.0, 2.0, 0.9, 1.2)
+	var names := _names(row)
+	check("body" in names and "glass" in names and "trim" in names, "city row has walls, windows, trim")
+	# the gap behind the tower stays clear
+	var v: PackedVector3Array = row.surface_get_arrays(names.find("body"))[Mesh.ARRAY_VERTEX]
+	var blocked := false
+	for p in v:
+		if absf(p.x) < 1.15:
+			blocked = true
+	check(not blocked, "no building directly behind the tower")
+	check(City.car(1).get_surface_count() >= 4, "car builds")
+	check(City.street_light().get_surface_count() == 2, "street light builds")
+
+
+func test_city_rows_deterministic() -> void:
+	var a: PackedVector3Array = City.city_row(9, -5.0, 5.0, -3.0, 1.5, 1.0, 2.0, 0.6).surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var b: PackedVector3Array = City.city_row(9, -5.0, 5.0, -3.0, 1.5, 1.0, 2.0, 0.6).surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	check(a == b, "same seed gives the same city")
