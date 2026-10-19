@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Full project check. Run before marking any task done. Exit code 0 = all green.
-# Steps: config validation, rule tests, autoplay smoke test, clean-room check, dashboard.
+# Steps: config validation, rule tests, autoplay smoke test, clean-room check, translations committed and current, dashboard.
 set -u
 cd "$(dirname "$0")/.."
 GODOT="${GODOT:-godot}"
@@ -34,6 +34,9 @@ run_step tests   with_timeout "$GODOT" --headless --path game --script res://tes
 run_step smoke   with_timeout "$GODOT" --headless --path game -- --autoplay --seconds=90
 run_step ui-tour with_timeout "$GODOT" --headless --path game -- --tour
 run_step cleanroom python3 tools/cleanroom_check.py
+# the import above regenerates game/localisation/*.translation from strings.csv; they are committed so fresh
+# clones show text, so they must be current (edit strings.csv -> commit the regenerated .translation files too)
+run_step translations bash -c 'git diff --quiet -- "game/localisation/*.translation" && [ -z "$(git ls-files --others --exclude-standard -- "game/localisation/*.translation")" ] || { echo "commit the regenerated game/localisation/*.translation files"; exit 1; }'
 
 ok_json=$([ $ok_all -eq 1 ] && echo true || echo false)
 printf '{"time": "%s", "ok": %s, "steps": {%s}}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$ok_json" "${steps_json%, }" > coordination/.last_check.json

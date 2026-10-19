@@ -13,7 +13,8 @@ export_credentials.cfg
 *.tmp
 # Generated check result (dashboard files are committed so they can be read without running tools)
 coordination/.last_check.json
-*.translation
+# (game/localisation/*.translation are committed: Godot only regenerates them on import, and a fresh
+#  clone run without the editor showed raw keys like TITLE)
 game/override.cfg
 # Blender backup and autosave files
 *.blend1

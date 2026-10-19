@@ -102,7 +102,7 @@ Save keys: `ads.rounds_since_interstitial`, `ads.last_interstitial_unix`, `purch
 
 ## `localisation/strings.csv`
 Godot translation CSV: header `keys,en,es,de`, one row per UI string. Code uses `tr("KEY")`; block names use
-`block_types[].name_key`. Godot imports it into `strings.<lang>.translation` (generated, git-ignored) listed in
+`block_types[].name_key`. Godot imports it into `strings.<lang>.translation` (generated but committed, so fresh clones show text; see 08_TESTING) listed in
 `project.godot` `[internationalization]`. To add a language: add a column, add the generated file to that list,
 add the code to `SaveData.LANGUAGES`, and request a native review in HUMAN_NEEDED.
 `tests/test_localisation.gd` fails on missing keys, empty cells, mismatched `%d/%s` placeholders, or literal text

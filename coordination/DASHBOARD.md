@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-19 09:06 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 11:43 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T09:06:17Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T11:43:59Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok · translations: ok
 
 ## Milestones
 

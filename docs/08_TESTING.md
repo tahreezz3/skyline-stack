@@ -9,7 +9,10 @@
 4. UI tour: `godot --headless --path game -- --tour` visits menu, select, round, pause, results; must print `TOUR_DONE`
    with no script errors.
 5. `tools/cleanroom_check.py`.
-6. `tools/dashboard.py` regenerates the dashboard and records the check result.
+6. Translations: `game/localisation/*.translation` (generated from `strings.csv` by the import step) must be committed
+   and current. A fresh clone run without the editor has no import cache, and without these files every label shows
+   its raw key (`TITLE`, `SUBTITLE_WORKING`). After editing `strings.csv`, commit the regenerated files.
+7. `tools/dashboard.py` regenerates the dashboard and records the check result.
 
 ## 2. Writing tests
 - Suites are files named `game/tests/test_<area>.gd` that extend `res://tests/test_case.gd`; the runner finds them
