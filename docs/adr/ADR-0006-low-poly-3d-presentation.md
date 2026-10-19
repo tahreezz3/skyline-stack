@@ -27,5 +27,8 @@ Real-time 3D (option 2) for the playfield; 2D for the UI.
 - Artists deliver low-poly models (`.glb`, Blender), not sprite sheets. Asset specs in `docs/06_ART_AUDIO_SPEC.md`.
 - Until art arrives, meshes are generated in code (`scripts/game/low_poly.gd`) in the target style, so the game
   already looks like the direction and artists have a style reference.
+- Render quality settings (T-0311): 4× MSAA; directional shadows with 2 stabilised splits over 30 units, a 4096
+  map (also on mobile), Soft High filtering on desktop and Soft Medium on mobile, small biases. Building parts cast
+  shadows double-sided, and thin parts (awnings) are closed slabs, not paper surfaces.
 - More GPU work than 2D. Budget: under 60k triangles on screen, one shadowed directional light, glow on, no SSAO
   (not available on the mobile renderer). Check on a low-end phone during T-0602.

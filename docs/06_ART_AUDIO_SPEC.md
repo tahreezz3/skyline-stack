@@ -97,6 +97,9 @@ never trace it or copy it into the game.* The current in-game placeholders follo
 | Cars | `env_car_*.glb` | ≤ 400 tris | front +x |
 | Street light | `env_street_light.glb` | ≤ 150 tris | arm over +Z |
 
+Shadow-friendly modelling: give every part some thickness (no single-sided planes; they cast flickering
+shadows), and avoid ledges thinner than about 0.02 units (they alias at the low camera angle).
+
 Conventions: 1 Blender unit = 1 world unit; Y up in Godot (Blender's glTF export converts Z up); apply all
 transforms; flat shading; materials named `body`, `body_dark`, `body2`, `wall2`, `trim`, `accent`, `glass`, `pot`,
 `plant`, `emissive` so the game can recolour and light them (see `scripts/game/building_kit.gd` for what each is).

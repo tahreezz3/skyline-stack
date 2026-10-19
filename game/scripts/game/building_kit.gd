@@ -129,7 +129,8 @@ static func storey(h: float) -> ArrayMesh:
 	var b := Builder.new()
 	# core stops inside the cornice: two top faces at the same height would z-fight (T-0307)
 	b.box("body", Vector3(-C, 0.0, -C), Vector3(C, h - 0.03, C))
-	b.box("trim", Vector3(-0.355, 0.0, -0.355), Vector3(0.355, 0.035, 0.355))            # ledge
+	# ledge overhangs the cornice below (0.36): a sub-pixel sliver of cornice would alias into a dotted line
+	b.box("trim", Vector3(-0.368, 0.0, -0.368), Vector3(0.368, 0.035, 0.368))            # ledge
 	b.box("trim", Vector3(-0.375, h - 0.05, -0.375), Vector3(0.375, h - 0.02, 0.375))    # cornice
 	b.box("trim", Vector3(-0.36, h - 0.02, -0.36), Vector3(0.36, h, 0.36))
 	for sx in [-1.0, 1.0]:
@@ -190,8 +191,12 @@ static func base_storey(h: float) -> ArrayMesh:
 			var t1 := Vector3(lerpf(-0.34, 0.34, u1), top_y, 0.34)
 			var b0 := Vector3(lerpf(-0.47, 0.47, u0), bot_y, 0.47)
 			var b1 := Vector3(lerpf(-0.47, 0.47, u1), bot_y, 0.47)
-			b.quad(name, b0, b1, t1, t0, Vector3(0, 0.75, 0.6))
+			# a real (thin) slab, not a paper surface: one-sided faces cast unreliable, flickering shadows
+			var down := Vector3(0, -0.014, 0)
+			b.quad(name, b0, b1, t1, t0, Vector3(0, 0.75, 0.6))                                    # top
+			b.quad(name, b0 + down, b1 + down, t1 + down, t0 + down, Vector3(0, -0.75, -0.6))       # underside
 			b.quad(name, b0 + Vector3(0, -0.035, 0), b1 + Vector3(0, -0.035, 0), b1, b0, Vector3.BACK)   # valance
+			b.quad(name, b0 + Vector3(0, -0.035, -0.01), b1 + Vector3(0, -0.035, -0.01), b1 + Vector3(0, 0, -0.01), b0 + Vector3(0, 0, -0.01), Vector3.FORWARD)
 	)
 	return b.commit()
 

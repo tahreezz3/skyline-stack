@@ -38,8 +38,12 @@ locale/fallback="en"
 
 [rendering]
 
+anti_aliasing/quality/msaa_3d=2
+
 lights_and_shadows/directional_shadow/size=4096
-lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/directional_shadow/size.mobile=4096
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=4
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=3
 
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true

@@ -167,13 +167,17 @@ func _build_camera_and_light() -> void:
 	sun = DirectionalLight3D.new()
 	sun.shadow_enabled = true
 	# Stable, crisp shadows (T-0307): stabilised splits, short range, tuned bias.
+	# Shadow quality (T-0311): stabilised 2-split maps; the near split (0..~23 units from the camera)
+	# covers the tower and street at high texel density; filtered (PCF) soft edges; small biases
+	# because double-sided casting and closed meshes no longer need large ones.
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
-	sun.directional_shadow_max_distance = 36.0
-	sun.directional_shadow_split_1 = 0.5
+	sun.directional_shadow_max_distance = 30.0
+	sun.directional_shadow_split_1 = 0.78
 	sun.directional_shadow_blend_splits = true
-	sun.shadow_blur = 0.0
-	sun.shadow_bias = 0.15
-	sun.shadow_normal_bias = 3.0
+	sun.directional_shadow_fade_start = 0.9
+	sun.shadow_blur = 1.0
+	sun.shadow_bias = 0.04
+	sun.shadow_normal_bias = 1.0
 	add_child(sun)
 	# warm key light from the upper left: the left faces glow, the right faces fall into cool shade
 	sun.look_at_from_position(Vector3(-7, 8, 4), Vector3.ZERO)
@@ -324,6 +328,7 @@ func _build_actors() -> void:
 
 func _make_block(is_base: bool) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED   # thin parts cast reliably
 	_set_block_mesh(mi, is_base)
 	return mi
 
@@ -372,6 +377,7 @@ func _on_block_resolved(ev: Dictionary) -> void:
 		roof_node = MeshInstance3D.new()
 		var trophy := bool(ev.get("star", false))
 		roof_node.mesh = Kit.roof(trophy)
+		roof_node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 		_dress(roof_node, {"trim": mat_gold, "body2": mat_gold, "emissive": mat_spark} if trophy else {})
 		add_child(roof_node)
 
