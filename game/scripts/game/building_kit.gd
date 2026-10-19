@@ -108,6 +108,23 @@ class Builder:
 				out.z = 0.0
 				quad(name, Vector3(a.x, a.y, z0), Vector3(b.x, b.y, z0), b, a, out)
 
+	## Extrude a 2D outline (x, y; star-shaped around its centroid) from z0 to z1: front cap at z1,
+	## back cap at z0, and side walls. Used for car silhouettes, signs, profiles.
+	func extrude(name: String, poly: Array, z0: float, z1: float) -> void:
+		var c := Vector2.ZERO
+		for p in poly:
+			c += p
+		c /= poly.size()
+		var cf := Vector3(c.x, c.y, z1)
+		var cb := Vector3(c.x, c.y, z0)
+		for i in range(poly.size()):
+			var a: Vector2 = poly[i]
+			var b: Vector2 = poly[(i + 1) % poly.size()]
+			tri(name, cf, Vector3(a.x, a.y, z1), Vector3(b.x, b.y, z1), Vector3.BACK)
+			tri(name, cb, Vector3(b.x, b.y, z0), Vector3(a.x, a.y, z0), Vector3.FORWARD)
+			var mid := (a + b) * 0.5 - c
+			quad(name, Vector3(a.x, a.y, z0), Vector3(b.x, b.y, z0), Vector3(b.x, b.y, z1), Vector3(a.x, a.y, z1), Vector3(mid.x, mid.y, 0))
+
 	## Run `fn(face_index)` once per side with the transform turned to that side.
 	func each_side(fn: Callable) -> void:
 		for i in range(4):

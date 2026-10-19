@@ -64,6 +64,11 @@ func _build() -> void:
 		b.box("cream", Vector3(-0.018, 0.004, 0.03), Vector3(0.018, 0.022, 0.042))       # muzzle
 		b.box("pink", Vector3(-0.005, 0.02, 0.041), Vector3(0.005, 0.027, 0.045))        # nose
 		b.box("stripe", Vector3(-0.012, 0.05, -0.02), Vector3(0.012, 0.056, 0.02))       # forehead stripe
+		for sx in [-1.0, 1.0]:
+			b.blob("fur", Vector3(sx * 0.036, 0.016, 0.012), 0.017)                    # cheek tufts
+			for k in range(2):                                                         # whiskers
+				var wy := 0.012 + k * 0.007
+				b.box("cream", Vector3(minf(sx * 0.016, sx * 0.05), wy, 0.04), Vector3(maxf(sx * 0.016, sx * 0.05), wy + 0.0015, 0.0415))
 		for sx in [-0.024, 0.024]:
 			b.cone("fur", Vector3(sx, 0.05, 0.0), 0.017, 0.03, 4, PI / 4.0)            # ears
 			b.cone("pink", Vector3(sx, 0.052, 0.006), 0.009, 0.02, 4, PI / 4.0)
@@ -76,12 +81,12 @@ func _build() -> void:
 	# tail: three segments, each a child of the previous, so a wave travels along it
 	var parent: Node3D = self
 	var pos := Vector3(0.0, 0.015, -0.06)
-	for i in range(3):
+	for i in range(4):
 		var seg := Node3D.new()
 		seg.position = pos
 		parent.add_child(seg)
-		var len := 0.04 - i * 0.006
-		var colour_name := "stripe" if i == 2 else "fur"
+		var len := 0.036 - i * 0.005
+		var colour_name := "cream" if i == 3 else ("stripe" if i == 2 else "fur")
 		seg.add_child(_part(func(b) -> void: b.box(colour_name, Vector3(-0.008, 0.0, -0.008), Vector3(0.008, len, 0.008))))
 		tail_segments.append(seg)
 		parent = seg

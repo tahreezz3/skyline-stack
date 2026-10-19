@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-19 04:36 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 04:50 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T04:36:35Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T04:50:05Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -12,8 +12,8 @@ _Generated 2026-10-19 04:36 UTC by `tools/dashboard.py`. Do not edit by hand._
 |---|---|---|
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `██████████░░░░░░░░░░` | 4 / 8 |
-| M2 Game loop | `████████████████████` | 7 / 7 |
-| M3 Art and audio | `███████████████░░░░░` | 8 / 11 |
+| M2 Game loop | `████████████████████` | 8 / 8 |
+| M3 Art and audio | `███████████████░░░░░` | 9 / 12 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
@@ -92,7 +92,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (26)
+## Done (28)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -109,6 +109,7 @@ Delivered / answered: HR-0002
 - T-0205 Results screen and stats
 - T-0206 Pause and app lifecycle
 - T-0207 Endless mode
+- T-0208 Towers start at 20 storeys; retune rewards and unlocks
 - T-0304 Localisation framework
 - T-0305 Low-poly 3D tower renderer with procedural placeholders
 - T-0306 Low-poly environment: sky by height, parallax hills and skyline, clouds
@@ -117,6 +118,7 @@ Delivered / answered: HR-0002
 - T-0309 City setting: street in front, city skyline behind, lower camera
 - T-0310 Cozy lo-fi look: zoom in, spacious distant city, warm palette, a cat
 - T-0311 Awning shadow flicker; overall shadow quality
+- T-0312 Foreground detail pass and a setting pink sun
 - T-0401 City map grid and placement
 - T-0501 Rewarded and interstitial ads
 - T-0503 Analytics events

@@ -55,6 +55,17 @@ never trace it or copy it into the game.* The current in-game placeholders follo
 - Camera zoomed in (6.5 units visible instead of 8) so the buildings read; the crane swing was narrowed to fit, at
   the same crossing speed (see `docs/balance/TUNING_LOG.md`).
 
+### 2.1d Sun and foreground detail (T-0312)
+- **Lo-fi sun:** a soft pink disc with a warm glow and retro horizontal bands in its lower half, low in the sky to
+  the right of the tower, behind the painterly clouds. It sinks and fades as the tower climbs into night
+  (`sky_backdrop.gdshader`, driven by `tower_view_3d.gd`). A pink rim light from the sun's side catches the
+  buildings, turning cool at night.
+- **Foreground props** (`scripts/game/street_props.gd`): ornate post-top street lamps whose lanterns glow and cast
+  warm light pools at night, a slatted park bench (with the cat), a wooden planter with flowers, a café chalkboard
+  sign, a fire hydrant, a trash bin, a manhole cover, a storm drain, and three car models (hatchback, retro car,
+  van) with real silhouettes, bumpers, lights, mirrors and hubcaps. The sidewalk near the tower is laid in
+  staggered tiles with grout lines.
+
 ### 2.2 Colour and materials
 - Flat colour per material (no photo textures). One small palette texture or vertex colours are fine.
 - Tower families: **blue** `#4a90d9`, **red** `#d9534a`, **green** `#5cb85c`, **gold** `#e6b800`. Siding is a pastel

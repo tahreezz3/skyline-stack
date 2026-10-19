@@ -28,16 +28,36 @@ static func street(width: float) -> ArrayMesh:
 	var b := Kit.Builder.new()
 	var hw := width * 0.5
 	# Top faces all sit at different heights (no z-fighting, T-0307).
-	b.box("sidewalk", Vector3(-hw, -2.0, -1.8), Vector3(hw, -0.035, ROAD_FAR - 0.12))             # back sidewalk (ends behind the tower)
+	# back sidewalk (ends behind the tower): plain slab at the sides, individual paving tiles with grout
+	# lines near the tower (vertex colours give each tile a slightly different tone)
+	var tiles_half := 3.0
+	var zt0 := -1.8
+	var zt1 := ROAD_FAR - 0.12
+	b.box("sidewalk", Vector3(-hw, -2.0, zt0), Vector3(-tiles_half, -0.035, zt1))
+	b.box("sidewalk", Vector3(tiles_half, -2.0, zt0), Vector3(hw, -0.035, zt1))
+	b.color = Color("#cbb59e")                                                                    # grout
+	b.box("sidewalk", Vector3(-tiles_half, -2.0, zt0), Vector3(tiles_half, -0.045, zt1))
+	var trng := RandomNumberGenerator.new()
+	trng.seed = 77
+	var tz := zt0
+	while tz < zt1 - 0.01:
+		var tx := -tiles_half
+		var row_off := 0.15 if int(round((tz - zt0) / 0.3)) % 2 == 1 else 0.0                      # staggered rows
+		tx -= row_off
+		while tx < tiles_half - 0.01:
+			var x0 := maxf(tx, -tiles_half) + 0.006
+			var x1 := minf(tx + 0.3, tiles_half) - 0.006
+			if x1 > x0 + 0.02:
+				b.color = Color.WHITE.darkened(trng.randf_range(0.0, 0.07))
+				b.box("sidewalk", Vector3(x0, -0.045, tz + 0.006), Vector3(x1, -0.035, minf(tz + 0.3, zt1) - 0.006))
+			tx += 0.3
+		tz += 0.3
+	b.color = Color.WHITE
 	b.box("curb", Vector3(-hw, -2.0, ROAD_FAR - 0.12), Vector3(hw, -0.03, ROAD_FAR))              # curb stone
 	b.box("asphalt", Vector3(-hw, -2.0, ROAD_FAR), Vector3(hw, -0.09, ROAD_NEAR))                 # road
 	b.box("curb", Vector3(-hw, -2.0, ROAD_NEAR), Vector3(hw, -0.03, ROAD_NEAR + 0.12))
 	b.box("sidewalk", Vector3(-hw, -2.0, ROAD_NEAR + 0.12), Vector3(hw, -0.035, ROAD_NEAR + 6.0))  # front sidewalk
-	# sidewalk paving joints (thin raised strips)
 	var x := -hw
-	while x < hw:
-		b.box("curb", Vector3(x, -0.035, -1.6), Vector3(x + 0.02, -0.03, ROAD_FAR - 0.12))
-		x += 0.6
 	var mid := (ROAD_FAR + ROAD_NEAR) * 0.5
 	var cross_half := 0.55
 	# dashed centre line, interrupted by the crossing

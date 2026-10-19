@@ -11,6 +11,7 @@ const LowPoly := preload("res://scripts/game/low_poly.gd")
 const Kit := preload("res://scripts/game/building_kit.gd")
 const City := preload("res://scripts/game/city_kit.gd")
 const Cat := preload("res://scripts/game/cat.gd")
+const Props := preload("res://scripts/game/street_props.gd")
 
 const PITCH_DEG := 6.0              # low street-level angle: little foreground (owner feedback, T-0309)
 const BUILDING_YAW_DEG := 38.0
@@ -54,6 +55,8 @@ var layers: Array[Dictionary] = []      # {node, mat, base: Color, haze, paralla
 var rings: Array[Dictionary] = []       # {node, mat, age}
 var cars: Array[Dictionary] = []        # {node, speed}
 var cat: Node3D
+var rim: DirectionalLight3D               # pink light from the setting sun's side
+var lamp_lights: Array[OmniLight3D] = []  # warm pools of light under the street lamps at night
 var mat_city: StandardMaterial3D        # vertex-coloured city walls / awnings
 var mat_lamp: StandardMaterial3D        # street-light heads, glow at night
 var mat_headlight: StandardMaterial3D
@@ -181,6 +184,13 @@ func _build_camera_and_light() -> void:
 	add_child(sun)
 	# warm key light from the upper left: the left faces glow, the right faces fall into cool shade
 	sun.look_at_from_position(Vector3(-7, 8, 4), Vector3.ZERO)
+	# pink rim light from behind on the right, where the lo-fi sun sets (no shadows; fades at night)
+	rim = DirectionalLight3D.new()
+	rim.light_color = Color("#ff8fb3")
+	rim.light_energy = 0.4
+	rim.shadow_enabled = false
+	add_child(rim)
+	rim.look_at_from_position(Vector3(6, 3, -6), Vector3.ZERO)
 
 	var we := WorldEnvironment.new()
 	env = Environment.new()
@@ -226,6 +236,7 @@ func _build_environment_layers() -> void:
 	mats["glass_dark"] = glass_dark
 	mats["roof"] = _lit(Color("#9aa3b5"))
 	mats["sidewalk"] = _lit(Color("#e6d3bd"))
+	(mats["sidewalk"] as StandardMaterial3D).vertex_color_use_as_albedo = true   # per-tile tone variation
 	mats["curb"] = _lit(Color("#f1e4d3"))
 	mats["asphalt"] = _lit(Color("#5a5168"), 0.95)       # warm violet-grey asphalt
 	mats["marking"] = _lit(Color("#f6eddf"))
@@ -252,40 +263,59 @@ func _build_environment_layers() -> void:
 	_add_city_layer(City.city_row(43, -60.0, 60.0, -34.0, 2.5, 2.5, 6.0, 0.25, 0.0, 0.2, 0.0, Color("#93a49a")), -34.0, 0.6, 0.25, 0.78)
 	_add_layer(LowPoly.ridge(140.0, 26, 0.8, 2.2, 11, 2.0), Color("#a58fc9"), -70.0, 1.0, 0.85, 0.0)   # soft violet hills
 
-	# cozy corner by the tower: a planter, a bench with the cat on it, warm street lights, light traffic
-	var pl := MeshInstance3D.new()
-	pl.mesh = City.planter()
-	_dress(pl, {"pot": mats["accent"], "soil": _lit(Color("#6b4a3a")), "leaf": _lit(Color("#6f9e5f")), "flower": _lit(Color("#f2a7b8"))})
-	pl.position = Vector3(-1.02, -0.035, 0.55)
-	add_child(pl)
-	var bn := MeshInstance3D.new()
-	bn.mesh = City.bench()
-	_dress(bn, {"wood": _lit(Color("#b07a52")), "iron": _lit(Color("#4a4458"))})
-	bn.position = Vector3(1.12, -0.035, 0.7)
-	bn.scale = Vector3.ONE * 1.4
-	add_child(bn)
+	# cozy corner by the tower (T-0312 detail pass): planter, bench with the cat, café sign, hydrant,
+	# trash bin, street lamps with warm light pools at night, manhole, storm drain, light traffic
+	var prop_mats := {
+		"iron": _lit(Color("#3e3a4d"), 0.6), "glass_lamp": mat_lamp, "wood": _lit(Color("#b07a52")),
+		"wood_dark": _lit(Color("#8a5a3c")), "metal": _lit(Color("#6f7484"), 0.5), "rubber": _lit(Color("#2a2a33")),
+		"hub": _lit(Color("#c9ccd6"), 0.4), "chrome": _lit(Color("#d7d9e0"), 0.3), "light": mat_headlight,
+		"tail": _glow(Color("#ff4a4a"), 1.2), "red": _lit(Color("#c94a4a"), 0.6), "green": _lit(Color("#4f7f6a"), 0.6),
+		"board": _lit(Color("#2f3b3a")), "chalk": _lit(Color("#f2efe6")), "leaf": _lit(Color("#6f9e5f")),
+		"flower_a": _lit(Color("#f2a7b8")), "flower_b": _lit(Color("#ffd36e")), "flower_c": _lit(Color("#ffffff")),
+		"soil": _lit(Color("#6b4a3a")), "glass": _lit(Color("#3a4766"), 0.2),
+	}
+	_place_prop(Props.planter(), prop_mats, Vector3(-1.05, -0.035, 0.55))
+	_place_prop(Props.bench(), prop_mats, Vector3(1.12, -0.035, 0.7), 0.0, 1.4)
+	_place_prop(Props.cafe_sign(), prop_mats, Vector3(-0.66, -0.035, 0.86), 0.35, 1.2)
+	_place_prop(Props.hydrant(), prop_mats, Vector3(1.58, -0.035, 1.02), 0.4, 1.2)
+	_place_prop(Props.trash_bin(), prop_mats, Vector3(-1.48, -0.035, 0.35), 0.0, 1.2)
+	_place_prop(Props.manhole(), prop_mats, Vector3(0.95, 0.0, City.ROAD_FAR + 1.9))
+	_place_prop(Props.storm_drain(), prop_mats, Vector3(-0.95, 0.0, City.ROAD_FAR))
 	cat = Cat.new()
 	add_child(cat)
 	cat.scale = Vector3.ONE * 1.7                              # toy scale: readable and cute
-	cat.place(Vector3(1.02, -0.035 + 0.085 * 1.4, 0.7), -0.35) # sitting on the bench seat, turned towards the tower
-	var light_mesh := City.street_light()
-	for lx in [-1.75, 1.75, -5.5, 5.5]:
-		var l := MeshInstance3D.new()
-		l.mesh = light_mesh
-		_dress(l, {"pole": _lit(Color("#4a4458")), "lamp": mat_lamp})
-		l.position = Vector3(lx, -0.035, City.ROAD_FAR - 0.3)
-		add_child(l)
+	cat.place(Vector3(1.02, -0.035 + 0.086 * 1.4, 0.7), -0.35) # sitting on the bench seat, turned towards the tower
+	var lamp_mesh := Props.street_lamp()
+	for lx in [-1.72, 1.72, -5.5, 5.5]:
+		var l := _place_prop(lamp_mesh, prop_mats, Vector3(lx, -0.035, City.ROAD_FAR - 0.25))
+		var omni := OmniLight3D.new()
+		omni.light_color = Color("#ffb994")
+		omni.omni_range = 1.5
+		omni.light_energy = 0.0
+		omni.shadow_enabled = false
+		omni.position = Vector3(0, Props.LAMP_Y + 0.02, 0)
+		l.add_child(omni)
+		lamp_lights.append(omni)
 	var lanes := [[City.ROAD_FAR + 1.0, 0.7], [City.ROAD_NEAR - 1.0, -0.85]]
 	for i in range(3):
 		var lane: Array = lanes[i % 2]
-		var c := MeshInstance3D.new()
-		c.mesh = City.car(70 + i)
-		var paint := _lit(Color(City.PASTELS[(i * 3) % City.PASTELS.size()]).darkened(0.08), 0.5)
-		_dress(c, {"body": paint, "wheel": _lit(Color("#2a2d36")), "emissive": mat_headlight, "tail": _glow(Color("#ff4a4a"), 1.2)})
-		c.position = Vector3(-7.0 + i * 5.3, -0.09, float(lane[0]))
-		c.rotation.y = 0.0 if float(lane[1]) > 0.0 else PI
-		add_child(c)
+		var paint := _lit(Color(["#e7a17f", "#9fc2d6", "#f1cf7d"][i]).darkened(0.05), 0.45)
+		var mats_car := prop_mats.duplicate()
+		mats_car["paint"] = paint
+		var c := _place_prop(Props.car(i), mats_car, Vector3(-7.0 + i * 5.3, -0.09, float(lane[0])), 0.0 if float(lane[1]) > 0.0 else PI)
 		cars.append({"node": c, "speed": float(lane[1]) * (0.9 + 0.1 * i)})
+
+
+func _place_prop(mesh: Mesh, prop_mats: Dictionary, at: Vector3, yaw_rad := 0.0, scale := 1.0) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	mi.mesh = mesh
+	_dress(mi, prop_mats)
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
+	mi.position = at
+	mi.rotation.y = yaw_rad
+	mi.scale = Vector3.ONE * scale
+	add_child(mi)
+	return mi
 
 
 ## City rows: vertex-coloured walls and awnings, shared glass (some windows light up at night).
@@ -476,6 +506,14 @@ func _update_time_of_day(delta: float) -> void:
 	mat_lamp.emission_energy_multiplier = clampf((night - 0.25) * 4.0, 0.0, 3.0)
 	mat_headlight.emission_energy_multiplier = 0.6 + night * 2.5
 	env.fog_light_color = bottom.lerp(_sky(0), 0.3).lightened(0.1)   # lavender-peach haze, not a flat orange wash
+	# the lo-fi sun sinks and fades as the tower climbs into night (T-0312)
+	var sun_amount := 1.0 - smoothstep(0.35, 0.8, night)
+	backdrop_mat.set_shader_parameter("sun_amount", sun_amount)
+	backdrop_mat.set_shader_parameter("sun_pos", Vector2(0.578, 0.52 + night * 0.2))   # right of the tower; sinks behind the city
+	rim.light_energy = 0.4 * sun_amount + 0.12 * night
+	rim.light_color = Color("#ff8fb3").lerp(Color("#8f9bff"), night)
+	for l in lamp_lights:
+		l.light_energy = clampf((night - 0.25) * 2.5, 0.0, 1.4)
 
 
 func _update_tower(st) -> void:

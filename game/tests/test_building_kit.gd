@@ -117,3 +117,26 @@ func test_city_rows_deterministic() -> void:
 	var a: PackedVector3Array = City.city_row(9, -5.0, 5.0, -3.0, 1.5, 1.0, 2.0, 0.6).surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
 	var b: PackedVector3Array = City.city_row(9, -5.0, 5.0, -3.0, 1.5, 1.0, 2.0, 0.6).surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
 	check(a == b, "same seed gives the same city")
+
+
+# --- street props (T-0312) ------------------------------------------------------
+
+func test_props_build_with_named_surfaces() -> void:
+	const Props := preload("res://scripts/game/street_props.gd")
+	check("glass_lamp" in _names(Props.street_lamp()), "street lamp has a glass lantern")
+	check(Props.street_lamp().get_aabb().size.y > 1.1, "street lamp is about 1.2 tall")
+	check("wood" in _names(Props.bench()) and "iron" in _names(Props.bench()), "bench: wood slats, iron sides")
+	for n in ["wood", "soil", "leaf", "flower_a"]:
+		check(n in _names(Props.planter()), "planter has %s" % n)
+	check("red" in _names(Props.hydrant()), "hydrant is red")
+	check("chalk" in _names(Props.cafe_sign()), "café sign has chalk lines")
+	for k in range(3):
+		var car := Props.car(k)
+		for n in ["paint", "glass", "rubber", "light", "tail"]:
+			check(n in _names(car), "car %d has %s" % [k, n])
+		check(car.get_aabb().size.x > 0.7 and car.get_aabb().size.x < 0.85, "car %d is about 0.78 long" % k)
+
+
+func test_tiled_sidewalk_no_overlaps() -> void:
+	# tiles, grout slab and crossing must not fight over the same pixels
+	check(_coplanar_overlaps([City.street(8.0)]) == 0, "tiled street has no overlapping top faces")

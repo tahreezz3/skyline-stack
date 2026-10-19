@@ -12,6 +12,14 @@ uniform float cloud_amount : hint_range(0.0, 1.0) = 0.85;
 uniform float stars : hint_range(0.0, 1.0) = 0.0;
 uniform float scroll = 0.0;   // camera height, so clouds drift past as the tower grows
 
+// lo-fi sun (T-0312): pink disc with retro bands in its lower half; sets and fades towards night
+uniform vec2 sun_pos = vec2(0.56, 0.6);          // in quad UV (visible area is roughly x 0.39-0.61, y 0.3-0.7)
+uniform float sun_size = 0.03;
+uniform float sun_amount : hint_range(0.0, 1.0) = 1.0;
+uniform vec3 sun_top : source_color = vec3(1.0, 0.85, 0.62);
+uniform vec3 sun_bottom : source_color = vec3(1.0, 0.45, 0.62);
+uniform vec3 sun_glow : source_color = vec3(1.0, 0.62, 0.7);
+
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
 }
@@ -37,6 +45,20 @@ float fbm(vec2 p) {
 void fragment() {
 	float t = smoothstep(0.0, 1.0, UV.y);
 	vec3 c = mix(top_color, bottom_color, t);
+
+	// sun: soft glow, then the disc; lower half cut by retro bands that thicken towards the bottom
+	vec2 sd = (UV - sun_pos) / sun_size;
+	float r = length(sd);
+	c += sun_glow * exp(-r * 0.9) * 0.45 * sun_amount;
+	float disc = smoothstep(1.0, 0.94, r);
+	float band = 1.0;
+	if (sd.y > 0.1) {
+		float stripe = fract(sd.y * 3.2);
+		float gap = mix(0.08, 0.42, clamp(sd.y, 0.0, 1.0));
+		band = smoothstep(gap - 0.04, gap, stripe);
+	}
+	vec3 sun_col = mix(sun_top, sun_bottom, clamp(sd.y * 0.5 + 0.5, 0.0, 1.0));
+	c = mix(c, sun_col, disc * band * sun_amount);
 
 	// painterly clouds: stretched fbm, banded so they read as soft puffs with lit tops
 	vec2 cp = vec2(UV.x * 2.2 + TIME * 0.006, (UV.y - scroll) * 3.2);
