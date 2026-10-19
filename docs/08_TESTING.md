@@ -25,6 +25,9 @@ score and combo-share tables. Use it before and after any balance change; log th
 `docs/balance/TUNING_LOG.md`.
 
 ## 4. Looking at the game without a screen
+`tools/capture.sh <out_dir> <frames> -- --autoplay` (or `-- --tour`, `-- --autoplay --endless` for the night sky)
+writes full-resolution 720×1280 PNG frames. Look at them after any visual change.
+
 `godot --path game --write-movie /tmp/frames/f.png --fixed-fps 30 --quit-after 600 -- --autoplay`
 writes PNG frames you can inspect (it opens a window briefly). Use `-- --tour` instead of `-- --autoplay` to
 capture every screen. Always look at frames after UI changes: a headless run cannot catch layout bugs.

@@ -14,3 +14,4 @@ export_credentials.cfg
 # Generated check result (dashboard files are committed so they can be read without running tools)
 coordination/.last_check.json
 *.translation
+game/override.cfg

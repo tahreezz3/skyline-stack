@@ -14,8 +14,18 @@ This document holds the shared direction those requests follow.
 > "Modern simple shapes with good details; looks 3D, with effects, animation and design; the level itself is 2D
 > and fixed; details in low-poly simple shapes with a good modern aesthetic."
 
+**Visual reference (owner, 2026-10-19):** `docs/art/references/owner_reference_corner_building.webp`: a corner
+view of a pastel building with white pilasters and stepped cornices, board siding, mullioned windows with terracotta
+frames and sills, flower pots on ledges, and a shop-front ground floor (panelled plinth, arched doors, striped
+awning), under a pastel sky with warm painterly clouds and a soft background blur. *Mood and detail reference only:
+never trace it or copy it into the game.* The current in-game placeholders follow it: `docs/art/style_frame_building_detail.png`.
+
 ### 2.1 Shape language
 - Simple, chunky, readable silhouettes built from boxes, prisms, cylinders with 6–8 sides, and pyramids.
+- **Buildings are shown at an angle:** every block is turned 38° about its vertical axis so two faces show (a corner
+  view). Footprints are square (core 0.66 units) so the turned block spans the gameplay width on screen.
+- **The ground storey is different:** shop front with plinth panels, arched doors, corner columns and a striped
+  awning wrapping the corners. Upper storeys repeat: siding, pilasters, cornice, framed windows, flower pots.
 - **Flat-shaded facets** (no smooth normals): light catches individual faces, which is what makes low-poly look crisp.
 - Detail comes from a few well-placed extras (cornice bands, window insets, rooftop antennas, awnings, balconies),
   not from texture noise. Slight bevels or chamfers on major edges only.
@@ -23,8 +33,10 @@ This document holds the shared direction those requests follow.
 
 ### 2.2 Colour and materials
 - Flat colour per material (no photo textures). One small palette texture or vertex colours are fine.
-- Tower families: **blue** `#4a90d9`, **red** `#d9534a`, **green** `#5cb85c`, **gold** `#e6b800`. Each has a body
-  tone, a lighter trim tone (+15% lightness), and shared dark glass (`#22304a`).
+- Tower families: **blue** `#4a90d9`, **red** `#d9534a`, **green** `#5cb85c`, **gold** `#e6b800`. Siding is a pastel
+  of the family colour (+42% lightness), trim is off-white `#e6e9f0`, and each family has an **accent** for window
+  frames, awning stripes and the shop wall tint (`accent` in `block_types.json`: terracotta on blue and green, teal on
+  red, blue on gold). Glass is dark navy `#2b3a57`.
 - Glass is **emissive at night**: windows glow warm (`#ffd27a`) as the sky darkens with height.
 - Trophy roofs use gold with emissive edges, so they bloom.
 - Background layers are desaturated and pushed towards the sky colour with distance (atmospheric perspective).
@@ -52,17 +64,18 @@ This document holds the shared direction those requests follow.
 ### 2.6 3D asset specs for artists (Blender → `.glb`)
 | Asset | File | Budget | Notes |
 |---|---|---|---|
-| Storey (per family) | `block_<family>_floor.glb` | ≤ 300 tris | 1.0 × 0.6 × 0.9 units; origin at bottom centre; front faces +Z |
-| Ground storey | `block_<family>_base.glb` | ≤ 400 tris | door or shop front on +Z |
-| Roof / trophy roof | `block_<family>_roof.glb`, `..._roof_trophy.glb` | ≤ 400 tris | sits on top of the last storey; trophy version has emissive parts |
+| Storey (per family) | `block_<family>_floor.glb` | ≤ 900 tris | square: core 0.66 × 0.66, cornice ≤ 0.76; 0.6 tall; origin at bottom centre; all four sides detailed (the game turns it 38°, and debris tumbles) |
+| Ground storey | `block_<family>_base.glb` | ≤ 1200 tris | same footprint and height; shop front on all four sides |
+| Roof / trophy roof | `block_<family>_roof.glb`, `..._roof_trophy.glb` | ≤ 600 tris | sits on top of the last storey; trophy version has emissive parts |
 | Crane hook | `crane_hook.glb` | ≤ 200 tris | attachment point at origin |
 | Plaza and props | `env_plaza.glb`, `env_tree_*.glb`, `env_lamp.glb` | ≤ 2k tris total | |
 | Background layers | `env_hills_*.glb`, `env_skyline.glb` | ≤ 3k tris each | wide strips, about 60 units |
 | Clouds | `env_cloud_*.glb` | ≤ 150 tris each | |
 
 Conventions: 1 Blender unit = 1 world unit; Y up in Godot (Blender's glTF export converts Z up); apply all
-transforms; flat shading; materials named `body`, `trim`, `glass`, `emissive` so the game can recolour and light them.
-Export glTF binary with no cameras or lights. Until delivered, `scripts/game/low_poly.gd` generates placeholders with
+transforms; flat shading; materials named `body`, `body_dark`, `body2`, `wall2`, `trim`, `accent`, `glass`, `pot`,
+`plant`, `emissive` so the game can recolour and light them (see `scripts/game/building_kit.gd` for what each is).
+Export glTF binary with no cameras or lights. Until delivered, `scripts/game/building_kit.gd` (buildings) and `scripts/game/low_poly.gd` (environment) generate placeholders with
 the same names and dimensions. Use them as the size and style reference.
 
 ## 3. Placeholder policy

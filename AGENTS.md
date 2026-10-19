@@ -66,6 +66,7 @@ godot --headless --path game --script res://tests/run_tests.gd     # rule tests 
 godot --headless --path game -- --autoplay --seconds=60            # smoke test: bot plays one round
 godot --path game --write-movie /tmp/f.png --fixed-fps 30 --quit-after 600 -- --autoplay   # capture frames to look at
 godot --path game --write-movie /tmp/t/f.png --fixed-fps 10 -- --tour                       # capture every screen
+tools/capture.sh /tmp/shots 420 -- --autoplay                                               # full-res 720x1280 frames
 python3 tools/new_task.py --title "..." --milestone M1             # create a task with the next free id
 python3 tools/dashboard.py                                         # regenerate dashboard
 python3 tools/task.py claim T-0101 --owner <handle>                # claim (also: status, done, log, tick)

@@ -14,6 +14,8 @@ The owner chose a modern low-poly look that "looks 3D, with effects, animation a
 Real-time 3D (option 2) for the playfield; 2D for the UI.
 - `scripts/game/tower_view_3d.gd` draws the round. Camera: orthographic, fixed, pitched about 14° down so the top
   faces of blocks show. The camera only follows the tower upwards and never rotates.
+- Building parts are turned 38° about their vertical axis (corner view, owner reference, T-0308); their square
+  footprint is sized so the turned block spans the gameplay width on screen.
 - All blocks sit on z = 0 and use the same world units as the rules (1 unit = one block width), so what the player
   sees lines up exactly with the 2D rules in `TowerState`. Rules, input and tests are unchanged (ADR-0004).
 - HUD, popups and menus remain 2D Control/canvas drawing on top.

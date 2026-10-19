@@ -31,7 +31,7 @@ REQUIRED = {
         "audio.perfect_pitch_step", "audio.perfect_pitch_max_steps", "audio.combo_tick_pitch_min", "audio.combo_tick_pitch_max",
     ],
 }
-BLOCK_KEYS = ["id", "name_key", "colour", "target_height", "roof_people", "star_population", "star_roof_people", "unlock_population"]
+BLOCK_KEYS = ["id", "name_key", "colour", "accent", "target_height", "roof_people", "star_population", "star_roof_people", "unlock_population"]
 
 
 def get(d, dotted):
