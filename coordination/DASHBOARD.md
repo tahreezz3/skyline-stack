@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-13 04:55 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-19 02:47 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-13T04:54:59Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-19T02:47:24Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
 
 ## Milestones
 
@@ -13,7 +13,7 @@ _Generated 2026-10-13 04:55 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M2 Game loop | `████████████████████` | 7 / 7 |
-| M3 Art and audio | `█████░░░░░░░░░░░░░░░` | 1 / 4 |
+| M3 Art and audio | `██████████░░░░░░░░░░` | 3 / 6 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `███████░░░░░░░░░░░░░` | 2 / 6 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
@@ -53,19 +53,18 @@ _Generated 2026-10-13 04:55 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0603** [Store listing](../coordination/tasks/T-0603-store-listing.md) · M6 P1 · _waits on T-0301; needs HR-0001, HR-0012_
 - **T-0604** [Soft launch checklist](../coordination/tasks/T-0604-soft-launch-checklist.md) · M6 P1 · _waits on T-0601, T-0602, T-0603_
 
-## Needs a human (18 open of 18)
+## Needs a human (17 open of 18)
 
 Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 | ID | Request | Type | Priority | Files | Blocks |
 |---|---|---|---|---|---|
 | HR-0001 | Final game name | decision | P1 | - | T-0603 |
-| HR-0002 | Art direction choice | decision | P0 | - | T-0301, T-0303 |
 | HR-0003 | Approve the unique hook | decision | P1 | - | - |
-| HR-0004 | Building block sprites (4 colours × 4 parts) | art | P1 | 0/16 | T-0301 |
-| HR-0005 | Crane hook and rope | art | P2 | 0/2 | - |
-| HR-0006 | Background layers | art | P1 | 0/4 | T-0301 |
-| HR-0007 | Ground, dust and debris effects | art | P2 | 0/4 | - |
+| HR-0004 | Building storey models (4 families × 4 parts, low-poly 3D) | art | P1 | 0/16 | T-0301 |
+| HR-0005 | Crane hook model | art | P2 | 0/1 | - |
+| HR-0006 | Environment models (plaza, props, background layers, clouds) | art | P1 | 0/9 | T-0301 |
+| HR-0007 | Effect look-dev (optional polish) | art | P2 | 0/1 | - |
 | HR-0008 | Sound effects set | audio | P1 | 0/12 | T-0302 |
 | HR-0009 | Music loops | music | P2 | 0/3 | T-0302 |
 | HR-0010 | UI font | font | P2 | 0/2 | T-0303 |
@@ -77,6 +76,8 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0016 | Privacy policy and legal entity | legal | P1 | - | T-0504 |
 | HR-0017 | Device playtest of core feel | playtest | P1 | - | - |
 | HR-0018 | Review Spanish and German translations | design | P2 | - | - |
+
+Delivered / answered: HR-0002
 
 ## Recent sessions
 
@@ -91,7 +92,7 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
 - none
 
-## Done (17)
+## Done (19)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -107,6 +108,8 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 - T-0206 Pause and app lifecycle
 - T-0207 Endless mode
 - T-0304 Localisation framework
+- T-0305 Low-poly 3D tower renderer with procedural placeholders
+- T-0306 Low-poly environment: sky by height, parallax hills and skyline, clouds
 - T-0401 City map grid and placement
 - T-0501 Rewarded and interstitial ads
 - T-0503 Analytics events

@@ -104,7 +104,7 @@ daily skyline). Summary of the candidates:
 - Coins are not implemented yet; population is the only currency so far.
 - IAP: remove ads (non-consumable). Optional later: cosmetic packs.
 
-## 8. Feedback and juice [planned, M1/M3]
+## 8. Feedback and juice (look: Modern low-poly 2.5D, docs/06_ART_AUDIO_SPEC.md §2)
 - Perfect: chime pitch rising per combo step, sparkle, tiny camera kick, "PERFECT" text.
 - Sloppy landing: creak, dust puff on the overhang side.
 - Collapse: rumble, blocks tumble with rotation, screen shake scaled by blocks lost.

@@ -13,6 +13,7 @@ extends Node2D
 const TowerState := preload("res://scripts/core/tower_state.gd")
 const UI := preload("res://scripts/game/ui_kit.gd")
 const AdPolicy := preload("res://scripts/core/ad_policy.gd")
+const TowerView3D := preload("res://scripts/game/tower_view_3d.gd")
 const RESUME_COUNTDOWN_S := 3
 const RESULTS_DELAY_S := 1.2
 
@@ -45,6 +46,7 @@ var kick := 0.0
 var squash_t := 0.0
 var particles: Array[Dictionary] = []   # {x, y, vx, vy, age, life, kind, size}
 var last_combo_count := 0
+var view3d = null                      # low-poly 3D renderer (ADR-0006); null = 2D fallback
 var continues_used := 0
 var offering_continue := false
 
@@ -80,6 +82,10 @@ func _ready() -> void:
 		autoplay_seconds = SceneRouter.autoplay_seconds
 		Engine.time_scale = 4.0
 		SaveData.persist = false
+	if String(feel.get("view", "3d")) == "3d":
+		view3d = TowerView3D.new()
+		add_child(view3d)
+		view3d.setup(self)
 	GameEvents.round_started.emit(String(block_type["id"]), endless)
 	_build_hud()
 	_build_pause()
@@ -184,6 +190,8 @@ func _process(delta: float) -> void:
 	view_y = lerpf(view_y, maxf(0.0, _top_y() - VIEW_BELOW_TOP), minf(1.0, delta * 4.0))
 	if autoplay:
 		_autoplay_step()
+	if view3d:
+		view3d.sync(delta)
 	_refresh_hud()
 	queue_redraw()
 
@@ -434,6 +442,9 @@ func _autoplay_step() -> void:
 # --- drawing -----------------------------------------------------------------
 
 func _draw() -> void:
+	if view3d:
+		_draw_popups()   # the 3D view draws the world; only floating text stays 2D
+		return
 	draw_rect(Rect2(Vector2(-64, -64), SCREEN + Vector2(128, 128)), Color("#1c2333"))
 	var ground := _to_screen(0.0, 0.0)
 	draw_rect(Rect2(0, ground.y, SCREEN.x, SCREEN.y), FOUNDATION_COLOUR)
@@ -479,11 +490,17 @@ func _draw() -> void:
 	if not falling.is_empty():
 		_draw_block(_block_rect_at(falling["x"], falling["y"]), colour.lightened(0.15))
 
+	_draw_popups()
+
+
+func _draw_popups() -> void:
 	var font := ThemeDB.fallback_font
 	for p in popups:
-		var pos := _to_screen(p["x"], p["y"])
+		var pos: Vector2 = view3d.world_to_screen(p["x"], p["y"]) if view3d else _to_screen(p["x"], p["y"])
 		var c: Color = p["colour"]
 		c.a = 1.0 - p["age"] / 1.4
+		# dark outline keeps text readable over a bright sky
+		draw_string_outline(font, pos - Vector2(200, 0), p["text"], HORIZONTAL_ALIGNMENT_CENTER, 400, 34, 8, Color(0, 0, 0, c.a * 0.55))
 		draw_string(font, pos - Vector2(200, 0), p["text"], HORIZONTAL_ALIGNMENT_CENTER, 400, 34, c)
 
 

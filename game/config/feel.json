@@ -1,5 +1,6 @@
 {
-  "_doc": "Presentation-only tuning: screen shake, camera kick, squash, particles, combo bar pulse, audio pitch. Never affects scoring. See docs/03_DATA_SPEC.md. Shake and kick are disabled when settings.reduced_motion is true.",
+  "_doc": "Presentation-only tuning: renderer (view: \"3d\" low-poly per ADR-0006, or \"2d\" fallback), screen shake, camera kick, squash, particles, combo bar pulse, audio pitch. Never affects scoring. See docs/03_DATA_SPEC.md. Shake and kick are disabled when settings.reduced_motion is true.",
+  "view": "3d",
   "shake": {
     "land": 3.0,
     "land_sloppy": 6.0,

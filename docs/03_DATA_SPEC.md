@@ -45,6 +45,7 @@ Block types unlock **only** through `block_types[].unlock_population` (single so
 
 | Key | Meaning |
 |---|---|
+| `view` | `"3d"` (low-poly renderer, ADR-0006) or `"2d"` (debug fallback) |
 | `shake.land`, `shake.land_sloppy`, `shake.perfect`, `shake.miss` | screen-shake amount (px) added per event |
 | `shake.collapse_per_block`, `shake.max`, `shake.decay` | collapse shake per fallen block; cap; decay rate per second |
 | `camera_kick.perfect`, `camera_kick.decay` | downward camera nudge on a perfect (px) and its decay |

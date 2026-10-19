@@ -8,7 +8,7 @@ const Progression := preload("res://scripts/core/progression.gd")
 func _ready() -> void:
 	if SceneRouter.autoplay:
 		# Smoke test: go straight into a round with the default tower.
-		SceneRouter.go.call_deferred("game", {"block_type": "blue"})
+		SceneRouter.go.call_deferred("game", {"block_type": "blue", "endless": "--endless" in OS.get_cmdline_user_args()})
 		return
 	AudioDirector.play_music("menu")
 	var col := UI.screen(self)

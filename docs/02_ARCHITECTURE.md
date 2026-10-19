@@ -70,6 +70,15 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 
 Add new signals here when you add them to `game_events.gd`.
 
+## Rendering (ADR-0006)
+The round is drawn by `scripts/game/tower_view_3d.gd`: low-poly meshes (`scripts/game/low_poly.gd`) under a fixed
+orthographic `Camera3D` pitched 14° down. It reads `tower_game`'s state every frame (`view3d.sync()`) and never
+changes it. Gameplay objects all sit on z = 0 in rules units, so the 3D picture lines up with the 2D rules.
+Behind them: a sky backdrop shader on a camera-parented quad (`scripts/game/shaders/sky_backdrop.gdshader`),
+parallax ridges, skyline and clouds that sink as the tower rises, and a plaza with props. Time of day follows the
+camera height (day, then dusk, then night with emissive windows and stars). Popups and the HUD stay 2D;
+`view3d.world_to_screen()` positions popups. `feel.json` `"view": "2d"` switches back to the old `_draw()` renderer.
+
 ## Coordinates
 - Rules use world units: 1.0 = one block width; y up; the foundation top is y = 0.
 - Block i (i ≥ 1) sits with its bottom at `(i − 1) × block.height`.
