@@ -18,6 +18,8 @@ REQUIRED = {
         "sway.speed", "sway.scale", "sway.max",
     ],
     "block_types.json": ["types"],
+    "themes.json": ["default", "geometry", "scenery_layout", "themes"],
+    "round_hud.json": ["margin", "heart_pixel", "heart_spacing", "meter_width", "meter_height", "meter_segments", "badge_height", "bottom_clearance", "endless_page_floors", "counter_digits", "population_font_size", "pause_size", "combo_width", "combo_height"],
     "levels.json": ["levels"],
     "city_map.json": ["width", "height", "disabled", "rules"],
     "economy.json": ["interstitial.min_rounds_before_first", "interstitial.every_n_rounds", "interstitial.min_seconds_between",
@@ -80,6 +82,51 @@ def main() -> int:
             errors.append("levels.json: population thresholds must strictly increase")
         else:
             prev = level["population"]
+    themes = data.get("themes.json", {})
+    entries = themes.get("themes", [])
+    theme_ids = [t.get("id") for t in entries]
+    if theme_ids != [f"v{i:03}" for i in range(1, 11)]:
+        errors.append("themes.json: need unique ordered themes v001-v010")
+    if themes.get("default") not in theme_ids:
+        errors.append("themes.json: default theme must exist")
+    architectures = {"classical", "glass", "pagoda", "palace", "fort", "ice", "prison", "office", "factory", "lighthouse"}
+    sceneries = {"garden", "skyline", "river", "courtyard", "fortress", "arctic", "compound", "campus", "harbor", "coast"}
+    palette_keys = {"body", "shadow", "trim", "glass", "accent", "gold"}
+    for theme in entries:
+        for key in ["name_key", "description_key", "architecture", "scenery", "palette", "sky_top", "sky_bottom", "landscape"]:
+            if key not in theme:
+                errors.append(f"themes.json: {theme.get('id')} missing {key}")
+        if theme.get("architecture") not in architectures or theme.get("scenery") not in sceneries:
+            errors.append(f"themes.json: unknown architecture/scenery in {theme.get('id')}")
+        if set(theme.get("palette", {})) != palette_keys:
+            errors.append(f"themes.json: incomplete palette in {theme.get('id')}")
+        colors = list(theme.get("palette", {}).values()) + [theme.get(k, "") for k in ["sky_top", "sky_bottom", "landscape"]]
+        for color in colors:
+            if not isinstance(color, str) or len(color) != 7 or not color.startswith("#") or any(c not in "0123456789abcdefABCDEF" for c in color[1:]):
+                errors.append(f"themes.json: invalid hex color {color!r}")
+        if set(theme) - {"id", "name_key", "description_key", "architecture", "scenery", "palette", "sky_top", "sky_bottom", "landscape"}:
+            errors.append("themes.json: themes may contain presentation fields only")
+    geometry = themes.get("geometry", {})
+    for key in ["half_width", "round_radius", "round_sides", "cornice_width", "roof_height", "window_columns", "rope_width", "sling_height"]:
+        value = geometry.get(key)
+        if not isinstance(value, (int, float)) or value <= 0:
+            errors.append(f"themes.json: geometry.{key} must be positive")
+    if not isinstance(geometry.get("yaw_degrees"), (int, float)):
+        errors.append("themes.json: geometry.yaw_degrees must be numeric")
+    layout = themes.get("scenery_layout", {})
+    for key in ["row_depths", "row_scales", "row_parallax", "row_horizons", "haze"]:
+        values = layout.get(key, [])
+        if not isinstance(values, list) or len(values) != 3 or any(not isinstance(v, (int, float)) for v in values):
+            errors.append(f"themes.json: scenery_layout.{key} needs three numeric entries")
+    for key in ["row_extent", "row_spacing"]:
+        if not isinstance(layout.get(key), (int, float)) or layout[key] <= 0:
+            errors.append(f"themes.json: scenery_layout.{key} must be positive")
+    counts = layout.get("floor_counts", [])
+    if not counts or any(not isinstance(v, int) or v < 1 for v in counts):
+        errors.append("themes.json: scenery floor counts must be positive integers")
+    for key, value in data.get("round_hud.json", {}).items():
+        if not key.startswith("_") and (not isinstance(value, (int, float)) or value <= 0):
+            errors.append(f"round_hud.json: {key} must be positive")
     for e in errors:
         print("config error:", e)
     print("config: OK" if not errors else f"config: {len(errors)} error(s)")

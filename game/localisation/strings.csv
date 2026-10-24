@@ -87,3 +87,26 @@ BTN_NO_THANKS,No thanks,"No, gracias","Nein, danke"
 POP_EXTRA_LIFE,+%d LIFE,+%d VIDA,+%d LEBEN
 BTN_DOUBLE_REWARD,Watch ad · double population (+%d),Ver anuncio · doble población (+%d),Werbung ansehen · doppelte Bevölkerung (+%d)
 RES_BONUS,Bonus +%d population!,¡Bonus +%d habitantes!,Bonus +%d Einwohner!
+THEME_SELECT,Architecture theme,Estilo arquitectónico,Architekturstil
+HUD_PAUSE,II,II,II
+HUD_METER_HELP,Completed floors / target. Endless: repeats every %d floors.,Pisos completados / objetivo. Sin fin: se repite cada %d pisos.,Fertige Etagen / Ziel. Endlos: wiederholt sich alle %d Etagen.
+THEME_MANOR,Manor,Mansión,Herrenhaus
+THEME_MANOR_DESC,"Ivory stone, blue arches and formal gardens.","Piedra marfil, arcos azules y jardines formales.","Elfenbeinfarbener Stein, blaue Bögen und Gärten."
+THEME_CORPORATE,Corporate,Corporativo,Konzern
+THEME_CORPORATE_DESC,"Blue glass, silver bands and a modern skyline.","Vidrio azul, franjas plateadas y rascacielos.","Blaues Glas, silberne Bänder und eine moderne Skyline."
+THEME_CHINESE,Traditional Chinese,Chino tradicional,Traditionell chinesisch
+THEME_CHINESE_DESC,"Red timber, tiled eaves and a misty river.","Madera roja, aleros de tejas y un río brumoso.","Rotes Holz, Ziegeldächer und ein nebliger Fluss."
+THEME_PALACE,Palace,Palacio,Palast
+THEME_PALACE_DESC,"Cream stone, gold details and a royal courtyard.","Piedra crema, detalles dorados y un patio real.","Cremefarbener Stein, Gold und ein königlicher Hof."
+THEME_FORT,Fort,Fortaleza,Festung
+THEME_FORT_DESC,"Stone battlements, blue banners and fortified walls.","Almenas de piedra, banderas azules y murallas.","Steinzinnen, blaue Banner und Festungsmauern."
+THEME_IGLOO,Igloo,Iglú,Iglu
+THEME_IGLOO_DESC,"Rounded ice, snow caps and frozen water.","Hielo redondeado, nieve y agua congelada.","Rundes Eis, Schneekappen und gefrorenes Wasser."
+THEME_PRISON,Prison,Prisión,Gefängnis
+THEME_PRISON_DESC,"Concrete, barred windows and a guarded compound.","Hormigón, ventanas con barrotes y un recinto vigilado.","Beton, vergitterte Fenster und ein bewachtes Gelände."
+THEME_OFFICE,Office,Oficinas,Büro
+THEME_OFFICE_DESC,"Glass, warm interiors and planted terraces.","Vidrio, interiores cálidos y terrazas con plantas.","Glas, warme Innenräume und bepflanzte Terrassen."
+THEME_FACTORY,Factory,Fábrica,Fabrik
+THEME_FACTORY_DESC,"Steel frames, pipes and an industrial harbor.","Estructuras de acero, tuberías y un puerto industrial.","Stahlrahmen, Rohre und ein Industriehafen."
+THEME_LIGHTHOUSE,Lighthouse,Faro,Leuchtturm
+THEME_LIGHTHOUSE_DESC,White and red towers above a rocky sunset coast.,Torres blancas y rojas en una costa rocosa al atardecer.,Weiße und rote Türme über einer felsigen Abendküste.

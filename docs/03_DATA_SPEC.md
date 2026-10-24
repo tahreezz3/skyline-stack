@@ -107,3 +107,17 @@ Godot translation CSV: header `keys,en,es,de`, one row per UI string. Code uses 
 add the code to `SaveData.LANGUAGES`, and request a native review in HUMAN_NEEDED.
 `tests/test_localisation.gd` fails on missing keys, empty cells, mismatched `%d/%s` placeholders, or literal text
 passed to `UI.label`/`UI.button`. Preview: `godot --path game -- --lang=de`.
+
+## `themes.json` (presentation only)
+
+`default` is a valid theme ID; `themes[]` contains exactly v001-v010. Each entry has `id`, localized `name_key` and `description_key`, `architecture`, `scenery`, a six-color `palette` (`body`, `shadow`, `trim`, `glass`, `accent`, `gold`), `sky_top`, `sky_bottom` and `landscape` hex colors. These fields cannot override tower rules or block families.
+
+`geometry`: `half_width` and `cornice_width` are square facade/ledge half-widths; `round_radius` and integer `round_sides` define round modules; `roof_height` defines completion crowns; integer `window_columns` controls glass grids; `yaw_degrees` turns architecture around the vertical axis; `rope_width` and `sling_height` define suspension geometry. Distances use block-width units. Storey height always comes from `tower_rules.block.height`; decorations do not change placement dimensions.
+
+`scenery_layout`: `row_depths`, `row_scales`, `row_parallax`, `row_horizons` and `haze` each contain three numbers for the background rows. `row_spacing` spaces buildings; integer `row_extent` sets the number on each side; `floor_counts` is a repeating positive integer height pattern. Rendering batches each row by material.
+
+`SceneRouter.selected_theme` holds the session's cosmetic ID; empty/unknown IDs fall back to `default`. It is not saved or used by progression, city bookkeeping or analytics. See `art/THEME_IMPLEMENTATION.md` for source conflicts and theme inventory.
+
+## `round_hud.json` (presentation only)
+
+All dimensions are logical canvas pixels: `margin`, `heart_pixel`, `heart_spacing`, `meter_width`, `meter_height`, `badge_height`, `bottom_clearance`, `pause_size`, `combo_width` and `combo_height`. `population_font_size` controls counter text size; `counter_digits` is its minimum zero-padded digit count. `meter_segments` is the vertical blue segment count. The badge displays completed floors; meter fill is height / target height, or height modulo `endless_page_floors` in Endless. None of these fields change rules or rewards.

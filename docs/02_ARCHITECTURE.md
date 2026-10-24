@@ -72,15 +72,9 @@ Rule of thumb: if it changes the score, lives or what counts as a hit, it belong
 Add new signals here when you add them to `game_events.gd`.
 
 ## Rendering (ADR-0006)
-The round is drawn by `scripts/game/tower_view_3d.gd`: low-poly meshes (`scripts/game/low_poly.gd`) under a fixed
-orthographic `Camera3D` pitched 14° down. It reads `tower_game`'s state every frame (`view3d.sync()`) and never
-changes it. Gameplay objects all sit on z = 0 in rules units, so the 3D picture lines up with the 2D rules.
-Behind them: a sky backdrop shader on a camera-parented quad (`scripts/game/shaders/sky_backdrop.gdshader`) and the
-city from `scripts/game/city_kit.gd`: the street in front (road, crossing, curbs, cars, street lights), framing
-neighbours, and three vertex-coloured city rows with parallax and depth fog. Buildings come from
-`scripts/game/building_kit.gd`. Time of day follows the
-camera height (day, then dusk, then night with emissive windows and stars). Popups and the HUD stay 2D;
-`view3d.world_to_screen()` positions popups. `feel.json` `"view": "2d"` switches back to the old `_draw()` renderer.
+The round is drawn by `scripts/game/tower_view_3d.gd` under a fixed orthographic camera pitched 6° down. The selected architecture comes from `theme_kit.gd`, using the existing `building_kit.gd` triangle builder. The renderer reads `tower_game` state each frame and never changes it. Gameplay objects sit on z = 0 in rules units, keeping the picture aligned with placement centres.
+
+A camera-parented sky shader (`scripts/game/shaders/sky_backdrop.gdshader`) sits behind three batched parallax rows of matching theme architecture. `themes.json` supplies palettes, ground/water settings and scenery layout. Time of day follows camera height from day through dusk to night; lit windows and stars remain. Popups and the HUD stay 2D; `view3d.world_to_screen()` positions popups. `feel.json` `"view": "2d"` retains the simple debug renderer with the chosen palette. The earlier city/cafe kits remain available for other screens and final artist integration.
 
 ## Coordinates
 - Rules use world units: 1.0 = one block width; y up; the foundation top is y = 0.
@@ -110,3 +104,9 @@ layer runs with `PROCESS_MODE_ALWAYS`, and back on the prompt means "No thanks".
 Screens are built in code with `scripts/game/ui_kit.gd` (placeholder styling until T-0303).
 Debug modes (user args after `--`): `--autoplay [--seconds=N]` plays a round and quits on the results screen;
 `--tour` visits every screen and quits (combine with `--write-movie` to see them).
+
+## Cosmetic themes and compact round HUD (T-0314)
+
+The tower selection screen offers ten cosmetics independently of the four progression families. `SceneRouter.selected_theme` carries the session choice through round/restart/menu/Endless without changing save schema v3. `theme_catalog.gd` resolves IDs from `config/themes.json`; `tower_game.visual_theme` is a read-only presentation choice. `tower_view_3d.gd` uses `theme_kit.gd` for matching active, fallen and placed modules, completion crowns and batched theme scenery, in place of the earlier cafe/city placeholders. It reuses `building_kit.gd`'s mesh builder. Core rules never receive a theme.
+
+`round_hud.gd` owns viewport-anchored pixel hearts, floor badge/segmented meter, population digits/icon, combo strip and pause button. It only reads round state and forwards pause input. Layout parameters live in `config/round_hud.json`; the existing popups and pause/results overlays remain in `tower_game.gd`. Full implementation notes: `art/THEME_IMPLEMENTATION.md`.

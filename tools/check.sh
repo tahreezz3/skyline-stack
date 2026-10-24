@@ -18,10 +18,11 @@ run_step() {   # name, command...
   out="$("$@" 2>&1)"; rc=$?
   echo "$out" | grep -vE '^Godot Engine|^\s*$' | tail -20
   # any GDScript error in any Godot step is a failure, even if the process exited 0
-  if echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|Failed to load script'; then rc=1; fi
+  if echo "$out" | grep -qE '^ERROR:|SCRIPT ERROR|Parse Error|Failed to load script'; then rc=1; fi
   if [ "$name" = "smoke" ] && ! echo "$out" | grep -qE 'AUTOPLAY_(SUMMARY|TIMEOUT)'; then rc=1; fi
   if [ "$name" = "smoke" ] && echo "$out" | grep -qE 'AUTOPLAY_FRAMING violations=[1-9]'; then rc=1; fi
   if [ "$name" = "ui-tour" ] && { echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|TOUR .* FAILED' || ! echo "$out" | grep -q 'TOUR_DONE'; }; then rc=1; fi
+  if [ "$name" = "theme-tour" ] && { echo "$out" | grep -q 'THEME_TOUR FAILED' || ! echo "$out" | grep -q 'THEME_TOUR_DONE failures=0'; }; then rc=1; fi
   local v=true; [ $rc -ne 0 ] && { v=false; ok_all=0; echo "!! $name FAILED"; }
   steps_json="${steps_json}\"$name\": $v, "
 }
@@ -33,6 +34,7 @@ run_step config  python3 tools/validate_config.py
 run_step tests   with_timeout "$GODOT" --headless --path game --script res://tests/run_tests.gd
 run_step smoke   with_timeout "$GODOT" --headless --path game -- --autoplay --seconds=90
 run_step ui-tour with_timeout "$GODOT" --headless --path game -- --tour
+run_step theme-tour with_timeout "$GODOT" --headless --path game --script res://tools/theme_tour.gd
 run_step cleanroom python3 tools/cleanroom_check.py
 # the import above regenerates game/localisation/*.translation from strings.csv; they are committed so fresh
 # clones show text, so they must be current (edit strings.csv -> commit the regenerated .translation files too)

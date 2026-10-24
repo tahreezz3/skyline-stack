@@ -2,8 +2,8 @@
 ## All rules are delegated to TowerState (scripts/core/tower_state.gd); this
 ## script only moves things on screen and turns state events into feedback.
 ##
-## Placeholder visuals: blocks are coloured rectangles drawn in _draw() until
-## the art in HUMAN_NEEDED.md (HR-0004..HR-0007) is delivered.
+## Procedural visual themes are rendered by TowerView3D; _draw() is the 2D debug
+## fallback. Final authored assets remain tracked by HR-0004..HR-0007.
 ##
 ## Params (SceneRouter.params): {block_type: id, endless: bool}.
 ## Headless autoplay for smoke tests (menu jumps straight here):
@@ -13,6 +13,8 @@ extends Node2D
 const TowerState := preload("res://scripts/core/tower_state.gd")
 const UI := preload("res://scripts/game/ui_kit.gd")
 const AdPolicy := preload("res://scripts/core/ad_policy.gd")
+const ThemeCatalog := preload("res://scripts/game/theme_catalog.gd")
+const RoundHUD := preload("res://scripts/game/round_hud.gd")
 const TowerView3D := preload("res://scripts/game/tower_view_3d.gd")
 const RESUME_COUNTDOWN_S := 3
 const RESULTS_DELAY_S := 1.2
@@ -25,6 +27,8 @@ const FOUNDATION_COLOUR := Color("#5a5a66")
 
 var rules: Dictionary
 var block_type: Dictionary
+var visual_theme: Dictionary
+var round_hud: Control
 var endless := false
 var state
 
@@ -60,7 +64,6 @@ var autoplay := false
 var autoplay_seconds := 0.0
 
 var hud_population: Label
-var hud_lives: Label
 var hud_height: Label
 var hud_combo: ProgressBar
 var hud_message: Label
@@ -76,6 +79,8 @@ func _ready() -> void:
 	reduced_motion = bool(SaveData.get_setting("reduced_motion"))
 	AudioDirector.play_music("round")
 	block_type = GameConfig.block_type(String(SceneRouter.params.get("block_type", "blue")))
+	visual_theme = ThemeCatalog.resolve(GameConfig.table("themes"), SceneRouter.selected_theme)
+	SceneRouter.selected_theme = visual_theme["id"]
 	endless = bool(SceneRouter.params.get("endless", false))
 	state = TowerState.new(rules, {
 		"target_height": 0 if endless else block_type["target_height"],
@@ -515,7 +520,7 @@ func _draw() -> void:
 	var ground := _to_screen(0.0, 0.0)
 	draw_rect(Rect2(0, ground.y, SCREEN.x, SCREEN.y), FOUNDATION_COLOUR)
 
-	var colour := Color(block_type["colour"])
+	var colour := Color(visual_theme["palette"]["body"])
 	var h := maxi(1, state.height())
 	for i in range(1, state.blocks.size()):
 		var b: Dictionary = state.blocks[i]
@@ -584,25 +589,13 @@ func _draw_block(r: Rect2, colour: Color) -> void:
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	hud_population = _hud_label(layer, Vector2(24, 24), 40)
-	hud_lives = _hud_label(layer, Vector2(24, 80), 30)
-	hud_height = _hud_label(layer, Vector2(24, 124), 30)
-	hud_combo = ProgressBar.new()
-	hud_combo.min_value = 0.0
-	hud_combo.max_value = 1.0
-	hud_combo.step = 0.001
-	hud_combo.show_percentage = false
-	hud_combo.position = Vector2(420, 32)
-	hud_combo.size = Vector2(276, 28)
-	layer.add_child(hud_combo)
-	pause_btn = Button.new()
-	pause_btn.text = "II"
-	pause_btn.position = Vector2(620, 80)
-	pause_btn.size = Vector2(76, 76)
-	pause_btn.add_theme_font_size_override("font_size", 32)
-	pause_btn.focus_mode = Control.FOCUS_NONE
-	pause_btn.pressed.connect(pause_game)
-	layer.add_child(pause_btn)
+	round_hud = RoundHUD.new()
+	layer.add_child(round_hud)
+	round_hud.setup(self, GameConfig.table("round_hud"))
+	hud_population = round_hud.population
+	hud_height = round_hud.badge
+	hud_combo = round_hud.combo
+	pause_btn = round_hud.pause_button
 	hud_message = _hud_label(layer, Vector2(0, 520), 48)
 	hud_message.size = Vector2(SCREEN.x, 300)
 	hud_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -618,12 +611,7 @@ func _hud_label(layer: CanvasLayer, pos: Vector2, font_size: int) -> Label:
 
 
 func _refresh_hud() -> void:
-	hud_population.text = tr("HUD_POPULATION") % state.population
-	hud_lives.text = tr("HUD_LIVES") % state.lives
-	var goal: int = state.target_height()
-	hud_height.text = tr("HUD_HEIGHT_GOAL") % [state.height(), goal] if goal > 0 else tr("HUD_HEIGHT") % state.height()
-	hud_combo.value = state.combo_ratio()
-	hud_combo.visible = state.combo_time > 0.0
+	round_hud.refresh()
 	if hud_combo.visible:
 		# pulse, and turn red when nearly empty
 		var cb: Dictionary = feel["combo_bar"]

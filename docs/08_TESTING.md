@@ -55,3 +55,9 @@ capture every screen. Always look at frames after UI changes: a headless run can
 - `tools/check.sh` passes.
 - Docs updated if behaviour, data or architecture changed.
 - Session log written; dashboard regenerated.
+
+## Theme integration and gallery (T-0314)
+
+`tools/check.sh` also runs `godot --headless --path game --script res://tools/theme_tour.gd`. Expect all ten IDs and `THEME_TOUR_DONE failures=0`. This checks actual theme-selection/start clicks, matching active/placed modules, one landing resolution per release, narrow/tall HUD bounds and restart reset without persisting player data.
+
+For visual review, run the same script without `--headless`, adding `-- --screenshots=/tmp/skyline-themes`. It captures the selection screen, all ten ground-level settings and six-floor towers and Lighthouse at narrow and tall logical portrait sizes (600×1280 and 720×1600). The tall preview uses a half-size native window so it fits laptop displays. Review the actual images; the headless checks alone cannot validate rendering quality.

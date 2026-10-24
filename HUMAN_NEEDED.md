@@ -187,3 +187,13 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - needed_for: T-0304, M3
 - requested: 2026-10-13 by opus55-a7k2
 - spec: `game/localisation/strings.csv` has English plus Spanish and German drafts written by an AI. A native speaker should review the `es` and `de` columns (tone: friendly, short, game-like), fix them directly in the CSV, keep every `%d`/`%s` placeholder, and set this to `answered`. Preview a language with `godot --path game -- --lang=es`. Also decide which languages ship at launch (add columns for more).
+
+HR-0018 follow-up (2026-10-24, T-0314): also review the new `THEME_*`, `HUD_PAUSE` and `HUD_METER_HELP` Spanish/German drafts. Preserve the `%d` floor-page placeholder.
+
+### HR-0019 · Restore GitHub authentication and sync the theme implementation
+- status: open
+- type: account
+- priority: P2
+- needed_for: T-0314, shared-repository sync
+- requested: 2026-10-24 by codex-p8m4
+- spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git for this repository and push the local T-0314 claim and implementation commits, or sync them from an authenticated checkout. Do not force-push shared history. Implementation is complete locally; this request only covers repository synchronization.

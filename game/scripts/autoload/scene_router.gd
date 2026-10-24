@@ -15,6 +15,8 @@ const FADE_S := 0.15
 
 ## Parameters for the screen being entered, e.g. {"block_type": "red"}.
 var params: Dictionary = {}
+## Cosmetic choice for this app session; deliberately independent of saved tower types.
+var selected_theme := ""
 ## True when the game was started with `-- --autoplay` (headless smoke test).
 var autoplay := false
 var autoplay_seconds := 0.0
@@ -43,6 +45,8 @@ func _ready() -> void:
 		elif arg.begins_with("--lang="):
 			# debug: preview a language without changing the save (e.g. for screenshots)
 			TranslationServer.set_locale(arg.get_slice("=", 1))
+		elif arg.begins_with("--theme="):
+			selected_theme = arg.get_slice("=", 1)
 	if tour:
 		_run_tour.call_deferred()
 
