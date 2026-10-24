@@ -16,3 +16,5 @@ One line per delivered file. Required before the file ships.
 | `game/assets/backgrounds/v008-office.png` | Owner-provided `v008_office.png`; environment-only edit using built-in image_gen | Project asset derived from owner-provided artwork; no third-party source files | 2026-10-24 |
 | `game/assets/backgrounds/v009-factory.png` | Owner-provided `v009_factory.png`; environment-only edit using built-in image_gen | Project asset derived from owner-provided artwork; no third-party source files | 2026-10-24 |
 | `game/assets/backgrounds/v010-lighthouse.png` | Owner-provided `v010_lighthouse.png`; environment-only edit using built-in image_gen | Project asset derived from owner-provided artwork; no third-party source files | 2026-10-24 |
+
+T-0316: `game/scripts/game/living_background.gd` contains original procedural vector art (small boats, birds, traffic, steam, ice, fountain and beacon); `game/config/background_motion.json` contains original fitted vector masks/routes. Created in this project by Codex from primitives; no external assets or new generated bitmaps. Existing reference-art PNGs and their provenance/hashes are unchanged.

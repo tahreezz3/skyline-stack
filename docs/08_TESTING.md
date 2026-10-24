@@ -63,3 +63,10 @@ capture every screen. Always look at frames after UI changes: a headless run can
 For visual review, run the same script without `--headless`, adding `-- --screenshots=/tmp/skyline-themes`. It captures the selection screen, all ten ground-level settings and six-floor towers and Lighthouse at narrow and tall logical portrait sizes (600×1280 and 720×1600). The tall preview uses a half-size native window so it fits laptop displays. Review the actual images; the headless checks alone cannot validate rendering quality.
 
 T-0315 adds `test_background_art.gd` and selected-background/height-independent-lighting assertions to the theme tour. For native visual review with large artwork, pass `--gallery-only` alongside `--screenshots=...`; this runs rendering/layout contracts while the standard headless tour keeps input checks. Review all ten backgrounds against the owner references, including day/sunset lighting and absence of baked UI/crane/tower elements.
+
+
+### Living backgrounds (T-0316)
+
+`tools/check.sh` includes `background-motion`: `godot --headless --path game --script res://tools/background_motion_tour.gd`. It opens all ten actual rounds, advances the environment independently, exercises round pause, checks frozen time/depth, enables Reduced Motion and checks resume without wall-clock jumps. Unit contracts additionally cover deterministic route loops, timing across frame rates, bounded depth and per-theme masks.
+
+For actual pixel checks and six-second clips, use `godot --path game --script res://tools/background_motion_tour.gd -- --screenshots=/tmp/motion --frames=72`. Native mode compares changing live pixels with pixel-identical Reduced Motion frames; each per-theme frame directory is a 12 fps sequence with gameplay frozen. Inspect water masks against bridges/shorelines, boats against islands/piers, steam sources and all portrait crops. The actor texture redraws only as the explicit clock changes. See `art/BACKGROUND_REVISION.md` and the animated previews. Device/mobile GPU performance remains a separate QA task.

@@ -73,7 +73,7 @@ Current version **3** (v3 added `city`):
 | `city.plots` | `"x,y" -> {type, population, height, star}` placed towers |
 | `city.unplaced` | completed towers waiting to be placed |
 | `settings.music_volume`, `settings.sfx_volume` | 0..1 |
-| `settings.reduced_motion` | disables screen shake and camera kick |
+| `settings.reduced_motion` | disables screen shake, camera kick and living-background motion |
 | `settings.language` | locale code, `""` = device language |
 | `settings.analytics_consent` | `unknown` (default) / `granted` / `denied`; analytics only sends when `granted` |
 
@@ -123,3 +123,17 @@ passed to `UI.label`/`UI.button`. Preview: `godot --path game -- --lang=de`.
 ## `round_hud.json` (presentation only)
 
 All dimensions are logical canvas pixels: `margin`, `heart_pixel`, `heart_spacing`, `meter_width`, `meter_height`, `badge_height`, `bottom_clearance`, `pause_size`, `combo_width` and `combo_height`. `population_font_size` controls counter text size; `counter_digits` is its minimum zero-padded digit count. `meter_segments` is the vertical blue segment count. The badge displays completed floors; meter fill is height / target height, or height modulo `endless_page_floors` in Endless. None of these fields change rules or rewards.
+
+
+## `background_motion.json` (presentation only)
+
+`shared.canvas_size` is the two-number offscreen actor canvas size in pixels; `mask_scale` (0.1..1) scales the one-time vector mask raster. `environments` has exactly v001-v010. All coordinates below use original artwork UVs (top-left 0,0; bottom-right 1,1), so responsive cover cropping keeps actors and masks aligned.
+
+- `shared.parallax`: `x_per_unit`/`y_per_unit` convert round camera units to UV offsets; `max_x`/`max_y` bound them; `far_factor`/`near_factor` control relative scenery depth; `follow_rate` is exponential easing per second. This excludes shake/kick and never changes rules.
+- `shared.sky`: `amplitude` and `angular_speed` control cloud drift in UVs and radians/second; `edge_pin` fixes texture edges. `shared.wind` supplies existing cloth `amplitude`, `speed` and `spatial_frequency`.
+- `shared.water`: `uv_amplitude` is two-axis refraction; `speed` is phase/second; `glint_strength` blends highlights; `refraction_frequency`, `glint_frequency`, `glint_sharpness` are two-number spatial/detail controls; `glint_drift`, `cross_wave_speed`, `cross_wave_bend` set traveling highlight behavior. Values preserve the reference base color.
+- `shared.actor_fade` (0..0.5) is the fraction faded at each moving route endpoint. `bird_wing_hz`, `boat_bob_hz`, `floe_bob_hz` and `flag_flutter_hz` set motion rates; `boat_bob` is vertical bob amplitude in UVs. `steam_puffs`, `steam_rise`, `steam_drift`, `steam_radius` set plume count, UV travel and size. `fountain_drops`, `fountain_height`, `fountain_spread` set fountain detail and UV extents. `beacon_period` documents the default beacon loop; an actor's `period` is authoritative.
+- Each environment's `sky` is an ordered horizon polyline covering x=0..1. `water`, `water_exclusions` and `wind` are lists of polygons; water must have at least one region. The raster uses red sky, green open water, blue fluttering cloth. Exclusions clear water over solid objects.
+- `actors[]`: `kind` is birds/sailboat/ferry/floe/car/steam/mist/fountain/flag/beacon/pollen; `start`/`end` are two-number UV route endpoints (x may extend -0.2..1.2 for offscreen entry); `size` is a positive vector-art scale (fraction of canvas width for ordinary actors, multiplier of shared plume dimensions for steam/mist); `period` is loop duration in seconds; `phase` is 0..1; `color` is hex RGB. Static emitters use matching start/end; their contents still animate. No actor participates in collisions, population or scores.
+
+Pause freezes elapsed time and depth. Reduced Motion retains a stationary time-zero composition and resumes the retained clock when disabled. Shader uniforms use this explicit clock, never global `TIME`.

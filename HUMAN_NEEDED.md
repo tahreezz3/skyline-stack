@@ -194,6 +194,6 @@ HR-0018 follow-up (2026-10-24, T-0314): also review the new `THEME_*`, `HUD_PAUS
 - status: open
 - type: account
 - priority: P2
-- needed_for: T-0314, T-0315, shared-repository sync
+- needed_for: T-0314, T-0315, T-0316, shared-repository sync
 - requested: 2026-10-24 by codex-p8m4
-- spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git for this repository and push the local T-0314/T-0315 claim and implementation commits, or sync them from an authenticated checkout. Do not force-push shared history. Implementation is complete locally; this request only covers repository synchronization.
+- spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git for this repository and push the local T-0314/T-0315/T-0316 claim and implementation commits, or sync them from an authenticated checkout. Do not force-push shared history. Implementation is complete locally; this request only covers repository synchronization.

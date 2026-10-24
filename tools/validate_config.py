@@ -2,6 +2,7 @@
 """Validate game/config/*.json: parses, required keys, value sanity. Exit 1 on error.
 Add keys here when you add them to the config (see docs/03_DATA_SPEC.md)."""
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -19,6 +20,7 @@ REQUIRED = {
     ],
     "block_types.json": ["types"],
     "themes.json": ["default", "geometry", "backdrop", "themes"],
+    "background_motion.json": ["shared", "environments"],
     "round_hud.json": ["margin", "heart_pixel", "heart_spacing", "meter_width", "meter_height", "meter_segments", "badge_height", "bottom_clearance", "endless_page_floors", "counter_digits", "population_font_size", "pause_size", "combo_width", "combo_height"],
     "levels.json": ["levels"],
     "city_map.json": ["width", "height", "disabled", "rules"],
@@ -42,6 +44,65 @@ def get(d, dotted):
             raise KeyError(dotted)
         d = d[part]
     return d
+
+
+
+def validate_background_motion(config, errors):
+    prefix = "background_motion.json: "
+    shared = config.get("shared", {})
+    fields = {
+        "canvas_size": None, "mask_scale": None, "actor_fade": None,
+        "bird_wing_hz": None, "boat_bob": None, "boat_bob_hz": None, "floe_bob_hz": None,
+        "steam_puffs": None, "steam_rise": None, "steam_drift": None, "steam_radius": None,
+        "fountain_drops": None, "fountain_height": None, "fountain_spread": None,
+        "flag_flutter_hz": None, "beacon_period": None,
+        "parallax": ["x_per_unit", "y_per_unit", "max_x", "max_y", "far_factor", "near_factor", "follow_rate"],
+        "sky": ["amplitude", "angular_speed", "edge_pin"],
+        "water": ["uv_amplitude", "speed", "glint_strength", "refraction_frequency", "glint_frequency", "glint_drift", "cross_wave_speed", "glint_sharpness", "cross_wave_bend"],
+        "wind": ["amplitude", "speed", "spatial_frequency"],
+    }
+    def positive(value):
+        if isinstance(value, dict):
+            return bool(value) and all(positive(v) for v in value.values())
+        if isinstance(value, list):
+            return len(value) == 2 and all(positive(v) for v in value)
+        return isinstance(value, (int, float)) and math.isfinite(value) and value > 0
+    for field, children in fields.items():
+        value = shared.get(field)
+        if not positive(value) or (children and (not isinstance(value, dict) or set(value) != set(children))):
+            errors.append(prefix + "missing/invalid shared." + field)
+    if not isinstance(shared.get("mask_scale"), (int, float)) or not 0.1 <= shared["mask_scale"] <= 1:
+        errors.append(prefix + "mask_scale must be 0.1..1")
+    if not isinstance(shared.get("actor_fade"), (int, float)) or not 0 < shared["actor_fade"] < 0.5:
+        errors.append(prefix + "actor_fade must be 0..0.5")
+    environments = config.get("environments", {})
+    if set(environments) != {f"v{i:03}" for i in range(1, 11)}:
+        errors.append(prefix + "need motion profiles for v001-v010")
+    def points(value, minimum=3, route=False):
+        return isinstance(value, list) and len(value) >= minimum and all(
+            isinstance(p, list) and len(p) == 2 and all(isinstance(v, (int, float)) and math.isfinite(v) for v in p)
+            and (-0.2 if route else 0) <= p[0] <= (1.2 if route else 1) and 0 <= p[1] <= 1 for p in value)
+    kinds = {"birds", "sailboat", "ferry", "floe", "car", "steam", "mist", "fountain", "flag", "beacon", "pollen"}
+    for theme, profile in environments.items():
+        sky = profile.get("sky", [])
+        if not points(sky, 2) or sky[0][0] != 0 or sky[-1][0] != 1 or any(a[0] >= b[0] for a, b in zip(sky, sky[1:])):
+            errors.append(prefix + theme + " sky must be an ordered horizon from x=0 to x=1")
+        for field in ["water", "wind", "water_exclusions"]:
+            regions = profile.get(field)
+            if not isinstance(regions, list) or (field == "water" and not regions) or any(not points(p) for p in regions):
+                errors.append(prefix + theme + " invalid " + field + " polygons")
+        actors = profile.get("actors", [])
+        if not isinstance(actors, list) or len(actors) < 3:
+            errors.append(prefix + theme + " needs at least three live actors")
+            continue
+        for actor in actors:
+            if actor.get("kind") not in kinds or not points([actor.get("start"), actor.get("end")], 2, True):
+                errors.append(prefix + theme + " invalid actor kind/route")
+            if not positive(actor.get("period")) or not positive(actor.get("size")) or not isinstance(actor.get("phase"), (int, float)) or not 0 <= actor["phase"] < 1:
+                errors.append(prefix + theme + " invalid actor timing/size")
+            color = actor.get("color", "")
+            if not isinstance(color, str) or len(color) != 7 or not color.startswith("#") or any(c not in "0123456789abcdefABCDEF" for c in color[1:]):
+                errors.append(prefix + theme + " invalid actor color")
 
 
 def main() -> int:
@@ -140,6 +201,7 @@ def main() -> int:
     for key, value in data.get("round_hud.json", {}).items():
         if not key.startswith("_") and (not isinstance(value, (int, float)) or value <= 0):
             errors.append(f"round_hud.json: {key} must be positive")
+    validate_background_motion(data.get("background_motion.json", {}), errors)
     for e in errors:
         print("config error:", e)
     print("config: OK" if not errors else f"config: {len(errors)} error(s)")
