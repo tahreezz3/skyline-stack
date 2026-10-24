@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-24 00:07 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-24 00:58 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-24T00:07:15Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · theme-tour: ok · cleanroom: ok · translations: ok
+**Last `tools/check.sh`:** PASS at 2026-10-24T00:58:38Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · theme-tour: ok · cleanroom: ok · translations: ok
 
 ## Milestones
 
@@ -13,7 +13,7 @@ _Generated 2026-10-24 00:07 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M0 Foundation | `████████████████████` | 4 / 4 |
 | M1 Core feel | `███████████░░░░░░░░░` | 5 / 9 |
 | M2 Game loop | `████████████████████` | 8 / 8 |
-| M3 Art and audio | `████████████████░░░░` | 11 / 14 |
+| M3 Art and audio | `████████████████░░░░` | 12 / 15 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `█████████░░░░░░░░░░░` | 3 / 7 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
@@ -76,12 +76,13 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0016 | Privacy policy and legal entity | legal | P1 | - | T-0504 |
 | HR-0017 | Device playtest of core feel | playtest | P1 | - | - |
 | HR-0018 | Review Spanish and German translations | design | P2 | - | - |
-| HR-0019 | Restore GitHub authentication and sync the theme implementation | account | P2 | - | T-0314 |
+| HR-0019 | Restore GitHub authentication and sync the theme implementation | account | P2 | - | T-0314, T-0315 |
 
 Delivered / answered: HR-0002
 
 ## Recent sessions
 
+- [Session 2026-10-24 · codex-r6b2 · reference backgrounds](../coordination/sessions/2026-10-24_codex-r6b2_reference-backgrounds.md)
 - [Session 2026-10-24 · codex-p8m4 · ten themes](../coordination/sessions/2026-10-24_codex-p8m4_ten-themes.md)
 - [Session 2026-10-13 · opus55-planner · foundation](../coordination/sessions/2026-10-13_opus55-planner_foundation.md)
 - [Session 2026-10-13 · opus55-a7k2 · M1/M2 build-out](../coordination/sessions/2026-10-13_opus55-a7k2_m1-m2-build.md)
@@ -94,7 +95,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (32)
+## Done (33)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -124,6 +125,7 @@ Delivered / answered: HR-0002
 - T-0312 Foreground detail pass and a setting pink sun
 - T-0313 Dreamy violet-pink sun
 - T-0314 Implement ten visual themes and reference HUD
+- T-0315 Match bright reference backgrounds for all themes
 - T-0401 City map grid and placement
 - T-0501 Rewarded and interstitial ads
 - T-0503 Analytics events

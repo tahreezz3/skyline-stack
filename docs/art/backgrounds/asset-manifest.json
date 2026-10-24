@@ -1,0 +1,72 @@
+[
+  {
+    "id": "v001",
+    "asset": "game/assets/backgrounds/v001-manor.png",
+    "reference": "v001_manor.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "f41235e445847e69a1e27d7872eba56ef94df94902c7536182f4a1992b2c65b6"
+  },
+  {
+    "id": "v002",
+    "asset": "game/assets/backgrounds/v002-corporate.png",
+    "reference": "v002_corporate.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "fcb3667dc48bcc7eb68dd3d8f830595ab518ef18a667150ef25ff5b575f3235c"
+  },
+  {
+    "id": "v003",
+    "asset": "game/assets/backgrounds/v003-chinese.png",
+    "reference": "v003_traditional_chinese.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "344ed0ca9db42d42b98fdc01cc957803fc8ed76bfb7e95a28a4d85e03c428e21"
+  },
+  {
+    "id": "v004",
+    "asset": "game/assets/backgrounds/v004-palace.png",
+    "reference": "v004_palace.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "6d9e8bc12adeaed4d8a4832fdaffacbebf5eba9fe78e4dc8911b97de3b572477"
+  },
+  {
+    "id": "v005",
+    "asset": "game/assets/backgrounds/v005-fort.png",
+    "reference": "v005_fort.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "9abc341c5db0cff1ed499fb597f2128f8bbe1d46d220d320c3f587bd2ae61b37"
+  },
+  {
+    "id": "v006",
+    "asset": "game/assets/backgrounds/v006-igloo.png",
+    "reference": "v006_igloo.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "fb16b160aaa001aa46c87a8996af37b29c25d5c8a88359bed66b773a3af6091c"
+  },
+  {
+    "id": "v007",
+    "asset": "game/assets/backgrounds/v007-prison.png",
+    "reference": "v007_prison.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "400e78a439f42f8d40be255ac86c8c9c9ad3fb0adbbd1a193321771093ab8cfe"
+  },
+  {
+    "id": "v008",
+    "asset": "game/assets/backgrounds/v008-office.png",
+    "reference": "v008_office.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "07f931cc30f6e55b436a91df1d99823ae488ad60a489a73b2bcb1091108f5016"
+  },
+  {
+    "id": "v009",
+    "asset": "game/assets/backgrounds/v009-factory.png",
+    "reference": "v009_factory.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "aa3ab633be1826c2feaadcdeb6c018de5056770b1d50dc8b6772025bc05bdbea"
+  },
+  {
+    "id": "v010",
+    "asset": "game/assets/backgrounds/v010-lighthouse.png",
+    "reference": "v010_lighthouse.png",
+    "source": "Owner-provided concept reference, edited with built-in image_gen to remove all gameplay/UI",
+    "sha256": "02915fc6475815c2b7448c029136a30564a0bdf42a2a34c9399039c907fa94a5"
+  }
+]

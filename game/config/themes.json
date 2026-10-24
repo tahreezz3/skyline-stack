@@ -1,5 +1,5 @@
 {
-  "_doc": "Presentation only. No placement, balance or progression fields. Dimensions are in block-width units; mesh topology uses normalized proportions. See docs/art/THEME_IMPLEMENTATION.md.",
+  "_doc": "Presentation only. Theme backgrounds are independent generated environment artwork based on owner references; never baked tower/crane/HUD. Lighting stays faithful to each reference at all heights. See docs/art/BACKGROUND_REVISION.md.",
   "default": "v001",
   "geometry": {
     "half_width": 0.33,
@@ -11,44 +11,6 @@
     "yaw_degrees": 38,
     "rope_width": 0.016,
     "sling_height": 0.28
-  },
-  "scenery_layout": {
-    "row_depths": [
-      -6,
-      -14,
-      -28
-    ],
-    "row_scales": [
-      1.0,
-      0.72,
-      0.52
-    ],
-    "row_parallax": [
-      0.22,
-      0.45,
-      0.65
-    ],
-    "row_spacing": 1.65,
-    "row_extent": 7,
-    "floor_counts": [
-      3,
-      6,
-      4,
-      7,
-      3,
-      5,
-      4
-    ],
-    "haze": [
-      0.36,
-      0.55,
-      0.72
-    ],
-    "row_horizons": [
-      0.0,
-      0.65,
-      1.5
-    ]
   },
   "themes": [
     {
@@ -65,9 +27,30 @@
         "accent": "#73955e",
         "gold": "#e8bd68"
       },
-      "sky_top": "#7ab9e0",
-      "sky_bottom": "#d9e9d7",
-      "landscape": "#9ab78a"
+      "background": {
+        "texture": "res://assets/backgrounds/v001-manor.png",
+        "reference": "v001_manor.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v002",
@@ -83,9 +66,30 @@
         "accent": "#4f826d",
         "gold": "#c6dbe5"
       },
-      "sky_top": "#75adde",
-      "sky_bottom": "#d5e8ee",
-      "landscape": "#829eae"
+      "background": {
+        "texture": "res://assets/backgrounds/v002-corporate.png",
+        "reference": "v002_corporate.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v003",
@@ -101,9 +105,30 @@
         "accent": "#b84335",
         "gold": "#e4b75c"
       },
-      "sky_top": "#a494ba",
-      "sky_bottom": "#f8c5a4",
-      "landscape": "#8b9b9b"
+      "background": {
+        "texture": "res://assets/backgrounds/v003-chinese.png",
+        "reference": "v003_traditional_chinese.png",
+        "sun_style": "natural_gold",
+        "lighting": {
+          "key_color": "#ffe1ad",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffe9ce",
+          "rim_energy": 0.12,
+          "window_glow": 0.12,
+          "key_position": [
+            7,
+            5,
+            4
+          ],
+          "rim_position": [
+            -6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v004",
@@ -119,9 +144,30 @@
         "accent": "#c79d45",
         "gold": "#f0d38b"
       },
-      "sky_top": "#83b8dc",
-      "sky_bottom": "#e8e2c6",
-      "landscape": "#9cb8a1"
+      "background": {
+        "texture": "res://assets/backgrounds/v004-palace.png",
+        "reference": "v004_palace.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v005",
@@ -137,9 +183,30 @@
         "accent": "#3c628b",
         "gold": "#e4bc57"
       },
-      "sky_top": "#8fb3d3",
-      "sky_bottom": "#d4e2df",
-      "landscape": "#8eab9e"
+      "background": {
+        "texture": "res://assets/backgrounds/v005-fort.png",
+        "reference": "v005_fort.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v006",
@@ -155,9 +222,30 @@
         "accent": "#8bd0ea",
         "gold": "#f0f8f8"
       },
-      "sky_top": "#7eb9e2",
-      "sky_bottom": "#e4f2f5",
-      "landscape": "#a7c9de"
+      "background": {
+        "texture": "res://assets/backgrounds/v006-igloo.png",
+        "reference": "v006_igloo.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v007",
@@ -173,9 +261,30 @@
         "accent": "#4e5964",
         "gold": "#c7b87e"
       },
-      "sky_top": "#91aac3",
-      "sky_bottom": "#dce0dc",
-      "landscape": "#9aa7b0"
+      "background": {
+        "texture": "res://assets/backgrounds/v007-prison.png",
+        "reference": "v007_prison.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v008",
@@ -191,9 +300,30 @@
         "accent": "#5f9273",
         "gold": "#e5c58b"
       },
-      "sky_top": "#91b7d0",
-      "sky_bottom": "#e2e9df",
-      "landscape": "#93a8a6"
+      "background": {
+        "texture": "res://assets/backgrounds/v008-office.png",
+        "reference": "v008_office.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v009",
@@ -209,9 +339,30 @@
         "accent": "#bd5146",
         "gold": "#ddad60"
       },
-      "sky_top": "#8a92ab",
-      "sky_bottom": "#edbf9d",
-      "landscape": "#9b9d9d"
+      "background": {
+        "texture": "res://assets/backgrounds/v009-factory.png",
+        "reference": "v009_factory.png",
+        "sun_style": "natural_gold",
+        "lighting": {
+          "key_color": "#ffe1ad",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffe9ce",
+          "rim_energy": 0.12,
+          "window_glow": 0.12,
+          "key_position": [
+            7,
+            5,
+            4
+          ],
+          "rim_position": [
+            -6,
+            3,
+            -6
+          ]
+        }
+      }
     },
     {
       "id": "v010",
@@ -227,9 +378,34 @@
         "accent": "#b9483e",
         "gold": "#efc873"
       },
-      "sky_top": "#9c9fbd",
-      "sky_bottom": "#efc39e",
-      "landscape": "#9da9ad"
+      "background": {
+        "texture": "res://assets/backgrounds/v010-lighthouse.png",
+        "reference": "v010_lighthouse.png",
+        "sun_style": "natural_gold",
+        "lighting": {
+          "key_color": "#ffe1ad",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffe9ce",
+          "rim_energy": 0.12,
+          "window_glow": 0.12,
+          "key_position": [
+            7,
+            5,
+            4
+          ],
+          "rim_position": [
+            -6,
+            3,
+            -6
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "backdrop": {
+    "overscan": 1.005,
+    "distance": 240.0
+  }
 }

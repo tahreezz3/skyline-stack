@@ -23,7 +23,7 @@ Live rules remain: perfect below 0.06; stack through 0.35; collapse above 0.35 a
 | v009 | Factory | Steel frames, pipes, safety red, tanks and harbor water |
 | v010 | Lighthouse | Round white/red modules, circular railings, lantern crown and rocky coast |
 
-These are procedural interpretations of the references, rather than photographic or painted replicas. Full reference compositions are not shipped as backgrounds or sprites. Active, falling, placed and toppled modules share the selected theme's mesh/materials; its ground floor adds a matching door, and its completion crown uses matching architecture. Background architecture is batched into three hazy parallax rows. Theme decorations never enter collision or placement calculations.
+The live tower modules remain procedural interpretations of the references. T-0315 replaces the initial procedural backgrounds with detailed environment-only artwork edited from each owner reference; see `BACKGROUND_REVISION.md`. Full reference compositions are not shipped as backgrounds or sprites. Active, falling, placed and toppled modules share the selected theme's mesh/materials; its ground floor adds a matching door, and its completion crown uses matching architecture. Background scenery now comes from independent reference-matched art with neutral daylight or golden-hour lighting; the shared purple sun and procedural hills/rows have been removed. Theme decorations never enter collision or placement calculations.
 
 ## Shared HUD
 
@@ -33,7 +33,7 @@ Portrait stretch uses `expand` so narrow and tall displays render their actual a
 
 ## Implementation and checks
 
-- `config/themes.json` is the cosmetic catalog, palette, mesh dimensions and scenery layout. `ThemeCatalog` resolves unknown IDs to the configured default.
+- `config/themes.json` is the cosmetic catalog, palette, mesh dimensions and reference background/lighting configuration. `ThemeCatalog` resolves unknown IDs to the configured default.
 - `theme_kit.gd` builds geometry using the existing `building_kit.gd` triangle builder. Fixed normalized fractions describe original mesh topology, while configurable dimensions remain in JSON.
 - `config/round_hud.json` contains HUD layout and display parameters.
 - `test_themes.gd` checks catalog integrity, full-width mesh envelopes, floor heights and live hybrid boundaries.

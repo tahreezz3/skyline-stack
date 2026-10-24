@@ -18,7 +18,7 @@ REQUIRED = {
         "sway.speed", "sway.scale", "sway.max",
     ],
     "block_types.json": ["types"],
-    "themes.json": ["default", "geometry", "scenery_layout", "themes"],
+    "themes.json": ["default", "geometry", "backdrop", "themes"],
     "round_hud.json": ["margin", "heart_pixel", "heart_spacing", "meter_width", "meter_height", "meter_segments", "badge_height", "bottom_clearance", "endless_page_floors", "counter_digits", "population_font_size", "pause_size", "combo_width", "combo_height"],
     "levels.json": ["levels"],
     "city_map.json": ["width", "height", "disabled", "rules"],
@@ -93,18 +93,37 @@ def main() -> int:
     sceneries = {"garden", "skyline", "river", "courtyard", "fortress", "arctic", "compound", "campus", "harbor", "coast"}
     palette_keys = {"body", "shadow", "trim", "glass", "accent", "gold"}
     for theme in entries:
-        for key in ["name_key", "description_key", "architecture", "scenery", "palette", "sky_top", "sky_bottom", "landscape"]:
+        for key in ["name_key", "description_key", "architecture", "scenery", "palette", "background"]:
             if key not in theme:
                 errors.append(f"themes.json: {theme.get('id')} missing {key}")
         if theme.get("architecture") not in architectures or theme.get("scenery") not in sceneries:
             errors.append(f"themes.json: unknown architecture/scenery in {theme.get('id')}")
         if set(theme.get("palette", {})) != palette_keys:
             errors.append(f"themes.json: incomplete palette in {theme.get('id')}")
-        colors = list(theme.get("palette", {}).values()) + [theme.get(k, "") for k in ["sky_top", "sky_bottom", "landscape"]]
+        background = theme.get("background", {})
+        lighting = background.get("lighting", {})
+        for key in ["key_color", "ambient_color", "rim_color"]:
+            if key not in lighting:
+                errors.append(f"themes.json: {theme.get('id')} missing lighting.{key}")
+        colors = list(theme.get("palette", {}).values()) + [lighting.get(k, "") for k in ["key_color", "ambient_color", "rim_color"]]
+        texture = background.get("texture", "")
+        if not texture.startswith("res://assets/backgrounds/") or not texture.endswith(".png") or not (CONFIG.parent / texture.removeprefix("res://")).is_file():
+            errors.append(f"themes.json: missing local background texture {texture!r}")
+        if background.get("sun_style") not in {"none", "natural_gold"}:
+            errors.append(f"themes.json: unsupported sun_style in {theme.get('id')}")
+        if not background.get("reference", "").endswith(".png"):
+            errors.append(f"themes.json: missing reference provenance in {theme.get('id')}")
+        for key in ["key_position", "rim_position"]:
+            values = lighting.get(key, [])
+            if not isinstance(values, list) or len(values) != 3 or any(not isinstance(v, (int, float)) for v in values) or values == [0, 0, 0]:
+                errors.append(f"themes.json: lighting.{key} must be a nonzero 3D vector")
+        for key in ["key_energy", "ambient_energy", "rim_energy", "window_glow"]:
+            if not isinstance(lighting.get(key), (int, float)) or lighting[key] < 0:
+                errors.append(f"themes.json: invalid lighting.{key} in {theme.get('id')}")
         for color in colors:
             if not isinstance(color, str) or len(color) != 7 or not color.startswith("#") or any(c not in "0123456789abcdefABCDEF" for c in color[1:]):
                 errors.append(f"themes.json: invalid hex color {color!r}")
-        if set(theme) - {"id", "name_key", "description_key", "architecture", "scenery", "palette", "sky_top", "sky_bottom", "landscape"}:
+        if set(theme) - {"id", "name_key", "description_key", "architecture", "scenery", "palette", "background"}:
             errors.append("themes.json: themes may contain presentation fields only")
     geometry = themes.get("geometry", {})
     for key in ["half_width", "round_radius", "round_sides", "cornice_width", "roof_height", "window_columns", "rope_width", "sling_height"]:
@@ -113,17 +132,11 @@ def main() -> int:
             errors.append(f"themes.json: geometry.{key} must be positive")
     if not isinstance(geometry.get("yaw_degrees"), (int, float)):
         errors.append("themes.json: geometry.yaw_degrees must be numeric")
-    layout = themes.get("scenery_layout", {})
-    for key in ["row_depths", "row_scales", "row_parallax", "row_horizons", "haze"]:
-        values = layout.get(key, [])
-        if not isinstance(values, list) or len(values) != 3 or any(not isinstance(v, (int, float)) for v in values):
-            errors.append(f"themes.json: scenery_layout.{key} needs three numeric entries")
-    for key in ["row_extent", "row_spacing"]:
-        if not isinstance(layout.get(key), (int, float)) or layout[key] <= 0:
-            errors.append(f"themes.json: scenery_layout.{key} must be positive")
-    counts = layout.get("floor_counts", [])
-    if not counts or any(not isinstance(v, int) or v < 1 for v in counts):
-        errors.append("themes.json: scenery floor counts must be positive integers")
+    backdrop = themes.get("backdrop", {})
+    if not isinstance(backdrop.get("overscan"), (int, float)) or not 1 <= backdrop["overscan"] <= 1.1:
+        errors.append("themes.json: backdrop.overscan must be 1..1.1")
+    if not isinstance(backdrop.get("distance"), (int, float)) or not 0 < backdrop["distance"] < 255:
+        errors.append("themes.json: backdrop.distance must fit inside the camera far plane")
     for key, value in data.get("round_hud.json", {}).items():
         if not key.startswith("_") and (not isinstance(value, (int, float)) or value <= 0):
             errors.append(f"round_hud.json: {key} must be positive")

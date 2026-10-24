@@ -110,13 +110,15 @@ passed to `UI.label`/`UI.button`. Preview: `godot --path game -- --lang=de`.
 
 ## `themes.json` (presentation only)
 
-`default` is a valid theme ID; `themes[]` contains exactly v001-v010. Each entry has `id`, localized `name_key` and `description_key`, `architecture`, `scenery`, a six-color `palette` (`body`, `shadow`, `trim`, `glass`, `accent`, `gold`), `sky_top`, `sky_bottom` and `landscape` hex colors. These fields cannot override tower rules or block families.
+`default` is a valid theme ID; `themes[]` contains exactly v001-v010. Each entry has `id`, localized `name_key`/`description_key`, `architecture`, `scenery`, a six-color `palette` (`body`, `shadow`, `trim`, `glass`, `accent`, `gold`) and `background`. Themes cannot override tower rules or progression families.
 
-`geometry`: `half_width` and `cornice_width` are square facade/ledge half-widths; `round_radius` and integer `round_sides` define round modules; `roof_height` defines completion crowns; integer `window_columns` controls glass grids; `yaw_degrees` turns architecture around the vertical axis; `rope_width` and `sling_height` define suspension geometry. Distances use block-width units. Storey height always comes from `tower_rules.block.height`; decorations do not change placement dimensions.
+`geometry`: `half_width` and `cornice_width` are square facade/ledge half-widths; `round_radius` and integer `round_sides` define round modules; `roof_height` defines completion crowns; integer `window_columns` controls glass grids; `yaw_degrees` turns architecture around the vertical axis; `rope_width` and `sling_height` define suspension geometry. Distances use block-width units. Storey height always comes from `tower_rules.block.height`.
 
-`scenery_layout`: `row_depths`, `row_scales`, `row_parallax`, `row_horizons` and `haze` each contain three numbers for the background rows. `row_spacing` spaces buildings; integer `row_extent` sets the number on each side; `floor_counts` is a repeating positive integer height pattern. Rendering batches each row by material.
+`background.texture` is a local `res://assets/backgrounds/*.png` resource; `reference` records its owner reference filename. `sun_style` documents `none` for daytime art or `natural_gold` for v003/v009/v010 sunset art. This metadata never adds another sun to the image. `lighting` defines `key_color`, `ambient_color`, `rim_color` hex colors; nonnegative `key_energy`, `ambient_energy`, `rim_energy`, `window_glow`; and nonzero three-number `key_position`/`rim_position` direction vectors for directional lights. Lighting remains fixed to the reference as camera height changes.
 
-`SceneRouter.selected_theme` holds the session's cosmetic ID; empty/unknown IDs fall back to `default`. It is not saved or used by progression, city bookkeeping or analytics. See `art/THEME_IMPLEMENTATION.md` for source conflicts and theme inventory.
+`backdrop.overscan` (1..1.1) prevents edge seams. `backdrop.distance` places the camera-parented quad inside the camera's far plane. Background texture dimensions and viewport aspect determine cover cropping without distortion, anchored at bottom centre.
+
+`SceneRouter.selected_theme` holds the session's cosmetic ID; empty/unknown IDs fall back to `default`. It is not saved or used by progression, city bookkeeping or analytics. See `art/THEME_IMPLEMENTATION.md` for theme inventory and `art/BACKGROUND_REVISION.md` for the current background implementation and provenance.
 
 ## `round_hud.json` (presentation only)
 
