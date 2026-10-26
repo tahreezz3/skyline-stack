@@ -13,7 +13,8 @@ export_credentials.cfg
 *.tmp
 # Generated check result (dashboard files are committed so they can be read without running tools)
 coordination/.last_check.json
-*.translation
+# Ship CSV translation resources so direct launches work without an editor import.
+# Regenerate these tracked files after changing game/localisation/strings.csv.
 game/override.cfg
 # Blender backup and autosave files
 *.blend1

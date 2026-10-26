@@ -25,6 +25,8 @@ godot --path game                   # play it (click / space to drop)
 godot --path game -e                # open in the editor
 ```
 
+EN/ES/DE translation resources are included, so direct launch works without first opening the editor. If updating an older checkout that is missing them, run `godot --headless --path game --editor --import --quit` once. After changing `game/localisation/strings.csv`, regenerate and commit the three `.translation` files; see `docs/08_TESTING.md`.
+
 ## Where things are
 
 | Path | What |

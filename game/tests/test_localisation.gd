@@ -67,3 +67,36 @@ func test_format_placeholders_match() -> void:
 		for i in range(2, mini(row.size(), langs.size())):
 			var other := re.search_all(row[i]).map(func(m): return m.get_string())
 			check(en == other, "%s placeholders differ in %s" % [k, langs[i]])
+
+
+func test_shipped_translation_resources_match_catalogue() -> void:
+	var registered: PackedStringArray = ProjectSettings.get_setting("internationalization/locale/translations", PackedStringArray())
+	for i in range(1, langs.size()):
+		var path := "res://localisation/strings.%s.translation" % langs[i]
+		check(FileAccess.file_exists(path), "%s ships without an editor import" % langs[i])
+		check(path in registered, "%s is registered at startup" % langs[i])
+		if not FileAccess.file_exists(path):
+			continue
+		var translation := load(path) as Translation
+		check(translation != null, "%s loads as a Translation resource" % langs[i])
+		if translation == null:
+			continue
+		check(translation.get_locale() == langs[i], "%s resource has the correct locale" % langs[i])
+		for key in keys:
+			check(String(translation.get_message(key)) == keys[key][i], "%s/%s binary matches CSV" % [langs[i], key])
+
+
+func test_runtime_menu_formatting_in_every_language() -> void:
+	var previous := TranslationServer.get_locale()
+	for i in range(1, langs.size()):
+		TranslationServer.set_locale(langs[i])
+		var level := String(TranslationServer.translate("LEVEL_N"))
+		check(level == keys["LEVEL_N"][i], "%s menu receives translated level format" % langs[i])
+		# Guard formatting to report a missing translation without aborting this test.
+		if "%d" in level:
+			check("7" in level % 7, "%s menu can format the level" % langs[i])
+		else:
+			check(false, "%s level format contains the required placeholder" % langs[i])
+		var population := String(TranslationServer.translate("NEXT_LEVEL"))
+		check(population == keys["NEXT_LEVEL"][i], "%s menu receives translated population format" % langs[i])
+	TranslationServer.set_locale(previous)

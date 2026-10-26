@@ -1,6 +1,9 @@
 # 08 · Testing and definition of done
 
 ## 1. Automated checks (`tools/check.sh`)
+
+Before importing, run a direct headless launch (`godot --headless --path game --quit-after 2`). Any resource or script error fails, even when Godot exits zero. This catches missing shipped translations before the import step can regenerate them.
+
 1. `tools/validate_config.py`: config files parse; required keys exist; thresholds are ordered.
 2. Rule tests: `godot --headless --path game --script res://tests/run_tests.gd` (exit 0 = pass).
 3. Smoke test: `godot --headless --path game -- --autoplay --seconds=60`: a bot plays a round; it must print
@@ -9,7 +12,8 @@
 4. UI tour: `godot --headless --path game -- --tour` visits menu, select, round, pause, results; must print `TOUR_DONE`
    with no script errors.
 5. `tools/cleanroom_check.py`.
-6. `tools/dashboard.py` regenerates the dashboard and records the check result.
+6. Generated EN/ES/DE translation resources must be staged/tracked and current after import. The localisation suite checks every compiled message against the CSV and exercises menu format strings through TranslationServer in each language.
+7. `tools/dashboard.py` regenerates the dashboard and records the check result.
 
 ## 2. Writing tests
 - Suites are files named `game/tests/test_<area>.gd` that extend `res://tests/test_case.gd`; the runner finds them
@@ -52,3 +56,18 @@ capture every screen. Always look at frames after UI changes: a headless run can
 - `tools/check.sh` passes.
 - Docs updated if behaviour, data or architecture changed.
 - Session log written; dashboard regenerated.
+
+
+## Translation resources and direct startup
+
+`game/localisation/strings.csv` is the source catalogue. Godot generates `strings.en.translation`, `strings.es.translation` and `strings.de.translation`; all three are committed because `godot --path game` does not run the editor importer. Missing translations make `tr("LEVEL_N")` return its raw key, which cannot be formatted with a level number.
+
+After editing the CSV, regenerate and stage the compiled resources before checking:
+
+```bash
+godot --headless --path game --editor --import --quit
+git add game/localisation/strings.csv game/localisation/*.translation
+tools/check.sh
+```
+
+To reproduce a fresh checkout without removing your working cache, copy the staged/tracked tree with `git checkout-index --all --prefix=/tmp/skyline-startup-check/`, then run `godot --headless --path /tmp/skyline-startup-check/game --quit-after 2` before importing. Verify all three languages with `-- --lang=en`, `-- --lang=es` and `-- --lang=de`. A zero exit code alone is insufficient; logs must contain no `ERROR:` or `SCRIPT ERROR` lines.

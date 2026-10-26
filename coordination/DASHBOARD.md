@@ -1,16 +1,16 @@
 # Project dashboard
 
-_Generated 2026-10-19 09:06 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-26 05:57 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-19T09:06:17Z  config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok
+**Last `tools/check.sh`:** PASS at 2026-10-26T05:56:51Z  startup: ok · config: ok · tests: ok · smoke: ok · ui-tour: ok · cleanroom: ok · translations: ok
 
 ## Milestones
 
 | Milestone | Progress | Done / total |
 |---|---|---|
-| M0 Foundation | `████████████████████` | 4 / 4 |
+| M0 Foundation | `████████████████████` | 5 / 5 |
 | M1 Core feel | `███████████░░░░░░░░░` | 5 / 9 |
 | M2 Game loop | `████████████████████` | 8 / 8 |
 | M3 Art and audio | `███████████████░░░░░` | 10 / 13 |
@@ -53,7 +53,7 @@ _Generated 2026-10-19 09:06 UTC by `tools/dashboard.py`. Do not edit by hand._
 - **T-0603** [Store listing](../coordination/tasks/T-0603-store-listing.md) · M6 P1 · _waits on T-0301; needs HR-0001, HR-0012_
 - **T-0604** [Soft launch checklist](../coordination/tasks/T-0604-soft-launch-checklist.md) · M6 P1 · _waits on T-0601, T-0602, T-0603_
 
-## Needs a human (17 open of 18)
+## Needs a human (18 open of 19)
 
 Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 
@@ -76,11 +76,13 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0016 | Privacy policy and legal entity | legal | P1 | - | T-0504 |
 | HR-0017 | Device playtest of core feel | playtest | P1 | - | - |
 | HR-0018 | Review Spanish and German translations | design | P2 | - | - |
+| HR-0019 | Restore GitHub authentication for startup-fix synchronization | account | P2 | - | T-0005 |
 
 Delivered / answered: HR-0002
 
 ## Recent sessions
 
+- [Session 2026-10-26 · codex-s4n8 · startup translations](../coordination/sessions/2026-10-26_codex-s4n8_startup-translations.md)
 - [Session 2026-10-13 · opus55-planner · foundation](../coordination/sessions/2026-10-13_opus55-planner_foundation.md)
 - [Session 2026-10-13 · opus55-a7k2 · M1/M2 build-out](../coordination/sessions/2026-10-13_opus55-a7k2_m1-m2-build.md)
 
@@ -92,12 +94,13 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (31)
+## Done (32)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
 - T-0003 Placeholder tower round scene with autoplay
 - T-0004 Coordination tooling and dashboard
+- T-0005 Fix startup with missing translation resources
 - T-0102 Juice pass with placeholder effects
 - T-0103 AudioDirector autoload with placeholder sounds
 - T-0106 First block on the foundation never wobbles

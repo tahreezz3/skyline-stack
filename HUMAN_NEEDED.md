@@ -187,3 +187,12 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - needed_for: T-0304, M3
 - requested: 2026-10-13 by opus55-a7k2
 - spec: `game/localisation/strings.csv` has English plus Spanish and German drafts written by an AI. A native speaker should review the `es` and `de` columns (tone: friendly, short, game-like), fix them directly in the CSV, keep every `%d`/`%s` placeholder, and set this to `answered`. Preview a language with `godot --path game -- --lang=es`. Also decide which languages ship at launch (add columns for more).
+
+
+### HR-0019 · Restore GitHub authentication for startup-fix synchronization
+- status: open
+- type: account
+- priority: P2
+- needed_for: T-0005, shared-repository sync
+- requested: 2026-10-26 by codex-s4n8
+- spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git and push the local startup-fix claim and implementation commits on `istiaque_leon`, or sync from an authenticated checkout. Do not force-push. The startup fix and verification are complete locally; only remote synchronization needs account access.

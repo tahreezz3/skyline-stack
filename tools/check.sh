@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Full project check. Run before marking any task done. Exit code 0 = all green.
-# Steps: config validation, rule tests, autoplay smoke test, clean-room check, dashboard.
+# Steps: direct startup before import, config/rule tests, autoplay/UI checks, translations, clean-room, dashboard.
 set -u
 cd "$(dirname "$0")/.."
 GODOT="${GODOT:-godot}"
@@ -18,7 +18,7 @@ run_step() {   # name, command...
   out="$("$@" 2>&1)"; rc=$?
   echo "$out" | grep -vE '^Godot Engine|^\s*$' | tail -20
   # any GDScript error in any Godot step is a failure, even if the process exited 0
-  if echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|Failed to load script'; then rc=1; fi
+  if echo "$out" | grep -qE '^ERROR:|SCRIPT ERROR|Parse Error|Failed to load script'; then rc=1; fi
   if [ "$name" = "smoke" ] && ! echo "$out" | grep -qE 'AUTOPLAY_(SUMMARY|TIMEOUT)'; then rc=1; fi
   if [ "$name" = "smoke" ] && echo "$out" | grep -qE 'AUTOPLAY_FRAMING violations=[1-9]'; then rc=1; fi
   if [ "$name" = "ui-tour" ] && { echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|TOUR .* FAILED' || ! echo "$out" | grep -q 'TOUR_DONE'; }; then rc=1; fi
@@ -28,12 +28,16 @@ run_step() {   # name, command...
 
 command -v "$GODOT" >/dev/null || { echo "Godot not found (set GODOT=/path/to/godot or brew install --cask godot)"; exit 2; }
 
+# Run before --import: import regenerates missing translations and can hide a broken checkout.
+run_step startup with_timeout "$GODOT" --headless --path game --quit-after 2
 run_step config  python3 tools/validate_config.py
 "$GODOT" --headless --path game --import >/dev/null 2>&1
 run_step tests   with_timeout "$GODOT" --headless --path game --script res://tests/run_tests.gd
 run_step smoke   with_timeout "$GODOT" --headless --path game -- --autoplay --seconds=90
 run_step ui-tour with_timeout "$GODOT" --headless --path game -- --tour
 run_step cleanroom python3 tools/cleanroom_check.py
+# Generated translation resources must ship in Git and match the import result.
+run_step translations bash -c 'git ls-files --error-unmatch game/localisation/strings.en.translation game/localisation/strings.es.translation game/localisation/strings.de.translation >/dev/null && git diff --quiet -- "game/localisation/*.translation" && [ -z "$(git ls-files --others --exclude-standard -- "game/localisation/*.translation")" ] || { echo "stage the current generated game/localisation/*.translation files"; exit 1; }'
 
 ok_json=$([ $ok_all -eq 1 ] && echo true || echo false)
 printf '{"time": "%s", "ok": %s, "steps": {%s}}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$ok_json" "${steps_json%, }" > coordination/.last_check.json
