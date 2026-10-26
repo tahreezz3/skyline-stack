@@ -154,3 +154,16 @@ Each `environments.v001`..`v010` defines `scenery`, `sky_top`, `sky_bottom`, nat
 `shared` ambient motion: `water_wave_amplitude`, `water_wave_speed`, `water_glint`; `boat_bob`, `boat_bob_speed`, `boat_roll_amplitude`; `bird_flap_speed`, `bird_roll_amplitude`; `steam_rise`, `steam_drift`, `steam_puffs`, `steam_radius`, `steam_wobble`; `fountain_drops`, `fountain_height`; `flag_speed`, `flag_amplitude`. Distances are world units, rates are phase/second; mesh-scaled particle counts/sizes are bounded by their emitter. All shader animation uses the explicit paused scene clock.
 
 Camera height never changes the position of ground/landmarks. Reduced Motion disables ambient animation, while ordinary gameplay camera ascent/descent remains spatially correct. Old `background_motion.json` describes the retired plate experiment and is retained alongside the archived art for reference.
+
+
+## `atmosphere.json` (T-0318, presentation only)
+
+- `altitude`: ordered `upper_start/end`, `space_start/end`, `weather_fade_start/end` in camera world units. Each pair uses smoothstep; weather finishes before full space. No game height/goal is changed.
+- `sky`: `upper_color`, `space_top`, `space_bottom` hex colors; positive `star_grid`, `star_size`, `star_density`, `star_parallax`. Density and size are fractions below 1. Stars are procedural and altitude-relative.
+- `effects`: positive `depth` (camera-local weather plane distance), `overscan`, two-component `rain_grid`/`snow_grid`, `rain_length`, `rain_width`, `rain_speed`, `snow_size`, `snow_speed`, `wind_speed`, `wind_opacity`, `fog_speed`, `lightning_period`, `lightning_duration`, `lightning_strength`. Time is explicit paused presentation time, never shader TIME. The plane sits behind gameplay geometry; no atmospheric effect is drawn over the HUD.
+- `cyclone`: finite world `position`; positive three-component `tornado_size`, `hurricane_size`; `hurricane_tilt` degrees, `rotation_speed` radians/second, integer `segments` (8–48), `bands` (4–48), and hex `color`. Only the selected distant cyclone is built.
+- `planets`: `kind` (`earth`, `gas`, `moon`), fixed world `position`, positive `radius`, hex `color`/`accent`, positive `rotation_speed` and boolean `ring`. These are background meshes, with no collision or gravity.
+- `planet_mesh`: integer `segments` (8–96), `rings` (4–48); positive `ring_inner`/`ring_outer` radius multiples, `ring_tilt` degrees and hex `ring_color`. Normalized mesh topology and procedural surface patterns remain original art in code/shaders.
+- `weather`: ten unique entries. Each has an `id`, positive random `weight`, `clouds` coverage, positive `cloud_speed` multiplier, hex `tint`, `tint_amount`, boolean `sun`, `rain`, `snow`, `wind`, `fog`, `storm`, and `cyclone` (`none`, `tornado`, `hurricane`). Coverage, tint and effect strengths are 0–1. IDs: `sunny`, `clear`, `cloudy`, `rainy`, `snowy`, `windy`, `foggy`, `thunderstorms`, `tornadoes`, `hurricanes`.
+
+A private RNG chooses one profile per round; `--visual-seed=<integer>` reproduces selection and `--weather=<id>` overrides it for developer previews. Neither is saved or forwarded to core rules. Altitude, weather and mesh parameters cannot alter crane speed, collision, scoring, lives, residents, gravity or landing classification. See `art/WEATHER_AND_SPACE.md`.

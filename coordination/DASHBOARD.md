@@ -1,10 +1,10 @@
 # Project dashboard
 
-_Generated 2026-10-26 07:04 UTC by `tools/dashboard.py`. Do not edit by hand._
+_Generated 2026-10-26 22:12 UTC by `tools/dashboard.py`. Do not edit by hand._
 
 **Current checkpoint:** [CP-000 · Foundation](../coordination/checkpoints/CP-000-foundation.md)
 
-**Last `tools/check.sh`:** PASS at 2026-10-26T06:58:29Z  startup: ok · config: ok · tests: ok · smoke: ok · ui-tour: ok · theme-tour: ok · background-motion: ok · world-climb: ok · cleanroom: ok · translations: ok
+**Last `tools/check.sh`:** PASS at 2026-10-26T22:12:05Z  startup: ok · config: ok · tests: ok · smoke: ok · ui-tour: ok · theme-tour: ok · background-motion: ok · world-climb: ok · atmosphere: ok · cleanroom: ok · translations: ok
 
 ## Milestones
 
@@ -13,7 +13,7 @@ _Generated 2026-10-26 07:04 UTC by `tools/dashboard.py`. Do not edit by hand._
 | M0 Foundation | `████████████████████` | 6 / 6 |
 | M1 Core feel | `███████████░░░░░░░░░` | 5 / 9 |
 | M2 Game loop | `████████████████████` | 8 / 8 |
-| M3 Art and audio | `████████████████░░░░` | 14 / 17 |
+| M3 Art and audio | `█████████████████░░░` | 15 / 18 |
 | M4 City meta | `███████░░░░░░░░░░░░░` | 1 / 3 |
 | M5 Services | `█████████░░░░░░░░░░░` | 3 / 7 |
 | M6 Release | `░░░░░░░░░░░░░░░░░░░░` | 0 / 4 |
@@ -76,12 +76,13 @@ Details and exact file names: [HUMAN_NEEDED.md](../HUMAN_NEEDED.md)
 | HR-0016 | Privacy policy and legal entity | legal | P1 | - | T-0504 |
 | HR-0017 | Device playtest of core feel | playtest | P1 | - | - |
 | HR-0018 | Review Spanish and German translations | design | P2 | - | - |
-| HR-0019 | Restore GitHub authentication and sync the recovered game | account | P2 | - | T-0005, T-0006, T-0314, T-0315, T-0316, T-0317 |
+| HR-0019 | Restore GitHub authentication and sync the recovered game | account | P2 | - | T-0005, T-0006, T-0314, T-0315, T-0316, T-0317, T-0318 |
 
 Delivered / answered: HR-0002
 
 ## Recent sessions
 
+- [Session 2026-10-27 · codex-s8p4 · weather and space](../coordination/sessions/2026-10-27_codex-s8p4_weather-and-space.md)
 - [Session 2026-10-26 · codex-w2h7 · world camera ascent](../coordination/sessions/2026-10-26_codex-w2h7_world-camera-ascent.md)
 - [Session 2026-10-26 · codex-s4n8 · startup translations](../coordination/sessions/2026-10-26_codex-s4n8_startup-translations.md)
 - [Session 2026-10-26 · codex-r9v2 · recover October 24 work](../coordination/sessions/2026-10-26_codex-r9v2_recover-october24-work.md)
@@ -89,7 +90,6 @@ Delivered / answered: HR-0002
 - [Session 2026-10-24 · codex-p8m4 · ten themes](../coordination/sessions/2026-10-24_codex-p8m4_ten-themes.md)
 - [Session 2026-10-24 · codex-d7q5 · living backgrounds](../coordination/sessions/2026-10-24_codex-d7q5_living-backgrounds.md)
 - [Session 2026-10-13 · opus55-planner · foundation](../coordination/sessions/2026-10-13_opus55-planner_foundation.md)
-- [Session 2026-10-13 · opus55-a7k2 · M1/M2 build-out](../coordination/sessions/2026-10-13_opus55-a7k2_m1-m2-build.md)
 
 ## Checkpoints
 
@@ -99,7 +99,7 @@ Delivered / answered: HR-0002
 
 - none
 
-## Done (37)
+## Done (38)
 
 - T-0001 Project foundation, docs and vision
 - T-0002 Core tower rules engine with tests
@@ -134,6 +134,7 @@ Delivered / answered: HR-0002
 - T-0315 Match bright reference backgrounds for all themes
 - T-0316 Animate the ten reference environments
 - T-0317 World scenery follows the rising tower camera
+- T-0318 Visual weather and orbital ascent
 - T-0401 City map grid and placement
 - T-0501 Rewarded and interstitial ads
 - T-0503 Analytics events

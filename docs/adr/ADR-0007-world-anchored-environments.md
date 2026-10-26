@@ -19,3 +19,8 @@ Keep thematic palettes and settings from v001-v010, and independent module/HUD/r
 ## Consequences
 
 Height is verified using projected world anchors and rendered ascent/descent across every theme. Separate original models/layouts replace the painting's baked detail; the old art/prompts remain available as reference/provenance for future artist integration. Static geometry is batched, and cloud/particle pools are bounded. Mobile GPU/device profiling remains part of existing device QA.
+
+
+## Extension · 2026-10-27 (T-0318)
+
+Random weather and orbital ascent preserve this decision. Planets and the selected distant cyclone are independent fixed world meshes. The camera-relative weather volume is an infinite atmospheric particle/haze field with altitude coordinates, not a full scenic image; it disappears above the atmosphere. Sky colors/stars transition continuously with camera height. A private presentation RNG chooses one weather profile per round, without consuming gameplay randomness. Weather never reads or writes rules, physics, input or save data. Explicit clock/pause/Reduced Motion behavior applies to weather, lightning and planets too.

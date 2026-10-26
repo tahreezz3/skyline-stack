@@ -1,0 +1,25 @@
+{
+  "_doc": "Presentation only. Heights are camera world units (one floor = 0.6 units); weather is chosen once per round with a private visual RNG. No gameplay effects.",
+  "altitude": {"upper_start": 14, "upper_end": 28, "space_start": 22, "space_end": 42, "weather_fade_start": 18, "weather_fade_end": 30},
+  "sky": {"upper_color": "#247bc4", "space_top": "#06122e", "space_bottom": "#123960", "star_grid": 40, "star_size": 0.075, "star_density": 0.3, "star_parallax": 0.018},
+  "effects": {"depth": 32, "overscan": 1.02, "rain_grid": [35, 9], "rain_length": 0.28, "rain_width": 0.028, "rain_speed": 1.8, "snow_grid": [22, 13], "snow_size": 0.06, "snow_speed": 0.18, "wind_speed": 0.32, "wind_opacity": 0.4, "fog_speed": 0.025, "lightning_period": 13, "lightning_duration": 0.65, "lightning_strength": 0.22},
+  "cyclone": {"position": [-0.95, -0.4, -38], "tornado_size": [0.65, 1.35, 0.65], "hurricane_size": [0.64, 0.64, 0.64], "hurricane_tilt": 62, "rotation_speed": 0.65, "segments": 20, "bands": 18, "color": "#afc3d2"},
+  "planets": [
+    {"kind": "earth", "position": [-1.5, 27, -90], "radius": 1.2, "color": "#2588c9", "accent": "#78bda5", "rotation_speed": 0.025, "ring": false},
+    {"kind": "gas", "position": [1.55, 43, -100], "radius": 1.05, "color": "#e2ae79", "accent": "#fbe0af", "rotation_speed": 0.04, "ring": true},
+    {"kind": "moon", "position": [-1.25, 63, -85], "radius": 0.68, "color": "#b3cadc", "accent": "#e4eaf1", "rotation_speed": 0.018, "ring": false}
+  ],
+  "planet_mesh": {"segments": 40, "rings": 20, "ring_inner": 1.35, "ring_outer": 2.1, "ring_tilt": 26, "ring_color": "#ead3aa"},
+  "weather": [
+    {"id": "sunny", "weight": 1, "clouds": 0.25, "cloud_speed": 1, "tint": "#a9e8ff", "tint_amount": 0.08, "sun": true, "rain": 0, "snow": 0, "wind": 0, "fog": 0, "storm": 0, "cyclone": "none"},
+    {"id": "clear", "weight": 1, "clouds": 0, "cloud_speed": 1, "tint": "#8fd9fa", "tint_amount": 0, "sun": false, "rain": 0, "snow": 0, "wind": 0, "fog": 0, "storm": 0, "cyclone": "none"},
+    {"id": "cloudy", "weight": 1, "clouds": 1, "cloud_speed": 1, "tint": "#a9cbdc", "tint_amount": 0.3, "sun": false, "rain": 0, "snow": 0, "wind": 0, "fog": 0.05, "storm": 0, "cyclone": "none"},
+    {"id": "rainy", "weight": 1, "clouds": 1, "cloud_speed": 1.4, "tint": "#7fadc9", "tint_amount": 0.4, "sun": false, "rain": 0.6, "snow": 0, "wind": 0.15, "fog": 0.12, "storm": 0, "cyclone": "none"},
+    {"id": "snowy", "weight": 1, "clouds": 0.7, "cloud_speed": 0.65, "tint": "#d6e8f4", "tint_amount": 0.35, "sun": false, "rain": 0, "snow": 0.8, "wind": 0.08, "fog": 0.16, "storm": 0, "cyclone": "none"},
+    {"id": "windy", "weight": 1, "clouds": 0.65, "cloud_speed": 4, "tint": "#b2e0ef", "tint_amount": 0.1, "sun": false, "rain": 0, "snow": 0, "wind": 0.85, "fog": 0, "storm": 0, "cyclone": "none"},
+    {"id": "foggy", "weight": 1, "clouds": 0.3, "cloud_speed": 0.6, "tint": "#d8e5e9", "tint_amount": 0.4, "sun": false, "rain": 0, "snow": 0, "wind": 0, "fog": 0.65, "storm": 0, "cyclone": "none"},
+    {"id": "thunderstorms", "weight": 0.7, "clouds": 1, "cloud_speed": 2.2, "tint": "#7094b4", "tint_amount": 0.48, "sun": false, "rain": 0.85, "snow": 0, "wind": 0.4, "fog": 0.15, "storm": 1, "cyclone": "none"},
+    {"id": "tornadoes", "weight": 0.5, "clouds": 1, "cloud_speed": 3, "tint": "#91acba", "tint_amount": 0.4, "sun": false, "rain": 0.25, "snow": 0, "wind": 0.7, "fog": 0.12, "storm": 0, "cyclone": "tornado"},
+    {"id": "hurricanes", "weight": 0.5, "clouds": 1, "cloud_speed": 3.5, "tint": "#829fb4", "tint_amount": 0.45, "sun": false, "rain": 0.9, "snow": 0, "wind": 1, "fog": 0.2, "storm": 0, "cyclone": "hurricane"}
+  ]
+}

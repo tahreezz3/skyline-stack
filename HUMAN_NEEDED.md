@@ -194,10 +194,12 @@ HR-0018 follow-up (2026-10-24, T-0314): also review the new `THEME_*`, `HUD_PAUS
 - status: open
 - type: account
 - priority: P2
-- needed_for: T-0005, T-0006, T-0314, T-0315, T-0316, T-0317, shared-repository sync
+- needed_for: T-0005, T-0006, T-0314, T-0315, T-0316, T-0317, T-0318, shared-repository sync
 - requested: 2026-10-24 by codex-p8m4
 - spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git for this repository and push the recovered October 24 work and October 26 startup fix from `istiaque_leon`, or sync them from an authenticated checkout. Do not force-push shared history. Implementation is complete locally; this request only covers repository synchronization.
 
 HR-0019 follow-up (2026-10-26, T-0006): local `main` retains all October 24 theme/background commits. Recovery merges this history into `istiaque_leon` together with T-0005. Preserve both branches and the existing GitHub Desktop stash; synchronize the merge after authenticating Git.
 
 HR-0019 follow-up (2026-10-26, T-0317): also synchronize the world-space scenery/camera-ascent implementation and previews on istiaque_leon. CLI HTTPS authentication remains unavailable.
+
+HR-0019 follow-up (2026-10-27, T-0318): also synchronize the cosmetic weather/orbital ascent and native previews on istiaque_leon. Implementation and checks are complete locally; HTTPS Git authentication remains unavailable.

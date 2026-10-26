@@ -2,7 +2,7 @@
 
 T-0317 replaces the camera-attached scenic image after the owner pointed out that the scene stayed unchanged as the tower rose. The game now builds original 3D ground, waterways, buildings, bridges, foliage and local activity. These stay at fixed world coordinates. The same camera that follows the tower moves past them, revealing rooftops, then sky and higher cloud bands. Falling/collapse camera descent returns to the same landscape.
 
-The infinite atmosphere alone follows the camera; it contains a procedural theme palette and the three reference-appropriate natural sunset suns. No complete scenic image is sampled. The previous paintings remain in the repository as art references with their original provenance. The new scenes have a code-native low-poly appearance; their component detail is separate from the old painted artwork.
+The infinite atmosphere alone follows the camera; it contains a procedural theme palette and the three reference-appropriate natural sunset suns (or natural sunshine in Sunny weather). No complete scenic image is sampled. The previous paintings remain in the repository as art references with their original provenance. The new scenes have a code-native low-poly appearance; their component detail is separate from the old painted artwork.
 
 | Theme | World objects |
 |---|---|
@@ -26,3 +26,6 @@ godot --path game --script res://tools/environment_climb_tour.gd -- --screenshot
 ```
 
 This captures every theme at ground, low and high tower stages and exports an eight-second 12 fps ascent through 24 floors with the real height-framing function. `previews/world-ascent.mp4` shows all ten; `previews/world-ascent.webp` shows Manor, Factory and Lighthouse. Historical `living-environments.*` previews show the superseded image-plate implementation.
+
+
+T-0318 adds a round's random cosmetic weather, upper-atmosphere fade and the climb into stars/planets. Ground/landmarks keep the same world-space behavior. See [WEATHER_AND_SPACE.md](WEATHER_AND_SPACE.md) for all ten conditions, altitude thresholds, architecture and preview commands.

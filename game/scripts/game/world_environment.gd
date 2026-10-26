@@ -16,6 +16,8 @@ var ground_anchor: Node3D
 var water_material: ShaderMaterial
 var cloud_material: StandardMaterial3D
 var last_cloud_band := -99999
+var weather: Dictionary={}
+var cloud_amount := 1.0
 
 
 func setup(id: String,config: Dictionary) -> void:
@@ -181,6 +183,7 @@ func _build_clouds() -> void:
 func update(delta: float,camera_height: float,paused: bool,reduced: bool) -> void:
 	clock.advance(delta,paused,reduced,Vector2.ZERO)
 	var t: float=clock.render_time()
+	cloud_material.albedo_color=Color(profile["colors"]["snow"]).lerp(Color(weather.get("tint",profile["colors"]["snow"])),float(weather.get("tint_amount",0.0)))
 	water_material.set_shader_parameter("scene_seconds",t)
 	water_material.set_shader_parameter("motion_amount",0.0 if reduced else 1.0)
 	var band := floori(camera_height/float(shared["cloud_gap"]))-1
@@ -190,9 +193,12 @@ func update(delta: float,camera_height: float,paused: bool,reduced: bool) -> voi
 		var column := i%int(shared["clouds_per_band"])
 		var shift := sin(float(row*7+column*11))*1.7
 		var width := float(shared["cloud_width"])
-		var x := fposmod(column*width/float(shared["clouds_per_band"])+shift+t*float(shared["cloud_speed"])+width*.5,width)-width*.5
+		var speed := float(weather.get("cloud_speed",1.0))
+		var x := fposmod(column*width/float(shared["clouds_per_band"])+shift+t*float(shared["cloud_speed"])*speed+width*.5,width)-width*.5
 		var slot := posmod(row,int(shared["cloud_bands"]))*int(shared["clouds_per_band"])+column
 		cloud_nodes[slot].position=Vector3(x,row*float(shared["cloud_gap"])+float(shared["cloud_projection_bias"]),float(shared["cloud_depth"])-column*float(shared["cloud_depth_step"]))
+		cloud_nodes[slot].visible=cloud_amount>0.0 and float(column)/float(shared["clouds_per_band"])<float(weather.get("clouds",1.0))
+		cloud_nodes[slot].transparency=1.0-cloud_amount
 	for actor in actors:
 		var e: Dictionary=actor["entry"]
 		var node: Node3D=actor["node"]

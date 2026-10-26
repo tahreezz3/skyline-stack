@@ -23,6 +23,7 @@ REQUIRED = {
     "themes.json": ["default", "geometry", "backdrop", "themes"],
     "background_motion.json": ["shared", "environments"],
     "environment_world.json": ["shared", "environments"],
+    "atmosphere.json": ["altitude", "sky", "effects", "cyclone", "planets", "planet_mesh", "weather"],
     "round_hud.json": ["margin", "heart_pixel", "heart_spacing", "meter_width", "meter_height", "meter_segments", "badge_height", "bottom_clearance", "endless_page_floors", "counter_digits", "population_font_size", "pause_size", "combo_width", "combo_height"],
     "levels.json": ["levels"],
     "city_map.json": ["width", "height", "disabled", "rules"],
@@ -145,6 +146,73 @@ def validate_environment_world(config, errors):
                 errors.append(prefix + theme + " invalid world actor")
 
 
+def validate_atmosphere(config, errors):
+    prefix = "atmosphere.json: "
+    def number(n):
+        return isinstance(n, (int, float)) and not isinstance(n, bool) and math.isfinite(n)
+    def positive(n):
+        return number(n) and n > 0
+    def color(c):
+        return isinstance(c, str) and re.fullmatch(r"#[0-9a-fA-F]{6}", c)
+    def vector(v, length=3, above_zero=False):
+        return isinstance(v, list) and len(v) == length and all(positive(n) if above_zero else number(n) for n in v)
+    altitude = config.get("altitude", {})
+    for start, end in [("upper_start", "upper_end"), ("space_start", "space_end"), ("weather_fade_start", "weather_fade_end")]:
+        if not positive(altitude.get(start)) or not positive(altitude.get(end)) or altitude[start] >= altitude[end]:
+            errors.append(prefix + "invalid altitude interval " + start)
+    if altitude and not altitude.get("weather_fade_end", math.inf) <= altitude.get("space_end", 0):
+        errors.append(prefix + "weather must finish fading before full space")
+    fields = {
+        "sky": ["upper_color", "space_top", "space_bottom", "star_grid", "star_size", "star_density", "star_parallax"],
+        "effects": ["depth", "overscan", "rain_grid", "rain_length", "rain_width", "rain_speed", "snow_grid", "snow_size", "snow_speed", "wind_speed", "wind_opacity", "fog_speed", "lightning_period", "lightning_duration", "lightning_strength"],
+        "cyclone": ["position", "tornado_size", "hurricane_size", "hurricane_tilt", "rotation_speed", "segments", "bands", "color"],
+        "planet_mesh": ["segments", "rings", "ring_inner", "ring_outer", "ring_tilt", "ring_color"],
+    }
+    for section, keys in fields.items():
+        data = config.get(section, {})
+        if set(data) != set(keys):
+            errors.append(prefix + "unexpected/missing " + section + " fields")
+        for key in keys:
+            value = data.get(key)
+            if key.endswith("color") or key in {"space_top", "space_bottom"}:
+                valid = color(value)
+            elif key == "position":
+                valid = vector(value)
+            elif key.endswith("size") and key in {"tornado_size", "hurricane_size"}:
+                valid = vector(value, above_zero=True)
+            elif key.endswith("grid") and section == "effects":
+                valid = vector(value, 2, True)
+            else:
+                valid = positive(value)
+            if not valid:
+                errors.append(prefix + "invalid " + section + "." + key)
+    weather = config.get("weather", [])
+    ids = {"sunny", "clear", "cloudy", "rainy", "snowy", "windy", "foggy", "thunderstorms", "tornadoes", "hurricanes"}
+    if len(weather) != 10 or {w.get("id") for w in weather} != ids:
+        errors.append(prefix + "need ten unique weather conditions")
+    keys = {"id", "weight", "clouds", "cloud_speed", "tint", "tint_amount", "sun", "rain", "snow", "wind", "fog", "storm", "cyclone"}
+    for w in weather:
+        if set(w) != keys or not positive(w.get("weight")) or not positive(w.get("cloud_speed")) or not color(w.get("tint")) or not isinstance(w.get("sun"), bool) or w.get("cyclone") not in {"none", "tornado", "hurricane"}:
+            errors.append(prefix + "invalid cosmetic weather profile " + str(w.get("id")))
+        for key in ["clouds", "tint_amount", "rain", "snow", "wind", "fog", "storm"]:
+            if not number(w.get(key)) or not 0 <= w[key] <= 1:
+                errors.append(prefix + "invalid weather intensity " + key)
+    sky = config.get("sky", {})
+    for key in ["star_density", "star_size"]:
+        if number(sky.get(key)) and not 0 < sky[key] < 1:
+            errors.append(prefix + key + " must be between 0 and 1")
+    for section, key, minimum, maximum in [("planet_mesh", "segments", 8, 96), ("planet_mesh", "rings", 4, 48), ("cyclone", "segments", 8, 48), ("cyclone", "bands", 4, 48)]:
+        value = config.get(section, {}).get(key)
+        if not isinstance(value, int) or not minimum <= value <= maximum:
+            errors.append(prefix + "invalid bounded mesh resolution " + section + "." + key)
+    planets = config.get("planets", [])
+    if {p.get("kind") for p in planets} != {"earth", "gas", "moon"}:
+        errors.append(prefix + "need earth, gas and moon world bodies")
+    for p in planets:
+        if set(p) != {"kind", "position", "radius", "color", "accent", "rotation_speed", "ring"} or not vector(p.get("position")) or not positive(p.get("radius")) or not positive(p.get("rotation_speed")) or not color(p.get("color")) or not color(p.get("accent")) or not isinstance(p.get("ring"), bool):
+            errors.append(prefix + "invalid world planet")
+
+
 def main() -> int:
     errors = []
     data = {}
@@ -243,6 +311,7 @@ def main() -> int:
             errors.append(f"round_hud.json: {key} must be positive")
     validate_background_motion(data.get("background_motion.json", {}), errors)
     validate_environment_world(data.get("environment_world.json", {}), errors)
+    validate_atmosphere(data.get("atmosphere.json", {}), errors)
     for e in errors:
         print("config error:", e)
     print("config: OK" if not errors else f"config: {len(errors)} error(s)")

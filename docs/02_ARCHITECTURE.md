@@ -78,6 +78,8 @@ The active T-0317 environment is `scripts/game/world_environment.gd`, built from
 
 Only infinite atmosphere uses a camera-attached sky quad (`world_sky.gdshader`), with the selected daytime or golden-hour palette and optional natural sunset sun. Actual cloud meshes occupy world altitude bands; only offscreen pool slots recycle, deterministically, preserving visible cloud identity. Independent 3D boats, traffic, birds, flags, steam, ice and fountain droplets use the explicit pause-aware clock. Water is a real horizontal mesh with an explicit-clock shader; geometry/depth naturally occludes it at shores and bridges. Reduced Motion freezes ambient animation while the essential gameplay camera still follows the tower.
 
+T-0318 extends this renderer with `atmosphere_state.gd` (private visual RNG and reversible altitude sampling) and `atmosphere_view.gd` (world-anchored planets/cyclone geometry, infinite weather volume and sky uniforms), configured by `atmosphere.json`. One cosmetic weather choice lasts a round; clouds/weather fade out through upper atmosphere into stars and planets. The volume follows the camera but includes altitude coordinates, while planets/cyclones stay outside its hierarchy. All animation shares the explicit presentation clock; Reduced Motion also suppresses lightning. No rules, physics, input or save dependencies are introduced. See `art/WEATHER_AND_SPACE.md`.
+
 Static scenery is batched by material; individual landmark anchors support projection/ascent checks. There are no physics bodies or scoring changes. See ADR-0007 and `art/WORLD_ENVIRONMENTS.md`. Existing module meshes and the responsive HUD remain the T-0314 implementation. The simple 2D debug renderer remains available through `feel.json`.
 
 

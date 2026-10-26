@@ -10,6 +10,8 @@ const LowPoly := preload("res://scripts/game/low_poly.gd")
 const Kit := preload("res://scripts/game/building_kit.gd")
 const BackgroundMotion := preload("res://scripts/game/background_motion.gd")
 const WorldScenery := preload("res://scripts/game/world_environment.gd")
+const Atmosphere := preload("res://scripts/game/atmosphere_view.gd")
+var atmosphere: Node3D
 const ThemeKit := preload("res://scripts/game/theme_kit.gd")
 
 const PITCH_DEG := 6.0              # low street-level angle: little foreground (owner feedback, T-0309)
@@ -204,11 +206,19 @@ func _build_world_environment() -> void:
 	backdrop_mat.set_shader_parameter("sky_horizon", shared["sky_horizon"])
 	backdrop_mat.set_shader_parameter("sun_position", Vector2(shared["sun_position"][0], shared["sun_position"][1]))
 	backdrop_mat.set_shader_parameter("sun_radius", shared["sun_radius"])
+	atmosphere=Atmosphere.new()
+	add_child(atmosphere)
+	atmosphere.setup(GameConfig.table("atmosphere"),camera,backdrop_mat)
+	var weather: Dictionary=atmosphere.state.weather
+	backdrop_mat.set_shader_parameter("natural_sun",weather["sun"] or (profile["sun"] and weather["id"] in ["clear","windy"]))
+	world_environment.weather=weather
 
 
 func _update_background(delta: float) -> void:
+	world_environment.cloud_amount=float(atmosphere.state.sample(game.view_y)["weather"])
 	world_environment.update(delta, game.view_y, game.paused or get_tree().paused, game.reduced_motion)
 	backdrop_mat.set_shader_parameter("altitude", game.view_y)
+	atmosphere.update(background_motion.render_time(),game.view_y,game.reduced_motion,get_viewport().get_visible_rect().size.aspect(),VIEW_UNITS)
 
 
 func _build_actors() -> void:
