@@ -114,7 +114,7 @@ passed to `UI.label`/`UI.button`. Preview: `godot --path game -- --lang=de`.
 
 `geometry`: `half_width` and `cornice_width` are square facade/ledge half-widths; `round_radius` and integer `round_sides` define round modules; `roof_height` defines completion crowns; integer `window_columns` controls glass grids; `yaw_degrees` turns architecture around the vertical axis; `rope_width` and `sling_height` define suspension geometry. Distances use block-width units. Storey height always comes from `tower_rules.block.height`.
 
-`background.texture` is a local `res://assets/backgrounds/*.png` resource; `reference` records its owner reference filename. `sun_style` documents `none` for daytime art or `natural_gold` for v003/v009/v010 sunset art. This metadata never adds another sun to the image. `lighting` defines `key_color`, `ambient_color`, `rim_color` hex colors; nonnegative `key_energy`, `ambient_energy`, `rim_energy`, `window_glow`; and nonzero three-number `key_position`/`rim_position` direction vectors for directional lights. Lighting remains fixed to the reference as camera height changes.
+T-0317 keeps `background.texture` as an archived reference, not a runtime scenic panel. The active world layout is `environment_world.json`. The reference texture is a local `res://assets/backgrounds/*.png` resource; `reference` records its owner reference filename. `sun_style` documents `none` for daytime art or `natural_gold` for v003/v009/v010 sunset art. This metadata never adds another sun to the image. `lighting` defines `key_color`, `ambient_color`, `rim_color` hex colors; nonnegative `key_energy`, `ambient_energy`, `rim_energy`, `window_glow`; and nonzero three-number `key_position`/`rim_position` direction vectors for directional lights. Lighting remains fixed to the reference as camera height changes.
 
 `backdrop.overscan` (1..1.1) prevents edge seams. `backdrop.distance` places the camera-parented quad inside the camera's far plane. Background texture dimensions and viewport aspect determine cover cropping without distortion, anchored at bottom centre.
 
@@ -137,3 +137,20 @@ All dimensions are logical canvas pixels: `margin`, `heart_pixel`, `heart_spacin
 - `actors[]`: `kind` is birds/sailboat/ferry/floe/car/steam/mist/fountain/flag/beacon/pollen; `start`/`end` are two-number UV route endpoints (x may extend -0.2..1.2 for offscreen entry); `size` is a positive vector-art scale (fraction of canvas width for ordinary actors, multiplier of shared plume dimensions for steam/mist); `period` is loop duration in seconds; `phase` is 0..1; `color` is hex RGB. Static emitters use matching start/end; their contents still animate. No actor participates in collisions, population or scores.
 
 Pause freezes elapsed time and depth. Reduced Motion retains a stationary time-zero composition and resumes the retained clock when disabled. Shader uniforms use this explicit clock, never global `TIME`.
+
+
+## `environment_world.json` (active presentation)
+
+Each `environments.v001`..`v010` defines `scenery`, `sky_top`, `sky_bottom`, natural sunset `sun` boolean, named RGB `colors`, `water` layout (`river`/`sea`), `patches`, `features` and `actors`. The game does not sample a complete reference painting as a background.
+
+- `features[]`: original mesh `kind`, world-unit `position` and `size` vectors, and `rotation` about Y in degrees. Kinds include manor, office, palace, pagoda, fort, prison/watchtower, igloo, cottage/lighthouse, refinery/tank/stack/crane, bridge, terrain, tree and garden details. Features remain at these coordinates at every tower height.
+- `patches[]`: named `material`, world-space box `lo`/`hi` bounds for plazas, paths, roads and markings. These use the same fixed-world rule.
+- `actors[]`: `kind`, world-unit route `start`/`end`, positive `size`, loop `period` in seconds and initial `phase` (0..1). Supported kinds: birds, car, sailboat, ferry, floe, flag, fountain, steam, beacon. Routes and emitters never enter game rules.
+
+`shared` world geometry: `ground_bounds`/`river_bounds` are six-number min/max XYZ boxes; `water_size` is XZ plane size, `water_center` its XYZ position; `foundation_size` and `foundation_y` set the build pad. `mesh_sides` controls radial topology. Artistic normalized model vertices/fractions are in the kit.
+
+`shared` sky/clouds: `cloud_gap` is vertical world-unit band spacing; integer `cloud_bands` and `clouds_per_band` bound the pool; `cloud_width` is horizontal wrap span; `cloud_depth`, `cloud_projection_bias` and `cloud_depth_step` compose the orthographic distance layers; `cloud_size` is XYZ model scale; `cloud_speed` is horizontal world units/second. `sky_height_range` and `sky_horizon` shape the infinite atmosphere gradient. `sun_position` is viewport UV and `sun_radius` its normalized radius, active only for the three natural sunset themes.
+
+`shared` ambient motion: `water_wave_amplitude`, `water_wave_speed`, `water_glint`; `boat_bob`, `boat_bob_speed`, `boat_roll_amplitude`; `bird_flap_speed`, `bird_roll_amplitude`; `steam_rise`, `steam_drift`, `steam_puffs`, `steam_radius`, `steam_wobble`; `fountain_drops`, `fountain_height`; `flag_speed`, `flag_amplitude`. Distances are world units, rates are phase/second; mesh-scaled particle counts/sizes are bounded by their emitter. All shader animation uses the explicit paused scene clock.
+
+Camera height never changes the position of ground/landmarks. Reduced Motion disables ambient animation, while ordinary gameplay camera ascent/descent remains spatially correct. Old `background_motion.json` describes the retired plate experiment and is retained alongside the archived art for reference.

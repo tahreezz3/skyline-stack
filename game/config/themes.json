@@ -1,5 +1,5 @@
 {
-  "_doc": "Presentation only. Theme backgrounds are independent generated environment artwork based on owner references; never baked tower/crane/HUD. Lighting stays faithful to each reference at all heights. See docs/art/BACKGROUND_REVISION.md.",
+  "_doc": "Presentation only. Active surroundings are world-space geometry configured in environment_world.json. Background texture paths retain the prior generated artwork as archived references; never baked tower/crane/HUD. Lighting stays faithful to each reference at all heights. See docs/art/BACKGROUND_REVISION.md.",
   "default": "v001",
   "geometry": {
     "half_width": 0.33,

@@ -62,18 +62,18 @@ func _run() -> void:
 		await _frame()
 		var before: float=view.background_motion.elapsed
 		var fixed_depth: Vector2=view.background_motion.depth
-		var actor_first := PackedByteArray()
+		var actor_first: Array = view.world_environment.actor_signature()
 		var first := PackedByteArray()
 		if not screenshot_dir.is_empty():
 			first=_pixels()
-			actor_first=view.actor_viewport.get_texture().get_image().get_data()
+			actor_first=view.world_environment.actor_signature()
 		view.sync(4.0)
 		await _frame()
 		check(view.background_motion.depth==fixed_depth,"motion is independent of camera movement")
 		check(is_equal_approx(view.background_motion.elapsed,before+4.0),"live clock advances for "+theme["id"])
-		check(is_equal_approx(view.background_actors.seconds,view.background_motion.render_time()),"independent actors use the same paused clock")
+		check(view.world_environment.actors.size()>0,"world has independent moving actors")
 		if not screenshot_dir.is_empty():
-			check(actor_first!=view.actor_viewport.get_texture().get_image().get_data(),"independent actor layer animates for "+theme["id"])
+			check(actor_first!=view.world_environment.actor_signature(),"independent world actors animate for "+theme["id"])
 			check(first!=_pixels(),"rendered clouds/water/actors visibly change for "+theme["id"])
 			_capture(theme["id"]+"_live")
 		# Exercise the actual pause flow, then call renderer sync defensively while paused.

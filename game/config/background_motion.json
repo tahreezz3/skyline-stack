@@ -1,5 +1,5 @@
 {
-  "_doc": "Presentation only. Coordinates normalized to each environment artwork. Polygons mask moving sky/water away from architecture; scene actors are independent vector art. No shader TIME; pause and reduced motion use an explicit clock.",
+  "_doc": "Legacy scenic-plate prototype retained for reference; active scenery uses environment_world.json. Presentation only. Coordinates normalized to each environment artwork. Polygons mask moving sky/water away from architecture; scene actors are independent vector art. No shader TIME; pause and reduced motion use an explicit clock.",
   "shared": {
     "canvas_size": [720, 1280],
     "mask_scale": 0.5,

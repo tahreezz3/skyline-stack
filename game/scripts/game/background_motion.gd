@@ -19,6 +19,9 @@ func advance(delta: float, is_paused: bool, reduced_motion: bool, camera_positio
 		depth = Vector2.ZERO
 		return
 	elapsed += maxf(delta, 0.0)
+	if not config.has("parallax"):
+		depth = Vector2.ZERO
+		return
 	var p: Dictionary = config["parallax"]
 	var target := Vector2(
 		clampf(camera_position.x * float(p["x_per_unit"]), -float(p["max_x"]), float(p["max_x"])),

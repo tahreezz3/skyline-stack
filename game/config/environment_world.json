@@ -1,0 +1,2773 @@
+{
+  "_doc": "World-space environment. Geometry is never parented to the camera or translated with its height. Positions/sizes are world units; only cloud bands are recycled outside the visible altitude range. Images from the prior version are references only.",
+  "shared": {
+    "cloud_gap": 5.0,
+    "cloud_bands": 4,
+    "clouds_per_band": 3,
+    "cloud_depth": -65.0,
+    "cloud_width": 8.0,
+    "cloud_speed": 0.035,
+    "cloud_size": [1, 0.9, 0.65],
+    "cloud_projection_bias": -7.2,
+    "water_size": [40, 32],
+    "water_center": [0, -0.13, -16],
+    "water_wave_amplitude": 0.018,
+    "water_wave_speed": 1.1,
+    "water_glint": 0.055,
+    "ground_bounds": [
+      -15,
+      -0.24,
+      -33,
+      15,
+      -0.17,
+      5
+    ],
+    "river_bounds": [
+      -15,
+      -0.16,
+      -28,
+      15,
+      -0.14,
+      -15
+    ],
+    "foundation_size": [1.8, 0.08, 1.8],
+    "foundation_y": -0.08,
+    "boat_bob": 0.018,
+    "boat_bob_speed": 1.2,
+    "steam_rise": 1.1,
+    "steam_drift": 0.28,
+    "steam_puffs": 7,
+    "steam_radius": 0.09,
+    "bird_flap_speed": 5.0,
+    "fountain_drops": 12,
+    "fountain_height": 0.45,
+    "flag_speed": 4.0,
+    "flag_amplitude": 0.035,
+    "sky_height_range": 30.0,
+    "sun_position": [0.84, 0.3],
+    "sun_radius": 0.065,
+    "mesh_sides": 12,
+    "sky_horizon": 0.44,
+    "cloud_depth_step": 3.0,
+    "boat_roll_amplitude": 0.025,
+    "bird_roll_amplitude": 0.15,
+    "steam_wobble": 0.06
+  },
+  "environments": {
+    "v001": {
+      "scenery": "garden",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#6cbb49",
+        "leaf": "#41944a",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#d6c9ab",
+        "path": "#f0dfb6",
+        "water": "#36b6dc",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#ecdfbd",
+        "trim": "#fff3d5",
+        "glass": "#458eb4",
+        "roof": "#35658b",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#78ac9c"
+      },
+      "features": [
+        {
+          "kind": "manor",
+          "position": [-1.75, 0, -11],
+          "size": [1.5, 2.0, 2],
+          "rotation": 0
+        },
+        {
+          "kind": "bridge",
+          "position": [0, 0, -24],
+          "size": [4.8, 0.7, 2.4],
+          "rotation": 0
+        },
+        {
+          "kind": "fountain",
+          "position": [1.45, 0, -7],
+          "size": [0.65, 0.65, 0.65],
+          "rotation": 0
+        },
+        {
+          "kind": "hedge",
+          "position": [-1.4, 0, -3],
+          "size": [0.5, 0.25, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "flowers",
+          "position": [-1.4, 0.25, -3],
+          "size": [0.48, 0.12, 1.6],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [-2.1, 0, -3],
+          "size": [0.35, 1.0, 0.35],
+          "rotation": 0
+        },
+        {
+          "kind": "hedge",
+          "position": [-1.4, 0, -6],
+          "size": [0.5, 0.25, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "flowers",
+          "position": [-1.4, 0.25, -6],
+          "size": [0.48, 0.12, 1.6],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [-2.1, 0, -6],
+          "size": [0.35, 1.0, 0.35],
+          "rotation": 0
+        },
+        {
+          "kind": "hedge",
+          "position": [-1.4, 0, -9],
+          "size": [0.5, 0.25, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "flowers",
+          "position": [-1.4, 0.25, -9],
+          "size": [0.48, 0.12, 1.6],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [-2.1, 0, -9],
+          "size": [0.35, 1.0, 0.35],
+          "rotation": 0
+        },
+        {
+          "kind": "hedge",
+          "position": [1.4, 0, -3],
+          "size": [0.5, 0.25, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "flowers",
+          "position": [1.4, 0.25, -3],
+          "size": [0.48, 0.12, 1.6],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [2.1, 0, -3],
+          "size": [0.35, 1.0, 0.35],
+          "rotation": 0
+        },
+        {
+          "kind": "hedge",
+          "position": [1.4, 0, -6],
+          "size": [0.5, 0.25, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "flowers",
+          "position": [1.4, 0.25, -6],
+          "size": [0.48, 0.12, 1.6],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [2.1, 0, -6],
+          "size": [0.35, 1.0, 0.35],
+          "rotation": 0
+        },
+        {
+          "kind": "hedge",
+          "position": [1.4, 0, -9],
+          "size": [0.5, 0.25, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "flowers",
+          "position": [1.4, 0.25, -9],
+          "size": [0.48, 0.12, 1.6],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [2.1, 0, -9],
+          "size": [0.35, 1.0, 0.35],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -4.0],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -4.0],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -7.1],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -7.1],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -10.2],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -10.2],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -13.3],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -13.3],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -16.4],
+          "size": [0.74, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -16.4],
+          "size": [0.5, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -19.5],
+          "size": [0.62, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -19.5],
+          "size": [0.74, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -22.6],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -22.6],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -25.7],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -25.7],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -28.8],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -28.8],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -31],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -31],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [-5.0, 0, -30.0],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [-3.65, 0, -29.3],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [-2.3, 0, -28.6],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [-0.9499999999999993, 0, -29.9],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [0.40000000000000036, 0, -29.2],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [1.75, 0, -28.5],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [3.1000000000000014, 0, -29.799999999999997],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "hill",
+          "position": [4.450000000000001, 0, -29.099999999999998],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "fountain",
+          "start": [1.45, 0.18, -7],
+          "end": [1.45, 0.18, -7],
+          "size": 0.6,
+          "period": 1.5,
+          "phase": 0
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": [
+        {
+          "material": "path",
+          "lo": [-0.9, -0.17, -13],
+          "hi": [0.9, -0.155, 2]
+        },
+        {
+          "material": "path",
+          "lo": [-5, -0.17, -3.35],
+          "hi": [5, -0.155, -2.65]
+        },
+        {
+          "material": "path",
+          "lo": [-5, -0.17, -7.35],
+          "hi": [5, -0.155, -6.65]
+        },
+        {
+          "material": "path",
+          "lo": [-5, -0.17, -11.35],
+          "hi": [5, -0.155, -10.65]
+        }
+      ]
+    },
+    "v002": {
+      "scenery": "skyline",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#79b86a",
+        "leaf": "#41944a",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#c2d1d0",
+        "path": "#d9e2dc",
+        "water": "#36b6dc",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#a4cbdc",
+        "trim": "#e9f4f2",
+        "glass": "#458eb4",
+        "roof": "#597c92",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#8aafc3"
+      },
+      "features": [
+        {
+          "kind": "office",
+          "position": [-0.95, 0, -12.0],
+          "size": [0.55, 2.6, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [1.71, 0, -12.0],
+          "size": [0.7100000000000001, 1.4, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-2.4699999999999998, 0, -12.0],
+          "size": [0.55, 3.8, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [0.95, 0, -17.1],
+          "size": [0.7100000000000001, 2.1, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-1.71, 0, -17.1],
+          "size": [0.55, 3.1, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [2.4699999999999998, 0, -17.1],
+          "size": [0.7100000000000001, 1.6, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-0.95, 0, -22.2],
+          "size": [0.55, 2.6, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [1.71, 0, -22.2],
+          "size": [0.7100000000000001, 1.4, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-2.4699999999999998, 0, -22.2],
+          "size": [0.55, 3.8, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [0.95, 0, -27.299999999999997],
+          "size": [0.7100000000000001, 2.1, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-1.71, 0, -27.299999999999997],
+          "size": [0.55, 3.1, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [2.4699999999999998, 0, -27.299999999999997],
+          "size": [0.7100000000000001, 1.6, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-0.95, 0, -31],
+          "size": [0.55, 2.6, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [1.71, 0, -31],
+          "size": [0.7100000000000001, 1.4, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "cable_bridge",
+          "position": [0, 0, -16],
+          "size": [5, 1.3, 2.0],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "ferry",
+          "start": [-1.6, -0.06, -19],
+          "end": [1.7, -0.06, -19],
+          "size": 0.3,
+          "period": 35,
+          "phase": 0.4
+        },
+        {
+          "kind": "car",
+          "start": [-3, 0.57, -16],
+          "end": [3, 0.57, -16],
+          "size": 0.18,
+          "period": 15,
+          "phase": 0.2
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": [
+        {
+          "material": "path",
+          "lo": [-7, -0.17, -11],
+          "hi": [7, -0.15, 4]
+        },
+        {
+          "material": "dark",
+          "lo": [-7, -0.149, -6],
+          "hi": [7, -0.14, -3]
+        },
+        {
+          "material": "white",
+          "lo": [-7, -0.138, -4.55],
+          "hi": [-6.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-6, -0.138, -4.55],
+          "hi": [-5.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-5, -0.138, -4.55],
+          "hi": [-4.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-4, -0.138, -4.55],
+          "hi": [-3.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-3, -0.138, -4.55],
+          "hi": [-2.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-2, -0.138, -4.55],
+          "hi": [-1.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-1, -0.138, -4.55],
+          "hi": [-0.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [0, -0.138, -4.55],
+          "hi": [0.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [1, -0.138, -4.55],
+          "hi": [1.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [2, -0.138, -4.55],
+          "hi": [2.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [3, -0.138, -4.55],
+          "hi": [3.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [4, -0.138, -4.55],
+          "hi": [4.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [5, -0.138, -4.55],
+          "hi": [5.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [6, -0.138, -4.55],
+          "hi": [6.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [7, -0.138, -4.55],
+          "hi": [7.5, -0.136, -4.5]
+        }
+      ]
+    },
+    "v003": {
+      "scenery": "river",
+      "sky_top": "#768dbb",
+      "sky_bottom": "#ffbb71",
+      "sun": true,
+      "colors": {
+        "grass": "#689751",
+        "leaf": "#6c8d4b",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#9b958a",
+        "path": "#f0dfb6",
+        "water": "#caa788",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#b94734",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#d99a69",
+        "trim": "#eec590",
+        "glass": "#458eb4",
+        "roof": "#444c56",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#a49ca6"
+      },
+      "features": [
+        {
+          "kind": "karst",
+          "position": [-1.8, 0, -16],
+          "size": [1.2, 2.1, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "pagoda",
+          "position": [-1.8, 1.722, -16],
+          "size": [0.6, 0.95, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [1.9, 0, -27],
+          "size": [1.2, 2.8, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "pagoda",
+          "position": [1.9, 2.296, -27],
+          "size": [0.6, 0.95, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [-0.8, 0, -31],
+          "size": [1.2, 3.5, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "pagoda",
+          "position": [-0.8, 2.8699999999999997, -31],
+          "size": [0.6, 0.95, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [2.6, 0, -31],
+          "size": [1.2, 2.0, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "pagoda",
+          "position": [2.6, 1.64, -31],
+          "size": [0.6, 0.95, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "bridge",
+          "position": [0, 0, -23],
+          "size": [4, 0.85, 2.4],
+          "rotation": 0
+        },
+        {
+          "kind": "pagoda",
+          "position": [-1.7, 0, -6],
+          "size": [0.8, 1.4, 0.9],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -4.0],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -4.0],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -7.1],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -7.1],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -10.2],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -10.2],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -13.3],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -13.3],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -16.4],
+          "size": [0.74, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -16.4],
+          "size": [0.5, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -19.5],
+          "size": [0.62, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -19.5],
+          "size": [0.74, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -22.6],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -22.6],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -25.7],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -25.7],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -28.8],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -28.8],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -31],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -31],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [-5.0, 0, -31],
+          "size": [2.5, 0.8, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [-3.65, 0, -31],
+          "size": [2.5, 1.3, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [-2.3, 0, -31],
+          "size": [2.5, 1.8, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [-0.9499999999999993, 0, -31],
+          "size": [2.5, 0.8, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [0.40000000000000036, 0, -31],
+          "size": [2.5, 1.3, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [1.75, 0, -31],
+          "size": [2.5, 1.8, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [3.1000000000000014, 0, -31],
+          "size": [2.5, 0.8, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "karst",
+          "position": [4.450000000000001, 0, -31],
+          "size": [2.5, 1.3, 3],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "sailboat",
+          "start": [0.8, -0.06, -18],
+          "end": [2.6, -0.06, -18],
+          "size": 0.32,
+          "period": 48,
+          "phase": 0.3
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": []
+    },
+    "v004": {
+      "scenery": "courtyard",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#6cbb49",
+        "leaf": "#41944a",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#e9d8b8",
+        "path": "#f0dfb6",
+        "water": "#36c5e0",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#f7e8c7",
+        "trim": "#ffe1a0",
+        "glass": "#458eb4",
+        "roof": "#256b9b",
+        "dark": "#4b5969",
+        "flag": "#bd3c49",
+        "mountain": "#8aafc3"
+      },
+      "features": [
+        {
+          "kind": "palace",
+          "position": [1.7, 0, -24],
+          "size": [2, 2.5, 2.3],
+          "rotation": 0
+        },
+        {
+          "kind": "palace",
+          "position": [-1.8, 0, -12],
+          "size": [1.2, 1.8, 1.7],
+          "rotation": 0
+        },
+        {
+          "kind": "bridge",
+          "position": [0, 0, -18],
+          "size": [4.7, 0.9, 2.2],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [-1.6, 0, -3],
+          "size": [0.33, 1.05, 0.4],
+          "rotation": 0
+        },
+        {
+          "kind": "column",
+          "position": [-1.0, 0, -3],
+          "size": [0.2, 0.55, 0.22],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [-1.6, 0, -6],
+          "size": [0.33, 1.05, 0.4],
+          "rotation": 0
+        },
+        {
+          "kind": "column",
+          "position": [-1.0, 0, -6],
+          "size": [0.2, 0.55, 0.22],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [-1.6, 0, -9],
+          "size": [0.33, 1.05, 0.4],
+          "rotation": 0
+        },
+        {
+          "kind": "column",
+          "position": [-1.0, 0, -9],
+          "size": [0.2, 0.55, 0.22],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [1.6, 0, -3],
+          "size": [0.33, 1.05, 0.4],
+          "rotation": 0
+        },
+        {
+          "kind": "column",
+          "position": [1.0, 0, -3],
+          "size": [0.2, 0.55, 0.22],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [1.6, 0, -6],
+          "size": [0.33, 1.05, 0.4],
+          "rotation": 0
+        },
+        {
+          "kind": "column",
+          "position": [1.0, 0, -6],
+          "size": [0.2, 0.55, 0.22],
+          "rotation": 0
+        },
+        {
+          "kind": "cypress",
+          "position": [1.6, 0, -9],
+          "size": [0.33, 1.05, 0.4],
+          "rotation": 0
+        },
+        {
+          "kind": "column",
+          "position": [1.0, 0, -9],
+          "size": [0.2, 0.55, 0.22],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -4.0],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -4.0],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -7.1],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -7.1],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -10.2],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -10.2],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -13.3],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -13.3],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -16.4],
+          "size": [0.74, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -16.4],
+          "size": [0.5, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -19.5],
+          "size": [0.62, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -19.5],
+          "size": [0.74, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -22.6],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -22.6],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -25.7],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -25.7],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -28.8],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -28.8],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -31],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -31],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-5.0, 0, -30.0],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-3.65, 0, -29.3],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-2.3, 0, -28.6],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-0.9499999999999993, 0, -29.9],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [0.40000000000000036, 0, -29.2],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [1.75, 0, -28.5],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [3.1000000000000014, 0, -29.799999999999997],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [4.450000000000001, 0, -29.099999999999998],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "flag",
+          "start": [-1.1, 1, -10],
+          "end": [-1.1, 1, -10],
+          "size": 0.35,
+          "period": 3,
+          "phase": 0
+        },
+        {
+          "kind": "flag",
+          "start": [1.3, 1.6, -23],
+          "end": [1.3, 1.6, -23],
+          "size": 0.4,
+          "period": 3,
+          "phase": 0.4
+        },
+        {
+          "kind": "ferry",
+          "start": [-1.8, -0.06, -21],
+          "end": [1.8, -0.06, -21],
+          "size": 0.25,
+          "period": 40,
+          "phase": 0.6
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": [
+        {
+          "material": "path",
+          "lo": [-0.9, -0.17, -13],
+          "hi": [0.9, -0.155, 2]
+        },
+        {
+          "material": "path",
+          "lo": [-5, -0.17, -3.35],
+          "hi": [5, -0.155, -2.65]
+        },
+        {
+          "material": "path",
+          "lo": [-5, -0.17, -7.35],
+          "hi": [5, -0.155, -6.65]
+        },
+        {
+          "material": "path",
+          "lo": [-5, -0.17, -11.35],
+          "hi": [5, -0.155, -10.65]
+        }
+      ]
+    },
+    "v005": {
+      "scenery": "fortress",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#6cbb49",
+        "leaf": "#41944a",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#aaa991",
+        "path": "#f0dfb6",
+        "water": "#36b6dc",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#d5cfb5",
+        "trim": "#f6e3ac",
+        "glass": "#458eb4",
+        "roof": "#2e6a9c",
+        "dark": "#4b5969",
+        "flag": "#316a9d",
+        "mountain": "#8aafc3"
+      },
+      "features": [
+        {
+          "kind": "cliff",
+          "position": [1.8, -0.1, -25],
+          "size": [2.1, 1.3, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "fort",
+          "position": [1.8, 0.784, -25],
+          "size": [1.6, 1.9, 1.8],
+          "rotation": 0
+        },
+        {
+          "kind": "bridge",
+          "position": [0, 0, -20],
+          "size": [5, 0.8, 2],
+          "rotation": 0
+        },
+        {
+          "kind": "fort",
+          "position": [-1.8, 0, -9],
+          "size": [0.8, 1.6, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "wall",
+          "position": [0, 0, -5],
+          "size": [5, 0.5, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -4.0],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -4.0],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -7.1],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -7.1],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -10.2],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -10.2],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -13.3],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -13.3],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -16.4],
+          "size": [0.74, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -16.4],
+          "size": [0.5, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -19.5],
+          "size": [0.62, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -19.5],
+          "size": [0.74, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -22.6],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -22.6],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -25.7],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -25.7],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -28.8],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -28.8],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -31],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -31],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-5.0, 0, -30.0],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-3.65, 0, -29.3],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-2.3, 0, -28.6],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-0.9499999999999993, 0, -29.9],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [0.40000000000000036, 0, -29.2],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [1.75, 0, -28.5],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [3.1000000000000014, 0, -29.799999999999997],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [4.450000000000001, 0, -29.099999999999998],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "flag",
+          "start": [-1.8, 1.5, -9],
+          "end": [-1.8, 1.5, -9],
+          "size": 0.3,
+          "period": 3,
+          "phase": 0
+        },
+        {
+          "kind": "flag",
+          "start": [1.8, 2.8, -25],
+          "end": [1.8, 2.8, -25],
+          "size": 0.35,
+          "period": 3,
+          "phase": 0.5
+        },
+        {
+          "kind": "ferry",
+          "start": [-1.2, -0.06, -17],
+          "end": [1.6, -0.06, -17],
+          "size": 0.25,
+          "period": 55,
+          "phase": 0.6
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": []
+    },
+    "v006": {
+      "scenery": "arctic",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#e5f8ff",
+        "leaf": "#d5eff9",
+        "leaf_dark": "#9fcae0",
+        "trunk": "#806044",
+        "stone": "#9ac7de",
+        "path": "#f0fbff",
+        "water": "#4abde5",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#e3f6fd",
+        "trim": "#ffffff",
+        "glass": "#458eb4",
+        "roof": "#a5dfef",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#91cbe4"
+      },
+      "features": [
+        {
+          "kind": "snow_island",
+          "position": [-1.6, -0.15, -6],
+          "size": [1.9, 0.35, 5],
+          "rotation": 0
+        },
+        {
+          "kind": "igloo",
+          "position": [-1.6, 0.1, -6],
+          "size": [1.0, 0.8, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "pier",
+          "position": [-2.0, 0, -3],
+          "size": [0.5, 0.1, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "snow_island",
+          "position": [1.7, -0.15, -12],
+          "size": [1.9, 0.35, 5],
+          "rotation": 0
+        },
+        {
+          "kind": "igloo",
+          "position": [1.7, 0.1, -12],
+          "size": [1.0, 0.8, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "pier",
+          "position": [1.2999999999999998, 0, -9],
+          "size": [0.5, 0.1, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "snow_island",
+          "position": [-2.1, -0.15, -25],
+          "size": [1.9, 0.35, 5],
+          "rotation": 0
+        },
+        {
+          "kind": "igloo",
+          "position": [-2.1, 0.1, -25],
+          "size": [1.0, 0.8, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "pier",
+          "position": [-2.5, 0, -22],
+          "size": [0.5, 0.1, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [1.0, -0.09, -10],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [-1.55, -0.09, -13],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [2.1, -0.09, -16],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [-1.0, -0.09, -19],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [1.55, -0.09, -22],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [-2.1, -0.09, -25],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [1.0, -0.09, -28],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "ice",
+          "position": [-1.55, -0.09, -31],
+          "size": [0.5, 0.18, 0.8],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-5.0, 0, -30.0],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-3.65, 0, -29.3],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-2.3, 0, -28.6],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-0.9499999999999993, 0, -29.9],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [0.40000000000000036, 0, -29.2],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [1.75, 0, -28.5],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [3.1000000000000014, 0, -29.799999999999997],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [4.450000000000001, 0, -29.099999999999998],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "pine",
+          "position": [-2.1500000000000004, 0.088, -6.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "pine",
+          "position": [-1.05, 0.088, -6.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "pine",
+          "position": [1.15, 0.088, -12.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "pine",
+          "position": [2.25, 0.088, -12.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "pine",
+          "position": [-2.6500000000000004, 0.088, -25.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "pine",
+          "position": [-1.55, 0.088, -25.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "floe",
+          "start": [-1.4, -0.08, -17],
+          "end": [1.6, -0.08, -17],
+          "size": 0.45,
+          "period": 75,
+          "phase": 0.4
+        },
+        {
+          "kind": "steam",
+          "start": [-1.6, 0.65, -6],
+          "end": [-1.6, 0.65, -6],
+          "size": 0.5,
+          "period": 5,
+          "phase": 0
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "sea",
+      "patches": []
+    },
+    "v007": {
+      "scenery": "compound",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#92b474",
+        "leaf": "#41944a",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#b4b8ab",
+        "path": "#ced3ca",
+        "water": "#4aafd7",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#bac6c8",
+        "trim": "#eef0df",
+        "glass": "#458eb4",
+        "roof": "#637883",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#8aafc3"
+      },
+      "features": [
+        {
+          "kind": "prison",
+          "position": [-1.65, 0, -10],
+          "size": [1.3, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "prison",
+          "position": [1.7, 0, -19],
+          "size": [1.5, 1.0, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "fence",
+          "position": [0, 0, -8],
+          "size": [5, 0.8, 0.12],
+          "rotation": 0
+        },
+        {
+          "kind": "watchtower",
+          "position": [-2, 0, -6],
+          "size": [0.45, 1.35, 0.55],
+          "rotation": 0
+        },
+        {
+          "kind": "watchtower",
+          "position": [2, 0, -13],
+          "size": [0.45, 1.35, 0.55],
+          "rotation": 0
+        },
+        {
+          "kind": "watchtower",
+          "position": [-1.6, 0, -28],
+          "size": [0.45, 1.35, 0.55],
+          "rotation": 0
+        },
+        {
+          "kind": "watchtower",
+          "position": [1.8, 0, -29],
+          "size": [0.45, 1.35, 0.55],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -4.0],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -4.0],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -7.1],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -7.1],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -10.2],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -10.2],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -13.3],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -13.3],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -16.4],
+          "size": [0.74, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -16.4],
+          "size": [0.5, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -19.5],
+          "size": [0.62, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -19.5],
+          "size": [0.74, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -22.6],
+          "size": [0.5, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -22.6],
+          "size": [0.62, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -25.7],
+          "size": [0.74, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -25.7],
+          "size": [0.5, 1.08, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.25, 0, -28.8],
+          "size": [0.62, 0.6, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.95, 0, -28.8],
+          "size": [0.74, 0.76, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.65, 0, -31],
+          "size": [0.5, 0.9199999999999999, 0.7],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-3.3499999999999996, 0, -31],
+          "size": [0.62, 1.08, 0.7],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "car",
+          "start": [-1.5, 0.02, -5],
+          "end": [2, 0.02, -5],
+          "size": 0.23,
+          "period": 20,
+          "phase": 0.2
+        },
+        {
+          "kind": "ferry",
+          "start": [-2, -0.06, -24],
+          "end": [2, -0.06, -24],
+          "size": 0.22,
+          "period": 55,
+          "phase": 0.3
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": [
+        {
+          "material": "path",
+          "lo": [-7, -0.17, -11],
+          "hi": [7, -0.15, 4]
+        },
+        {
+          "material": "dark",
+          "lo": [-7, -0.149, -6],
+          "hi": [7, -0.14, -3]
+        },
+        {
+          "material": "white",
+          "lo": [-7, -0.138, -4.55],
+          "hi": [-6.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-6, -0.138, -4.55],
+          "hi": [-5.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-5, -0.138, -4.55],
+          "hi": [-4.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-4, -0.138, -4.55],
+          "hi": [-3.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-3, -0.138, -4.55],
+          "hi": [-2.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-2, -0.138, -4.55],
+          "hi": [-1.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-1, -0.138, -4.55],
+          "hi": [-0.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [0, -0.138, -4.55],
+          "hi": [0.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [1, -0.138, -4.55],
+          "hi": [1.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [2, -0.138, -4.55],
+          "hi": [2.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [3, -0.138, -4.55],
+          "hi": [3.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [4, -0.138, -4.55],
+          "hi": [4.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [5, -0.138, -4.55],
+          "hi": [5.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [6, -0.138, -4.55],
+          "hi": [6.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [7, -0.138, -4.55],
+          "hi": [7.5, -0.136, -4.5]
+        }
+      ]
+    },
+    "v008": {
+      "scenery": "campus",
+      "sky_top": "#3e9fe9",
+      "sky_bottom": "#bfeaff",
+      "sun": false,
+      "colors": {
+        "grass": "#79b86a",
+        "leaf": "#41944a",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#c2d1d0",
+        "path": "#d9e2dc",
+        "water": "#36b6dc",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#a4cbdc",
+        "trim": "#e9f4f2",
+        "glass": "#458eb4",
+        "roof": "#597c92",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#8aafc3"
+      },
+      "features": [
+        {
+          "kind": "office",
+          "position": [-0.95, 0, -12.0],
+          "size": [0.55, 2.132, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [1.71, 0, -12.0],
+          "size": [0.7100000000000001, 1.148, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-2.4699999999999998, 0, -12.0],
+          "size": [0.55, 3.1159999999999997, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [0.95, 0, -17.1],
+          "size": [0.7100000000000001, 1.722, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-1.71, 0, -17.1],
+          "size": [0.55, 2.542, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [2.4699999999999998, 0, -17.1],
+          "size": [0.7100000000000001, 1.312, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-0.95, 0, -22.2],
+          "size": [0.55, 2.132, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [1.71, 0, -22.2],
+          "size": [0.7100000000000001, 1.148, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-2.4699999999999998, 0, -22.2],
+          "size": [0.55, 3.1159999999999997, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [0.95, 0, -27.299999999999997],
+          "size": [0.7100000000000001, 1.722, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-1.71, 0, -27.299999999999997],
+          "size": [0.55, 2.542, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [2.4699999999999998, 0, -27.299999999999997],
+          "size": [0.7100000000000001, 1.312, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "office",
+          "position": [-0.95, 0, -31],
+          "size": [0.55, 2.132, 0.8],
+          "rotation": 14
+        },
+        {
+          "kind": "office",
+          "position": [1.71, 0, -31],
+          "size": [0.7100000000000001, 1.148, 0.8],
+          "rotation": -12
+        },
+        {
+          "kind": "cable_bridge",
+          "position": [0, 0, -16],
+          "size": [5, 1.3, 2.0],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "ferry",
+          "start": [-1.6, -0.06, -19],
+          "end": [1.7, -0.06, -19],
+          "size": 0.3,
+          "period": 35,
+          "phase": 0.4
+        },
+        {
+          "kind": "car",
+          "start": [-3, 0.57, -16],
+          "end": [3, 0.57, -16],
+          "size": 0.18,
+          "period": 15,
+          "phase": 0.2
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "river",
+      "patches": [
+        {
+          "material": "path",
+          "lo": [-7, -0.17, -11],
+          "hi": [7, -0.15, 4]
+        },
+        {
+          "material": "dark",
+          "lo": [-7, -0.149, -6],
+          "hi": [7, -0.14, -3]
+        },
+        {
+          "material": "white",
+          "lo": [-7, -0.138, -4.55],
+          "hi": [-6.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-6, -0.138, -4.55],
+          "hi": [-5.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-5, -0.138, -4.55],
+          "hi": [-4.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-4, -0.138, -4.55],
+          "hi": [-3.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-3, -0.138, -4.55],
+          "hi": [-2.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-2, -0.138, -4.55],
+          "hi": [-1.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [-1, -0.138, -4.55],
+          "hi": [-0.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [0, -0.138, -4.55],
+          "hi": [0.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [1, -0.138, -4.55],
+          "hi": [1.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [2, -0.138, -4.55],
+          "hi": [2.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [3, -0.138, -4.55],
+          "hi": [3.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [4, -0.138, -4.55],
+          "hi": [4.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [5, -0.138, -4.55],
+          "hi": [5.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [6, -0.138, -4.55],
+          "hi": [6.5, -0.136, -4.5]
+        },
+        {
+          "material": "white",
+          "lo": [7, -0.138, -4.55],
+          "hi": [7.5, -0.136, -4.5]
+        }
+      ]
+    },
+    "v009": {
+      "scenery": "harbor",
+      "sky_top": "#768dbb",
+      "sky_bottom": "#ffbb71",
+      "sun": true,
+      "colors": {
+        "grass": "#a2a586",
+        "leaf": "#6e8f62",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#9b9f94",
+        "path": "#b6ad95",
+        "water": "#c0a78c",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#859292",
+        "flower": "#ea7fa5",
+        "body": "#b5ada0",
+        "trim": "#d9ceaa",
+        "glass": "#458eb4",
+        "roof": "#646c6c",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#a49ca6"
+      },
+      "features": [
+        {
+          "kind": "refinery",
+          "position": [1.15, 0, -8.0],
+          "size": [0.8, 1.0, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [1.5, 0, -9.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [-1.7, 0, -8.0],
+          "size": [0.8, 1.35, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [-1.35, 0, -9.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [2.25, 0, -12.0],
+          "size": [0.8, 1.7, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [2.6, 0, -13.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [-1.15, 0, -12.0],
+          "size": [0.8, 1.0, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [-0.7999999999999999, 0, -13.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [1.7, 0, -16.0],
+          "size": [0.8, 1.35, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [2.05, 0, -17.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [-2.25, 0, -16.0],
+          "size": [0.8, 1.7, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [-1.9, 0, -17.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [1.15, 0, -20.0],
+          "size": [0.8, 1.0, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [1.5, 0, -21.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [-1.7, 0, -20.0],
+          "size": [0.8, 1.35, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [-1.35, 0, -21.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [2.25, 0, -24.0],
+          "size": [0.8, 1.7, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [2.6, 0, -25.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "refinery",
+          "position": [-1.15, 0, -24.0],
+          "size": [0.8, 1.0, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "tank",
+          "position": [-0.7999999999999999, 0, -25.5],
+          "size": [0.65, 0.8, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "stack",
+          "position": [-1.7, 0, -9],
+          "size": [0.25, 1.8, 0.25],
+          "rotation": 0
+        },
+        {
+          "kind": "stack",
+          "position": [-0.9, 0, -18],
+          "size": [0.25, 2.3, 0.25],
+          "rotation": 0
+        },
+        {
+          "kind": "stack",
+          "position": [1.7, 0, -25],
+          "size": [0.25, 1.7, 0.25],
+          "rotation": 0
+        },
+        {
+          "kind": "harbor_crane",
+          "position": [1.6, 0, -30],
+          "size": [1.3, 2.0, 1.2],
+          "rotation": 0
+        },
+        {
+          "kind": "pier",
+          "position": [0, 0, -28],
+          "size": [5, 0.2, 3],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "steam",
+          "start": [-1.7, 1.8, -9],
+          "end": [-1.7, 1.8, -9],
+          "size": 0.8,
+          "period": 7,
+          "phase": 0.2
+        },
+        {
+          "kind": "steam",
+          "start": [-0.9, 2.3, -18],
+          "end": [-0.9, 2.3, -18],
+          "size": 0.8,
+          "period": 7,
+          "phase": 0.2
+        },
+        {
+          "kind": "steam",
+          "start": [1.7, 1.7, -25],
+          "end": [1.7, 1.7, -25],
+          "size": 0.8,
+          "period": 7,
+          "phase": 0.2
+        },
+        {
+          "kind": "ferry",
+          "start": [-2, -0.06, -34],
+          "end": [2, -0.06, -34],
+          "size": 0.5,
+          "period": 45,
+          "phase": 0.6
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "sea",
+      "patches": [
+        {
+          "material": "path",
+          "lo": [-7, -0.17, -11],
+          "hi": [7, -0.15, 4]
+        },
+        {
+          "material": "stone",
+          "lo": [-7, -0.3, -26],
+          "hi": [7, -0.1, 4]
+        }
+      ]
+    },
+    "v010": {
+      "scenery": "coast",
+      "sky_top": "#768dbb",
+      "sky_bottom": "#ffbb71",
+      "sun": true,
+      "colors": {
+        "grass": "#73a94c",
+        "leaf": "#4e8543",
+        "leaf_dark": "#246b3e",
+        "trunk": "#806044",
+        "stone": "#a99c87",
+        "path": "#f0dfb6",
+        "water": "#5da6bb",
+        "ice": "#9cdef4",
+        "snow": "#effbff",
+        "white": "#fff2d6",
+        "blue": "#286b9b",
+        "red": "#be5144",
+        "gold": "#e9bd58",
+        "metal": "#82929a",
+        "flower": "#ea7fa5",
+        "body": "#f6e4c0",
+        "trim": "#fff4dd",
+        "glass": "#458eb4",
+        "roof": "#b84d41",
+        "dark": "#4b5969",
+        "flag": "#c43f42",
+        "mountain": "#a49ca6"
+      },
+      "features": [
+        {
+          "kind": "cliff",
+          "position": [-1.9, -0.2, -8],
+          "size": [2, 0.8, 4],
+          "rotation": 0
+        },
+        {
+          "kind": "cottage",
+          "position": [-1.9, 0.35999999999999993, -8],
+          "size": [0.8, 0.7, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "cliff",
+          "position": [1.9, -0.2, -23],
+          "size": [2, 1.2, 4],
+          "rotation": 0
+        },
+        {
+          "kind": "cottage",
+          "position": [1.9, 0.6399999999999999, -23],
+          "size": [0.8, 0.7, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "cliff",
+          "position": [-1.3, -0.2, -31],
+          "size": [2, 0.5, 4],
+          "rotation": 0
+        },
+        {
+          "kind": "cottage",
+          "position": [-1.3, 0.14999999999999997, -31],
+          "size": [0.8, 0.7, 1],
+          "rotation": 0
+        },
+        {
+          "kind": "lighthouse",
+          "position": [1.35, 0.616, -23],
+          "size": [0.45, 1.5, 0.6],
+          "rotation": 0
+        },
+        {
+          "kind": "pier",
+          "position": [1.1, 0, -9],
+          "size": [1.5, 0.15, 3],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-5.0, 0, -30.0],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-3.65, 0, -29.3],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-2.3, 0, -28.6],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [-0.9499999999999993, 0, -29.9],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [0.40000000000000036, 0, -29.2],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [1.75, 0, -28.5],
+          "size": [1.9, 0.9, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [3.1000000000000014, 0, -29.799999999999997],
+          "size": [1.9, 0.4, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "mountain",
+          "position": [4.450000000000001, 0, -29.099999999999998],
+          "size": [1.9, 0.65, 2.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-2.45, 0.34400000000000003, -8.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.3499999999999999, 0.34400000000000003, -8.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [1.3499999999999999, 0.6160000000000001, -23.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [2.45, 0.6160000000000001, -23.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-1.85, 0.14, -31.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        },
+        {
+          "kind": "tree",
+          "position": [-0.75, 0.14, -31.7],
+          "size": [0.5, 0.6, 0.5],
+          "rotation": 0
+        }
+      ],
+      "actors": [
+        {
+          "kind": "sailboat",
+          "start": [-1.3, -0.06, -18],
+          "end": [1.6, -0.06, -18],
+          "size": 0.38,
+          "period": 45,
+          "phase": 0.6
+        },
+        {
+          "kind": "beacon",
+          "start": [1.35, 2.05, -23],
+          "end": [1.35, 2.05, -23],
+          "size": 0.45,
+          "period": 7,
+          "phase": 0
+        },
+        {
+          "kind": "birds",
+          "start": [-4, 3.7, -15],
+          "end": [4, 4.2, -15],
+          "size": 0.15,
+          "period": 75,
+          "phase": 0.25
+        }
+      ],
+      "water": "sea",
+      "patches": []
+    }
+  }
+}

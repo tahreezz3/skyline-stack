@@ -48,3 +48,5 @@ Since then: the full game loop (menu, tower select, round, results, city map, se
 and saves, juice and placeholder audio, EN/ES/DE localisation, analytics and ads against test backends, a balance
 simulator with a first tuning pass, and an Android debug build. 656 automated checks. Remaining work waits on
 humans; see `HUMAN_NEEDED.md` and the dashboard. Latest session log: `coordination/sessions/`.
+
+The current environment renderer (T-0317) builds ten world-space 3D settings. As the tower camera climbs, the ground and landmarks leave the view and higher cloud bands appear. See `docs/art/WORLD_ENVIRONMENTS.md` and `docs/art/previews/world-ascent.mp4`. The earlier work was recovered onto `istiaque_leon` on October 26; branch/history details are in `docs/RECOVERY_2026-10-26.md`.

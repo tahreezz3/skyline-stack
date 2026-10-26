@@ -1,5 +1,7 @@
 # Living reference environments
 
+**Superseded at runtime by T-0317.** The owner rejected the camera-attached scenic plate because it does not follow the tower ascent. The active renderer now builds world-space 3D scenery and procedural atmosphere. These images/prompts remain as art references and provenance. See [WORLD_ENVIRONMENTS.md](WORLD_ENVIRONMENTS.md).
+
 T-0315 replaces the shared purple sun, muted lighting, low-poly hills and repeated tower rows with ten distinct environment-only art assets based on the owner's visual references. The central playable tower, carried/falling modules, crane, effects and HUD remain separate live Godot elements. The reference images containing gameplay/UI are not shipped as backgrounds.
 
 The assets were produced with the built-in image generation tool, using each owner reference as an edit target: remove tower, floating floor, crane and all HUD; reconstruct the surrounding environment; preserve the source scenery, composition, bright color and natural time of day. Complete prompts and project paths are in [generation-prompts.json](backgrounds/generation-prompts.json). Provenance and hashes are in [asset-manifest.json](backgrounds/asset-manifest.json); asset terms are recorded in `assets_inbox/LICENSES.md`.

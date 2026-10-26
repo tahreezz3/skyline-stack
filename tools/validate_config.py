@@ -3,6 +3,7 @@
 Add keys here when you add them to the config (see docs/03_DATA_SPEC.md)."""
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
@@ -21,6 +22,7 @@ REQUIRED = {
     "block_types.json": ["types"],
     "themes.json": ["default", "geometry", "backdrop", "themes"],
     "background_motion.json": ["shared", "environments"],
+    "environment_world.json": ["shared", "environments"],
     "round_hud.json": ["margin", "heart_pixel", "heart_spacing", "meter_width", "meter_height", "meter_segments", "badge_height", "bottom_clearance", "endless_page_floors", "counter_digits", "population_font_size", "pause_size", "combo_width", "combo_height"],
     "levels.json": ["levels"],
     "city_map.json": ["width", "height", "disabled", "rules"],
@@ -103,6 +105,44 @@ def validate_background_motion(config, errors):
             color = actor.get("color", "")
             if not isinstance(color, str) or len(color) != 7 or not color.startswith("#") or any(c not in "0123456789abcdefABCDEF" for c in color[1:]):
                 errors.append(prefix + theme + " invalid actor color")
+
+
+def validate_environment_world(config, errors):
+    prefix = "environment_world.json: "
+    shared = config.get("shared", {})
+    def number(n):
+        return isinstance(n, (int, float)) and math.isfinite(n)
+    def vec(v, positive=False):
+        return isinstance(v, list) and len(v) == 3 and all(number(n) and (n > 0 if positive else True) for n in v)
+    required = ["cloud_gap", "cloud_bands", "clouds_per_band", "cloud_depth", "cloud_width", "cloud_speed", "cloud_size", "cloud_projection_bias", "water_size", "water_center", "water_wave_amplitude", "water_wave_speed", "water_glint", "ground_bounds", "river_bounds", "foundation_size", "foundation_y", "boat_bob", "boat_bob_speed", "steam_rise", "steam_drift", "steam_puffs", "steam_radius", "bird_flap_speed", "fountain_drops", "fountain_height", "flag_speed", "flag_amplitude", "sky_height_range", "sky_horizon", "sun_position", "sun_radius", "mesh_sides", "cloud_depth_step", "boat_roll_amplitude", "bird_roll_amplitude", "steam_wobble"]
+    for key in required:
+        value = shared.get(key)
+        if not (number(value) or isinstance(value, list) and value and all(number(n) for n in value)):
+            errors.append(prefix + "missing/invalid shared." + key)
+    for key in ["cloud_gap", "cloud_bands", "clouds_per_band", "cloud_width", "sky_height_range", "mesh_sides"]:
+        if not number(shared.get(key)) or shared[key] <= 0:
+            errors.append(prefix + key + " must be positive")
+    profiles = config.get("environments", {})
+    if set(profiles) != {f"v{i:03}" for i in range(1, 11)}:
+        errors.append(prefix + "need ten world environments")
+    kinds = {"tree", "pine", "cypress", "mountain", "hill", "karst", "cliff", "snow_island", "ice", "hedge", "flowers", "column", "fountain", "bridge", "cable_bridge", "wall", "fence", "pier", "tank", "stack", "refinery", "harbor_crane", "igloo", "lighthouse", "watchtower", "manor", "office", "palace", "fort", "pagoda", "prison", "cottage"}
+    actor_kinds = {"birds", "car", "sailboat", "ferry", "floe", "flag", "fountain", "steam", "beacon"}
+    for theme, profile in profiles.items():
+        colors = profile.get("colors", {})
+        for value in [profile.get("sky_top"), profile.get("sky_bottom")] + list(colors.values()):
+            if not isinstance(value, str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", value):
+                errors.append(prefix + theme + " invalid color")
+        if profile.get("water") not in {"river", "sea"}:
+            errors.append(prefix + theme + " invalid water layout")
+        for feature in profile.get("features", []):
+            if feature.get("kind") not in kinds or not vec(feature.get("position")) or not vec(feature.get("size"), True) or not number(feature.get("rotation")):
+                errors.append(prefix + theme + " invalid world feature")
+        for patch in profile.get("patches", []):
+            if patch.get("material") not in colors or not vec(patch.get("lo")) or not vec(patch.get("hi")) or any(a >= b for a, b in zip(patch["lo"], patch["hi"])):
+                errors.append(prefix + theme + " invalid world patch")
+        for actor in profile.get("actors", []):
+            if actor.get("kind") not in actor_kinds or not vec(actor.get("start")) or not vec(actor.get("end")) or not number(actor.get("period")) or actor["period"] <= 0 or not number(actor.get("size")) or actor["size"] <= 0 or not number(actor.get("phase")) or not 0 <= actor["phase"] < 1:
+                errors.append(prefix + theme + " invalid world actor")
 
 
 def main() -> int:
@@ -202,6 +242,7 @@ def main() -> int:
         if not key.startswith("_") and (not isinstance(value, (int, float)) or value <= 0):
             errors.append(f"round_hud.json: {key} must be positive")
     validate_background_motion(data.get("background_motion.json", {}), errors)
+    validate_environment_world(data.get("environment_world.json", {}), errors)
     for e in errors:
         print("config error:", e)
     print("config: OK" if not errors else f"config: {len(errors)} error(s)")

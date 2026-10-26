@@ -9,7 +9,7 @@ extends Node3D
 const LowPoly := preload("res://scripts/game/low_poly.gd")
 const Kit := preload("res://scripts/game/building_kit.gd")
 const BackgroundMotion := preload("res://scripts/game/background_motion.gd")
-const LivingBackground := preload("res://scripts/game/living_background.gd")
+const WorldScenery := preload("res://scripts/game/world_environment.gd")
 const ThemeKit := preload("res://scripts/game/theme_kit.gd")
 
 const PITCH_DEG := 6.0              # low street-level angle: little foreground (owner feedback, T-0309)
@@ -30,11 +30,9 @@ var sun: DirectionalLight3D
 var env: Environment
 var backdrop_mat: ShaderMaterial
 var backdrop_mesh: QuadMesh
-var background_texture: Texture2D
 var lighting: Dictionary
 var background_motion: RefCounted
-var background_actors: Node2D
-var actor_viewport: SubViewport
+var world_environment: Node3D
 
 var storey_mesh: ArrayMesh
 var base_mesh: ArrayMesh
@@ -134,17 +132,14 @@ func _build_camera_and_light() -> void:
 	camera.near = 0.5
 	camera.far = 260.0
 	camera.rotation_degrees = Vector3(-PITCH_DEG, 0, 0)
-	# Artwork already contains the intended atmospheric depth; keep it crisp and untinted.
+	# Tower and world scenery share a camera; only infinite atmosphere follows it.
 	add_child(camera)
 	camera.current = true
 	backdrop_mesh = QuadMesh.new()
 	backdrop_mesh.size = Vector2(VIEW_UNITS, VIEW_UNITS)
-	background_texture = load(String(theme["background"]["texture"])) as Texture2D
 	backdrop_mat = ShaderMaterial.new()
-	backdrop_mat.shader = load("res://scripts/game/shaders/sky_backdrop.gdshader")
-	backdrop_mat.set_shader_parameter("environment_image", background_texture)
-	backdrop_mat.set_shader_parameter("image_aspect", background_texture.get_size().aspect())
-	_build_living_background()
+	backdrop_mat.shader = load("res://scripts/game/shaders/world_sky.gdshader")
+	_build_world_environment()
 	var backdrop := MeshInstance3D.new()
 	backdrop.mesh = backdrop_mesh
 	backdrop.material_override = backdrop_mat
@@ -194,49 +189,26 @@ func _build_camera_and_light() -> void:
 	add_child(we)
 
 
-func _build_living_background() -> void:
-	var config: Dictionary = GameConfig.table("background_motion")
+func _build_world_environment() -> void:
+	var config: Dictionary = GameConfig.table("environment_world")
+	world_environment = WorldScenery.new()
+	add_child(world_environment)
+	world_environment.setup(theme["id"], config)
+	background_motion = world_environment.clock
+	var profile: Dictionary = config["environments"][theme["id"]]
 	var shared: Dictionary = config["shared"]
-	var environment: Dictionary = config["environments"][theme["id"]]
-	background_motion = BackgroundMotion.new(shared)
-	background_actors = LivingBackground.new()
-	background_actors.configure(shared, environment)
-	actor_viewport = SubViewport.new()
-	actor_viewport.size = Vector2i(shared["canvas_size"][0], shared["canvas_size"][1])
-	actor_viewport.transparent_bg = true
-	actor_viewport.disable_3d = true
-	actor_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	add_child(actor_viewport)
-	actor_viewport.add_child(background_actors)
-	backdrop_mat.set_shader_parameter("motion_mask", LivingBackground.make_mask(shared, environment))
-	backdrop_mat.set_shader_parameter("live_actors", actor_viewport.get_texture())
-	var sky: Dictionary = shared["sky"]
-	var water: Dictionary = shared["water"]
-	var wind: Dictionary = shared["wind"]
-	var depth: Dictionary = shared["parallax"]
-	backdrop_mat.set_shader_parameter("cloud_motion", Vector2(sky["amplitude"], sky["angular_speed"]))
-	backdrop_mat.set_shader_parameter("water_amplitude", Vector2(water["uv_amplitude"][0], water["uv_amplitude"][1]))
-	backdrop_mat.set_shader_parameter("water_speed", water["speed"])
-	backdrop_mat.set_shader_parameter("cloth_motion", Vector2(wind["amplitude"], wind["speed"]))
-	backdrop_mat.set_shader_parameter("glint_strength", water["glint_strength"])
-	for field in ["refraction_frequency", "glint_frequency", "glint_sharpness"]:
-		backdrop_mat.set_shader_parameter(field, Vector2(water[field][0], water[field][1]))
-	for field in ["glint_drift", "cross_wave_speed", "cross_wave_bend"]:
-		backdrop_mat.set_shader_parameter(field, water[field])
-	backdrop_mat.set_shader_parameter("cloud_edge_pin", sky["edge_pin"])
-	backdrop_mat.set_shader_parameter("cloth_frequency", wind["spatial_frequency"])
-	backdrop_mat.set_shader_parameter("depth_factors", Vector2(depth["far_factor"], depth["near_factor"]))
+	backdrop_mat.set_shader_parameter("sky_top", Color(profile["sky_top"]))
+	backdrop_mat.set_shader_parameter("sky_bottom", Color(profile["sky_bottom"]))
+	backdrop_mat.set_shader_parameter("natural_sun", profile["sun"])
+	backdrop_mat.set_shader_parameter("altitude_range", shared["sky_height_range"])
+	backdrop_mat.set_shader_parameter("sky_horizon", shared["sky_horizon"])
+	backdrop_mat.set_shader_parameter("sun_position", Vector2(shared["sun_position"][0], shared["sun_position"][1]))
+	backdrop_mat.set_shader_parameter("sun_radius", shared["sun_radius"])
 
 
 func _update_background(delta: float) -> void:
-	background_motion.advance(delta, game.paused or get_tree().paused, game.reduced_motion, Vector2(game.view_x, game.view_y))
-	var seconds: float = background_motion.render_time()
-	if background_actors.seconds != seconds:
-		background_actors.frame(seconds)
-		actor_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	backdrop_mat.set_shader_parameter("scene_seconds", seconds)
-	backdrop_mat.set_shader_parameter("depth_offset", background_motion.depth)
-	backdrop_mat.set_shader_parameter("motion_amount", 0.0 if background_motion.reduced else 1.0)
+	world_environment.update(delta, game.view_y, game.paused or get_tree().paused, game.reduced_motion)
+	backdrop_mat.set_shader_parameter("altitude", game.view_y)
 
 
 func _build_actors() -> void:

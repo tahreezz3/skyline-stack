@@ -47,3 +47,5 @@ godot --path game -- --autoplay --theme=v003 --seconds=60
 ```
 
 New English labels have draft Spanish and German translations covered by HR-0018. This task does not complete final artist delivery T-0301 or on-device visual/performance QA.
+
+T-0317 supersedes the scenic-image rendering described in earlier revisions: all ten environments now use world-anchored 3D geometry, procedural atmosphere and independent world activity. The same camera follows the tower past the ground/landmarks into higher sky. See WORLD_ENVIRONMENTS.md and ADR-0007 for the active implementation and ascent previews.

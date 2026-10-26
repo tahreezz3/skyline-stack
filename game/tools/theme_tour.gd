@@ -123,12 +123,16 @@ func _run() -> void:
 		var game := current_scene
 		game.set_process(false)
 		check(game.visual_theme["id"] == theme["id"], "round uses " + theme["id"])
-		check(game.view3d.background_texture.resource_path == theme["background"]["texture"], "round uses the selected reference environment")
+		check(game.view3d.world_environment.theme_id == theme["id"], "round uses the selected world environment")
+		check(game.view3d.world_environment.get_parent() == game.view3d, "scenery is world anchored, outside the camera")
+		var ground: Vector3 = game.view3d.world_environment.ground_anchor.global_position
 		var ground_light: Color = game.view3d.env.ambient_light_color
 		var original_y: float = game.view_y
 		game.view_y += 30.0
 		game.view3d.sync(1.0)
 		check(game.view3d.env.ambient_light_color == ground_light, "tower height does not tint daylight purple")
+		check(game.view3d.world_environment.ground_anchor.global_position == ground, "climbing never translates ground with camera")
+		check(game.view3d.camera.unproject_position(ground).y > root.get_visible_rect().size.y, "ground leaves screen at high tower height")
 		game.view_y = original_y
 		game.view3d.sync(0.0)
 		await _capture(theme["id"] + "_ground")
