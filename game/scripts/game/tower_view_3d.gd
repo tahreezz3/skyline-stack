@@ -1,41 +1,40 @@
-## Low-poly 3D presentation of a tower round (ADR-0006, T-0305/T-0306/T-0308).
+## Low-poly 3D presentation of a tower round (ADR-0006, T-0314 themes).
 ## A locked orthographic camera looks at a 2D playfield (everything gameplay-related
 ## lives on z = 0, in rules units), pitched slightly down. Buildings are turned by
-## BUILDING_YAW so two faces show, like the owner's reference
-## (docs/art/references/owner_reference_corner_building.webp); building_kit.gd sizes
-## the footprint so the turned block still spans the gameplay width on screen.
+## the configured yaw so two faces show. theme_kit.gd uses the existing mesh
+## builder and keeps the visible footprint close to the gameplay width.
 ## This node only *reads* the TowerGame each frame; it never changes game state.
 extends Node3D
 
 const LowPoly := preload("res://scripts/game/low_poly.gd")
 const Kit := preload("res://scripts/game/building_kit.gd")
-const City := preload("res://scripts/game/city_kit.gd")
-const Cat := preload("res://scripts/game/cat.gd")
-const Props := preload("res://scripts/game/street_props.gd")
+const BackgroundMotion := preload("res://scripts/game/background_motion.gd")
+const LivingBackground := preload("res://scripts/game/living_background.gd")
+const ThemeKit := preload("res://scripts/game/theme_kit.gd")
 
 const PITCH_DEG := 6.0              # low street-level angle: little foreground (owner feedback, T-0309)
-const BUILDING_YAW_DEG := 38.0
 const CAM_DIST := 20.0             # ortho: distance doesn't change size; closer keeps the shadow range tight
 const VIEW_UNITS := 6.5            # visible world height: zoomed in so the buildings read (T-0310)
 const CENTER_ABOVE_VIEW := 2.75    # ground this far below screen centre: only the street shows below the tower
 const PX_TO_UNITS := VIEW_UNITS / 1280.0   # screen pixels -> world units at the current zoom
 const MAX_SHARDS := 256
 
-## Sky keyframes by height, cozy lo-fi palette (T-0310): golden hour at the ground,
-## pink-violet dusk in the middle, deep indigo night with warm windows at the top.
-## [top, bottom, cloud warm, cloud light, cloud amount, sun colour, sun energy, ambient colour, ambient energy]
-const SKY_DAY := [Color("#8e9fe6"), Color("#ffc9a3"), Color("#f2a3ad"), Color("#ffe3bf"), 0.8, Color("#ffd7a8"), 1.05, Color("#b9a8e6"), 0.46]
-const SKY_DUSK := [Color("#5b4a9f"), Color("#ff9a74"), Color("#d96f8f"), Color("#ffb88a"), 0.75, Color("#ff9f73"), 0.85, Color("#8f78c9"), 0.36]
-const SKY_NIGHT := [Color("#15153a"), Color("#3c2f6b"), Color("#3a3366"), Color("#56497f"), 0.35, Color("#a9b0ff"), 0.32, Color("#5b4fa0"), 0.26]
-
+var theme: Dictionary
+var theme_config: Dictionary
 var game: Node2D
 var block_h := 0.6
-var yaw := deg_to_rad(BUILDING_YAW_DEG)
+var yaw := 0.0
 
 var camera: Camera3D
 var sun: DirectionalLight3D
 var env: Environment
 var backdrop_mat: ShaderMaterial
+var backdrop_mesh: QuadMesh
+var background_texture: Texture2D
+var lighting: Dictionary
+var background_motion: RefCounted
+var background_actors: Node2D
+var actor_viewport: SubViewport
 
 var storey_mesh: ArrayMesh
 var base_mesh: ArrayMesh
@@ -51,34 +50,25 @@ var carried: MeshInstance3D
 var rope: MeshInstance3D
 var falling_node: MeshInstance3D
 var roof_node: MeshInstance3D
-var layers: Array[Dictionary] = []      # {node, mat, base: Color, haze, parallax, z, horizon}
 var rings: Array[Dictionary] = []       # {node, mat, age}
-var cars: Array[Dictionary] = []        # {node, speed}
-var cat: Node3D
-var rim: DirectionalLight3D               # pink light from the setting sun's side
-var lamp_lights: Array[OmniLight3D] = []  # warm pools of light under the street lamps at night
-var mat_city: StandardMaterial3D        # vertex-coloured city walls / awnings
-var mat_lamp: StandardMaterial3D        # street-light heads, glow at night
-var mat_headlight: StandardMaterial3D
-var mat_city_glass: StandardMaterial3D      # background windows: sky-tinted by day, some glow at night
-var mat_city_glass_dark: StandardMaterial3D
+var rim: DirectionalLight3D
 var dust_mm: MultiMesh
 var spark_mm: MultiMesh
 
-var last_crane_x := 0.0
-var swing := 0.0
 var cam_y := 0.0
-var night := 0.0
 var combo_glow := 0.0          # eased 0..1; never switched instantly (instant changes read as flicker)
 var combo_target := 0.0
 
 
 func setup(p_game: Node2D) -> void:
 	game = p_game
+	theme = game.visual_theme
+	lighting = theme["background"]["lighting"]
+	theme_config = GameConfig.table("themes")
+	yaw = deg_to_rad(float(theme_config["geometry"]["yaw_degrees"]))
 	block_h = float(game.rules["block"]["height"])
 	_build_materials()
 	_build_camera_and_light()
-	_build_environment_layers()
 	_build_actors()
 	GameEvents.block_resolved.connect(_on_block_resolved)
 	GameEvents.combo_progress.connect(func(count: int, _rate: float) -> void: combo_target = 1.0 if count > 0 else 0.0)
@@ -103,31 +93,30 @@ func _glow(colour: Color, energy: float) -> StandardMaterial3D:
 
 
 func _build_materials() -> void:
-	var family := Color(game.block_type["colour"])
-	var accent := Color(String(game.block_type.get("accent", "#d9825b")))
-	var body := family.lightened(0.42)                       # pastel siding, like the reference
-	mats["body"] = _lit(body)
-	mats["body_dark"] = _lit(body.darkened(0.12))
-	mats["body2"] = _lit(Color("#a7b3cc"))                   # plinth / roof deck stone
-	mats["wall2"] = _lit(accent.lightened(0.45))             # shop-front wall
-	mats["trim"] = _lit(Color("#e6e9f0"), 0.7)               # off-white trim (pure white clips in sunlight)
-	mats["accent"] = _lit(accent)
-	var glass := _glow(Color("#2b3a57"), 0.0)
-	glass.emission = Color("#ffd27a")
+	var p: Dictionary = theme["palette"]
+	mats["body"] = _lit(Color(p["body"]))
+	mats["body_dark"] = _lit(Color(p["shadow"]))
+	mats["body2"] = _lit(Color(p["shadow"]))
+	mats["trim"] = _lit(Color(p["trim"]))
+	mats["accent"] = _lit(Color(p["accent"]))
+	mats["gold"] = _lit(Color(p["gold"]))
+	mats["roof"] = _lit(Color(p["shadow"]).darkened(0.15))
+	var glass := _glow(Color(p["glass"]), 0.0)
+	glass.emission = Color(p["gold"])
 	glass.roughness = 0.2
 	glass.metallic = 0.25
 	mats["glass"] = glass
-	mats["pot"] = _lit(Color("#c9744f"))
-	mats["plant"] = _lit(Color("#5f9e55"))
-	mats["emissive"] = _glow(Color("#ff5a4a"), 2.5)          # antenna lights
-	mat_gold = _glow(Color("#f2c14e"), 0.6)
+	mats["plant"] = _lit(Color("#729875") if theme["scenery"] != "arctic" else Color("#e1f4f5"))
+	mats["emissive"] = _glow(Color(p["gold"]), 1.6)
+	mat_gold = _glow(Color(p["gold"]), 0.6)
 	mat_gold.metallic = 0.4
 	mat_gold.roughness = 0.4
-	mat_dust = _lit(Color("#e7e2d6"))
+	mat_dust = _lit(Color(p["trim"]))
 	mat_spark = _glow(Color("#ffd75e"), 4.0)
 	mat_spark.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	storey_mesh = Kit.storey(block_h)
-	base_mesh = Kit.base_storey(block_h)
+	var g: Dictionary = theme_config["geometry"]
+	storey_mesh = ThemeKit.storey(theme, block_h, g)
+	base_mesh = ThemeKit.storey(theme, block_h, g, true)
 
 
 ## Assign materials by surface name; `overrides` replaces some (e.g. gold trophy roof).
@@ -145,25 +134,21 @@ func _build_camera_and_light() -> void:
 	camera.near = 0.5
 	camera.far = 260.0
 	camera.rotation_degrees = Vector3(-PITCH_DEG, 0, 0)
-	# soft background blur (like the reference's depth of field); the playfield stays sharp
-	var attrs := CameraAttributesPractical.new()
-	attrs.dof_blur_far_enabled = true
-	attrs.dof_blur_far_distance = CAM_DIST + 6.0
-	attrs.dof_blur_far_transition = 20.0
-	attrs.dof_blur_amount = 0.08
-	camera.attributes = attrs
+	# Artwork already contains the intended atmospheric depth; keep it crisp and untinted.
 	add_child(camera)
 	camera.current = true
-
-	# Backdrop: gradient + painterly clouds on a quad parented to the camera.
-	var quad := QuadMesh.new()
-	quad.size = Vector2(16, 16)
+	backdrop_mesh = QuadMesh.new()
+	backdrop_mesh.size = Vector2(VIEW_UNITS, VIEW_UNITS)
+	background_texture = load(String(theme["background"]["texture"])) as Texture2D
 	backdrop_mat = ShaderMaterial.new()
 	backdrop_mat.shader = load("res://scripts/game/shaders/sky_backdrop.gdshader")
+	backdrop_mat.set_shader_parameter("environment_image", background_texture)
+	backdrop_mat.set_shader_parameter("image_aspect", background_texture.get_size().aspect())
+	_build_living_background()
 	var backdrop := MeshInstance3D.new()
-	backdrop.mesh = quad
+	backdrop.mesh = backdrop_mesh
 	backdrop.material_override = backdrop_mat
-	backdrop.position = Vector3(0, 0, -240)
+	backdrop.position = Vector3(0, 0, -float(theme_config["backdrop"]["distance"]))
 	backdrop.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	camera.add_child(backdrop)
 
@@ -182,155 +167,76 @@ func _build_camera_and_light() -> void:
 	sun.shadow_bias = 0.04
 	sun.shadow_normal_bias = 1.0
 	add_child(sun)
-	# warm key light from the upper left: the left faces glow, the right faces fall into cool shade
-	sun.look_at_from_position(Vector3(-7, 8, 4), Vector3.ZERO)
-	# pink rim light from behind on the right, where the lo-fi sun sets (no shadows; fades at night)
+	# Reference-specific daylight or golden-hour light; no shared lavender fill.
+	var key_at: Array = lighting["key_position"]
+	sun.look_at_from_position(Vector3(key_at[0], key_at[1], key_at[2]), Vector3.ZERO)
+	# Neutral fill for daytime scenes and a restrained warm edge for sunset scenes.
 	rim = DirectionalLight3D.new()
-	rim.light_color = Color("#ff8fb3")
-	rim.light_energy = 0.4
+	rim.light_color = Color(lighting["rim_color"])
+	rim.light_energy = float(lighting["rim_energy"])
 	rim.shadow_enabled = false
 	add_child(rim)
-	rim.look_at_from_position(Vector3(6, 3, -6), Vector3.ZERO)
+	var rim_at: Array = lighting["rim_position"]
+	rim.look_at_from_position(Vector3(rim_at[0], rim_at[1], rim_at[2]), Vector3.ZERO)
 
 	var we := WorldEnvironment.new()
 	env = Environment.new()
 	env.background_mode = Environment.BG_COLOR
-	env.background_color = SKY_DAY[1]
+	env.background_color = Color(lighting["ambient_color"])
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = SKY_DAY[7]
-	env.ambient_light_energy = SKY_DAY[8]
+	env.ambient_light_color = Color(lighting["ambient_color"])
+	env.ambient_light_energy = float(lighting["ambient_energy"])
 	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR   # keeps the flat colours saturated
-	# distance haze: far city rows fade into the sky colour (depth fog; the playfield stays clear)
-	env.fog_enabled = true
-	env.fog_mode = Environment.FOG_MODE_DEPTH
-	env.fog_depth_begin = CAM_DIST + 3.0
-	env.fog_depth_end = CAM_DIST + 75.0
-	env.fog_depth_curve = 1.3          # gentle near, stronger far: colours survive in the near rows
-	env.fog_light_color = SKY_DAY[1]
-	env.fog_sky_affect = 0.0
-	env.glow_enabled = true
-	# glow only on genuinely emissive parts (windows at night, sparks), never on sunlit white trim
-	env.glow_intensity = 0.8
-	env.glow_bloom = 0.0
-	env.glow_hdr_threshold = 1.6
+	# The background owns its own atmosphere and sun. Keep gameplay geometry legible.
+	env.fog_enabled = false
+	env.glow_enabled = false
 	we.environment = env
 	add_child(we)
 
 
-func _add_layer(mesh: Mesh, colour: Color, z: float, horizon: float, parallax: float, haze: float, scale_y := 1.0) -> void:
-	var mi := MeshInstance3D.new()
-	mi.mesh = mesh
-	mi.scale = Vector3(1.0, scale_y, 1.0)
-	var m := _lit(colour, 1.0)
-	mi.material_override = m
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	add_child(mi)
-	layers.append({"node": mi, "mat": m, "base": colour, "haze": haze, "parallax": parallax, "z": z, "horizon": horizon})
+func _build_living_background() -> void:
+	var config: Dictionary = GameConfig.table("background_motion")
+	var shared: Dictionary = config["shared"]
+	var environment: Dictionary = config["environments"][theme["id"]]
+	background_motion = BackgroundMotion.new(shared)
+	background_actors = LivingBackground.new()
+	background_actors.configure(shared, environment)
+	actor_viewport = SubViewport.new()
+	actor_viewport.size = Vector2i(shared["canvas_size"][0], shared["canvas_size"][1])
+	actor_viewport.transparent_bg = true
+	actor_viewport.disable_3d = true
+	actor_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	add_child(actor_viewport)
+	actor_viewport.add_child(background_actors)
+	backdrop_mat.set_shader_parameter("motion_mask", LivingBackground.make_mask(shared, environment))
+	backdrop_mat.set_shader_parameter("live_actors", actor_viewport.get_texture())
+	var sky: Dictionary = shared["sky"]
+	var water: Dictionary = shared["water"]
+	var wind: Dictionary = shared["wind"]
+	var depth: Dictionary = shared["parallax"]
+	backdrop_mat.set_shader_parameter("cloud_motion", Vector2(sky["amplitude"], sky["angular_speed"]))
+	backdrop_mat.set_shader_parameter("water_amplitude", Vector2(water["uv_amplitude"][0], water["uv_amplitude"][1]))
+	backdrop_mat.set_shader_parameter("water_speed", water["speed"])
+	backdrop_mat.set_shader_parameter("cloth_motion", Vector2(wind["amplitude"], wind["speed"]))
+	backdrop_mat.set_shader_parameter("glint_strength", water["glint_strength"])
+	for field in ["refraction_frequency", "glint_frequency", "glint_sharpness"]:
+		backdrop_mat.set_shader_parameter(field, Vector2(water[field][0], water[field][1]))
+	for field in ["glint_drift", "cross_wave_speed", "cross_wave_bend"]:
+		backdrop_mat.set_shader_parameter(field, water[field])
+	backdrop_mat.set_shader_parameter("cloud_edge_pin", sky["edge_pin"])
+	backdrop_mat.set_shader_parameter("cloth_frequency", wind["spatial_frequency"])
+	backdrop_mat.set_shader_parameter("depth_factors", Vector2(depth["far_factor"], depth["near_factor"]))
 
 
-func _build_environment_layers() -> void:
-	mat_city = _lit(Color.WHITE)
-	mat_city.vertex_color_use_as_albedo = true
-	var glass_dark := _lit(Color("#2b3a57"), 0.25)
-	glass_dark.metallic = 0.25
-	mats["glass_dark"] = glass_dark
-	mats["roof"] = _lit(Color("#9aa3b5"))
-	mats["sidewalk"] = _lit(Color("#e6d3bd"))
-	(mats["sidewalk"] as StandardMaterial3D).vertex_color_use_as_albedo = true   # per-tile tone variation
-	mats["curb"] = _lit(Color("#f1e4d3"))
-	mats["asphalt"] = _lit(Color("#5a5168"), 0.95)       # warm violet-grey asphalt
-	mats["marking"] = _lit(Color("#f6eddf"))
-	mats["plinth"] = _lit(Color("#c8b5a6"))
-	mat_lamp = _glow(Color("#fff1c9"), 0.0)
-	mat_city_glass = _glow(Color("#c9a37a"), 0.35)
-	mat_city_glass.emission = Color("#ffc977")
-	mat_city_glass_dark = _lit(Color("#9b9fc0"), 0.4)
-	mat_headlight = _glow(Color("#fff6d8"), 0.6)
-
-	# street in front of the tower (world-fixed)
-	var street := MeshInstance3D.new()
-	street.mesh = City.street(80.0)
-	_dress(street)
-	add_child(street)
-	# the city, far back and spacious (gaps with trees, some pitched roofs), hazy and blurred so the tower
-	# stays the focus; rows rise slower than the camera (parallax) so you climb above the rooftops
-	# The camera is orthographic, so distance alone doesn't shrink anything: each row is scaled down
-	# (smaller = farther away) on top of the haze, blur and parallax.
-	# Each row has its own lawn strip and sits where perspective would put it on screen (`base_v`, units
-	# above the street's ground line): nearer rows lower, farther rows higher and smaller.
-	_add_city_layer(City.city_row(41, -16.0, 16.0, -7.0, 1.4, 1.2, 2.6, 0.9, 1.6, 0.4, 0.6, Color("#9cbf86")), -7.0, 0.14, 0.5, 0.22)
-	_add_city_layer(City.city_row(42, -30.0, 30.0, -16.0, 1.8, 1.6, 3.6, 0.55, 0.0, 0.3, 0.35, Color("#8fb08a")), -16.0, 0.34, 0.36, 0.5)
-	_add_city_layer(City.city_row(43, -60.0, 60.0, -34.0, 2.5, 2.5, 6.0, 0.25, 0.0, 0.2, 0.0, Color("#93a49a")), -34.0, 0.6, 0.25, 0.78)
-	_add_layer(LowPoly.ridge(140.0, 26, 0.8, 2.2, 11, 2.0), Color("#a58fc9"), -70.0, 1.0, 0.85, 0.0)   # soft violet hills
-
-	# cozy corner by the tower (T-0312 detail pass): planter, bench with the cat, café sign, hydrant,
-	# trash bin, street lamps with warm light pools at night, manhole, storm drain, light traffic
-	var prop_mats := {
-		"iron": _lit(Color("#3e3a4d"), 0.6), "glass_lamp": mat_lamp, "wood": _lit(Color("#b07a52")),
-		"wood_dark": _lit(Color("#8a5a3c")), "metal": _lit(Color("#6f7484"), 0.5), "rubber": _lit(Color("#2a2a33")),
-		"hub": _lit(Color("#c9ccd6"), 0.4), "chrome": _lit(Color("#d7d9e0"), 0.3), "light": mat_headlight,
-		"tail": _glow(Color("#ff4a4a"), 1.2), "red": _lit(Color("#c94a4a"), 0.6), "green": _lit(Color("#4f7f6a"), 0.6),
-		"board": _lit(Color("#2f3b3a")), "chalk": _lit(Color("#f2efe6")), "leaf": _lit(Color("#6f9e5f")),
-		"flower_a": _lit(Color("#f2a7b8")), "flower_b": _lit(Color("#ffd36e")), "flower_c": _lit(Color("#ffffff")),
-		"soil": _lit(Color("#6b4a3a")), "glass": _lit(Color("#3a4766"), 0.2),
-	}
-	_place_prop(Props.planter(), prop_mats, Vector3(-1.05, -0.035, 0.55))
-	_place_prop(Props.bench(), prop_mats, Vector3(1.12, -0.035, 0.7), 0.0, 1.4)
-	_place_prop(Props.cafe_sign(), prop_mats, Vector3(-0.66, -0.035, 0.86), 0.35, 1.2)
-	_place_prop(Props.hydrant(), prop_mats, Vector3(1.58, -0.035, 1.02), 0.4, 1.2)
-	_place_prop(Props.trash_bin(), prop_mats, Vector3(-1.48, -0.035, 0.35), 0.0, 1.2)
-	_place_prop(Props.manhole(), prop_mats, Vector3(0.95, 0.0, City.ROAD_FAR + 1.9))
-	_place_prop(Props.storm_drain(), prop_mats, Vector3(-0.95, 0.0, City.ROAD_FAR))
-	cat = Cat.new()
-	add_child(cat)
-	cat.scale = Vector3.ONE * 1.7                              # toy scale: readable and cute
-	cat.place(Vector3(1.02, -0.035 + 0.086 * 1.4, 0.7), -0.35) # sitting on the bench seat, turned towards the tower
-	var lamp_mesh := Props.street_lamp()
-	for lx in [-1.72, 1.72, -5.5, 5.5]:
-		var l := _place_prop(lamp_mesh, prop_mats, Vector3(lx, -0.035, City.ROAD_FAR - 0.25))
-		var omni := OmniLight3D.new()
-		omni.light_color = Color("#ffb994")
-		omni.omni_range = 1.5
-		omni.light_energy = 0.0
-		omni.shadow_enabled = false
-		omni.position = Vector3(0, Props.LAMP_Y + 0.02, 0)
-		l.add_child(omni)
-		lamp_lights.append(omni)
-	var lanes := [[City.ROAD_FAR + 1.0, 0.7], [City.ROAD_NEAR - 1.0, -0.85]]
-	for i in range(3):
-		var lane: Array = lanes[i % 2]
-		var paint := _lit(Color(["#e7a17f", "#9fc2d6", "#f1cf7d"][i]).darkened(0.05), 0.45)
-		var mats_car := prop_mats.duplicate()
-		mats_car["paint"] = paint
-		var c := _place_prop(Props.car(i), mats_car, Vector3(-7.0 + i * 5.3, -0.09, float(lane[0])), 0.0 if float(lane[1]) > 0.0 else PI)
-		cars.append({"node": c, "speed": float(lane[1]) * (0.9 + 0.1 * i)})
-
-
-func _place_prop(mesh: Mesh, prop_mats: Dictionary, at: Vector3, yaw_rad := 0.0, scale := 1.0) -> MeshInstance3D:
-	var mi := MeshInstance3D.new()
-	mi.mesh = mesh
-	_dress(mi, prop_mats)
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
-	mi.position = at
-	mi.rotation.y = yaw_rad
-	mi.scale = Vector3.ONE * scale
-	add_child(mi)
-	return mi
-
-
-## City rows: vertex-coloured walls and awnings, shared glass (some windows light up at night).
-func _dress_city(mi: MeshInstance3D) -> void:
-	_dress(mi, {"body": mat_city, "accent": mat_city, "glass": mat_city_glass, "glass_dark": mat_city_glass_dark})
-
-
-func _add_city_layer(mesh: Mesh, z: float, parallax: float, scale := 1.0, base_v := 0.0) -> void:
-	var mi := MeshInstance3D.new()
-	mi.mesh = mesh
-	mi.scale = Vector3.ONE * scale
-	_dress_city(mi)
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	add_child(mi)
-	layers.append({"node": mi, "mat": null, "base": Color.WHITE, "haze": 0.0, "parallax": parallax, "z": z, "horizon": 0.0, "world": true, "scale": scale, "base_v": base_v})
+func _update_background(delta: float) -> void:
+	background_motion.advance(delta, game.paused or get_tree().paused, game.reduced_motion, Vector2(game.view_x, game.view_y))
+	var seconds: float = background_motion.render_time()
+	if background_actors.seconds != seconds:
+		background_actors.frame(seconds)
+		actor_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	backdrop_mat.set_shader_parameter("scene_seconds", seconds)
+	backdrop_mat.set_shader_parameter("depth_offset", background_motion.depth)
+	backdrop_mat.set_shader_parameter("motion_amount", 0.0 if background_motion.reduced else 1.0)
 
 
 func _build_actors() -> void:
@@ -342,13 +248,34 @@ func _build_actors() -> void:
 	rope.mesh = rope_mesh
 	rope.material_override = _lit(Color("#3c4250"))
 	crane_pivot.add_child(rope)
-	var hook := MeshInstance3D.new()
-	hook.mesh = LowPoly.hook()
-	hook.material_override = _lit(Color("#f2b632"), 0.5)
-	hook.position = Vector3(0, 0.02, 0)
-	crane_pivot.add_child(hook)
 	carried = _make_block(false)
 	crane_pivot.add_child(carried)
+	var rig := Kit.Builder.new()
+	var c := float(theme_config["geometry"]["half_width"])
+	var sling_h := float(theme_config["geometry"]["sling_height"])
+	for x in [-c, c]:
+		for z in [-c, c]:
+			var wire := MeshInstance3D.new()
+			var cylinder := CylinderMesh.new()
+			cylinder.top_radius = float(theme_config["geometry"]["rope_width"]) * 0.5
+			cylinder.bottom_radius = cylinder.top_radius
+			var corner := Basis(Vector3.UP, yaw) * Vector3(x, 0, z)
+			var top := Vector3(0, sling_h, 0)
+			cylinder.height = corner.distance_to(top)
+			wire.mesh = cylinder
+			wire.material_override = rope.material_override
+			wire.position = (corner + top) * 0.5
+			wire.quaternion = Quaternion(Vector3.UP, (top - corner).normalized())
+			crane_pivot.add_child(wire)
+			wire.set_meta("sling", true)
+	# Striped hoist is a separate moving mesh, never baked into a floor.
+	for i in range(6):
+		var x0 := -c * 0.4 + i * c * 0.8 / 6.0
+		rig.box("gold" if i % 2 == 0 else "roof", Vector3(x0, sling_h, -c * 0.15), Vector3(x0 + c * 0.8 / 6.0, sling_h + c * 0.25, c * 0.15))
+	var hoist := MeshInstance3D.new()
+	hoist.mesh = rig.commit()
+	_dress(hoist, {"gold": _lit(Color("#f7c54a")), "roof": _lit(Color("#282c35"))})
+	crane_pivot.add_child(hoist)
 	falling_node = _make_block(false)
 	add_child(falling_node)
 
@@ -406,9 +333,9 @@ func _on_block_resolved(ev: Dictionary) -> void:
 	if ev.get("complete", false):
 		roof_node = MeshInstance3D.new()
 		var trophy := bool(ev.get("star", false))
-		roof_node.mesh = Kit.roof(trophy)
+		roof_node.mesh = ThemeKit.roof(theme, theme_config["geometry"])
 		roof_node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
-		_dress(roof_node, {"trim": mat_gold, "body2": mat_gold, "emissive": mat_spark} if trophy else {})
+		_dress(roof_node, {"trim": mat_gold, "accent": mat_gold, "gold": mat_gold, "emissive": mat_spark} if trophy else {})
 		add_child(roof_node)
 
 
@@ -431,24 +358,13 @@ func world_to_screen(x: float, y: float) -> Vector2:
 func sync(delta: float) -> void:
 	var st = game.state
 	_update_camera(delta)
-	_update_time_of_day(delta)
+	_update_background(delta)
+	_update_lighting(delta)
 	_update_tower(st)
 	_update_crane(st, delta)
 	_update_debris()
 	_update_particles()
 	_update_rings(delta)
-	_update_cars(delta)
-	cat.tick(delta, float(game.crane_x) if game.falling.is_empty() else float(game.falling["x"]))
-
-
-func _update_cars(delta: float) -> void:
-	for c in cars:
-		var n: Node3D = c["node"]
-		n.position.x += float(c["speed"]) * delta
-		if n.position.x > 9.0:
-			n.position.x = -9.0
-		elif n.position.x < -9.0:
-			n.position.x = 9.0
 
 
 func _update_camera(_delta: float) -> void:
@@ -457,72 +373,19 @@ func _update_camera(_delta: float) -> void:
 	var target := Vector3(float(game.view_x) + shake.x, cam_y + float(game.kick) * PX_TO_UNITS - shake.y, 0)
 	var back := Vector3(0, sin(deg_to_rad(PITCH_DEG)), cos(deg_to_rad(PITCH_DEG))) * CAM_DIST
 	camera.position = target + back
-	# background layers: placed so their base sits on the horizon, then drift up slower than the camera
-	var tan_p := tan(deg_to_rad(PITCH_DEG))
-	for l in layers:
-		var n: MeshInstance3D = l["node"]
-		var lift := (cam_y - CENTER_ABOVE_VIEW) * float(l["parallax"])
-		if l.get("world", false):
-			# mesh built at its real depth; when scaled down, shift it back so it stays at that depth, then
-			# lift/lower it so its base lands `base_v` above the ground line on screen
-			var z := float(l["z"])
-			var sp := sin(deg_to_rad(PITCH_DEG))
-			var y_base := (float(l["base_v"]) + z * sp) / cos(deg_to_rad(PITCH_DEG))
-			n.position = Vector3(0, y_base + lift, z * (1.0 - float(l.get("scale", 1.0))))
-		else:
-			n.position = Vector3(0, float(l["horizon"]) + float(l["z"]) * tan_p + lift, float(l["z"]))
-	backdrop_mat.set_shader_parameter("scroll", (cam_y - CENTER_ABOVE_VIEW) * 0.01)
+	var aspect := get_viewport().get_visible_rect().size.aspect()
+	backdrop_mesh.size = Vector2(VIEW_UNITS * aspect, VIEW_UNITS) * float(theme_config["backdrop"]["overscan"])
+	backdrop_mat.set_shader_parameter("viewport_aspect", aspect)
 
 
-func _sky(k: int) -> Variant:
-	# blend day -> dusk -> night by `night` (0..1)
-	if night < 0.5:
-		return _lerp_any(SKY_DAY[k], SKY_DUSK[k], night * 2.0)
-	return _lerp_any(SKY_DUSK[k], SKY_NIGHT[k], (night - 0.5) * 2.0)
-
-
-func _lerp_any(a: Variant, b: Variant, w: float) -> Variant:
-	if a is Color:
-		return (a as Color).lerp(b, w)
-	return lerpf(float(a), float(b), w)
-
-
-func _update_time_of_day(delta: float) -> void:
-	var target := clampf((cam_y - 9.0) / 20.0, 0.0, 1.0)
-	night = lerpf(night, target, minf(1.0, delta * 1.5))
-	combo_glow = move_toward(combo_glow, combo_target, delta * 2.5)   # ~0.4 s fade in/out
-	var bottom: Color = _sky(1)
-	backdrop_mat.set_shader_parameter("top_color", _sky(0))
-	backdrop_mat.set_shader_parameter("bottom_color", bottom)
-	backdrop_mat.set_shader_parameter("cloud_warm", _sky(2))
-	backdrop_mat.set_shader_parameter("cloud_light", _sky(3))
-	backdrop_mat.set_shader_parameter("cloud_amount", _sky(4))
-	backdrop_mat.set_shader_parameter("stars", clampf((night - 0.55) * 2.2, 0.0, 1.0))
-	env.background_color = bottom
-	sun.light_color = _sky(5)
-	sun.light_energy = _sky(6)
-	env.ambient_light_color = _sky(7)
-	env.ambient_light_energy = _sky(8)
-	# combo adds a gentle warm glow, weaker by day so windows don't flash gold in sunlight
-	(mats["glass"] as StandardMaterial3D).emission_energy_multiplier = clampf((night - 0.3) * 3.5, 0.0, 2.6) + combo_glow * lerpf(0.18, 0.5, night)
-	for l in layers:
-		if l["mat"] != null:
-			(l["mat"] as StandardMaterial3D).albedo_color = (l["base"] as Color).darkened(night * 0.45)
-	mat_city.albedo_color = Color.WHITE.darkened(night * 0.5)
-	mat_city_glass.albedo_color = Color("#c9a37a").lerp(Color("#2a2140"), night)
-	mat_city_glass.emission_energy_multiplier = 0.35 + clampf((night - 0.3) * 3.0, 0.0, 1.6)   # cozy: lit even by day
-	mat_city_glass_dark.albedo_color = Color("#9b9fc0").lerp(Color("#1f1a33"), night)
-	mat_lamp.emission_energy_multiplier = clampf((night - 0.25) * 4.0, 0.0, 3.0)
-	mat_headlight.emission_energy_multiplier = 0.6 + night * 2.5
-	env.fog_light_color = bottom.lerp(_sky(0), 0.3).lightened(0.1)   # lavender-peach haze, not a flat orange wash
-	# the lo-fi sun sinks and fades as the tower climbs into night (T-0312)
-	var sun_amount := 1.0 - smoothstep(0.35, 0.8, night)
-	backdrop_mat.set_shader_parameter("sun_amount", sun_amount)
-	backdrop_mat.set_shader_parameter("sun_pos", Vector2(0.578, 0.5 + night * 0.22))   # right of the tower; sinks behind the city
-	rim.light_energy = 0.4 * sun_amount + 0.12 * night
-	rim.light_color = Color("#ff8fb3").lerp(Color("#8f9bff"), night)
-	for l in lamp_lights:
-		l.light_energy = clampf((night - 0.25) * 2.5, 0.0, 1.4)
+func _update_lighting(delta: float) -> void:
+	# Height never turns the owner's bright daytime scene into generic purple dusk.
+	combo_glow = move_toward(combo_glow, combo_target, delta * 2.5)
+	sun.light_color = Color(lighting["key_color"])
+	sun.light_energy = float(lighting["key_energy"])
+	env.ambient_light_color = Color(lighting["ambient_color"])
+	env.ambient_light_energy = float(lighting["ambient_energy"])
+	(mats["glass"] as StandardMaterial3D).emission_energy_multiplier = float(lighting["window_glow"]) + combo_glow * 0.18
 
 
 func _update_tower(st) -> void:
@@ -552,22 +415,22 @@ func _update_tower(st) -> void:
 		roof_node.visible = count > 0
 
 
-func _update_crane(st, delta: float) -> void:
+func _update_crane(st, _delta: float) -> void:
 	var cx: float = game.crane_x
 	var cy: float = game._crane_y()
-	var vel := (cx - last_crane_x) / maxf(delta, 0.0001)
-	last_crane_x = cx
-	swing = lerpf(swing, clampf(-vel * 0.03, -0.12, 0.12), minf(1.0, delta * 6.0))
 	crane_pivot.position = Vector3(cx, cy, 0)
 	var rope_len := 14.0
 	rope.scale = Vector3(1, rope_len, 1)
-	rope.position = Vector3(0, rope_len * 0.5 + 0.14, 0)
-	# the next block is the shop-front storey when the tower is still empty
+	rope.position = Vector3(0, rope_len * 0.5 + float(theme_config["geometry"]["sling_height"]), 0)
+	# The next block uses the matching ground-floor facade when the tower is empty.
 	var next_is_base: bool = st.height() == 0
+	for child in crane_pivot.get_children():
+		if child.has_meta("sling"):
+			child.visible = game.falling.is_empty() and not st.is_over
 	_set_block_mesh(carried, next_is_base)
 	_set_block_mesh(falling_node, next_is_base)
-	# hangs from the hook and tilts with the swing around its top centre (visual only)
-	var tilt := Basis(Vector3.BACK, swing)
+	# Keep the carried top corners fixed to the four suspension cables.
+	var tilt := Basis.IDENTITY
 	carried.transform = Transform3D(tilt * Basis(Vector3.UP, yaw), tilt * Vector3(0, -block_h, 0))
 	carried.visible = game.falling.is_empty() and not st.is_over
 	falling_node.visible = not game.falling.is_empty()

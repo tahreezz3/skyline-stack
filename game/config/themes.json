@@ -1,0 +1,411 @@
+{
+  "_doc": "Presentation only. Theme backgrounds are independent generated environment artwork based on owner references; never baked tower/crane/HUD. Lighting stays faithful to each reference at all heights. See docs/art/BACKGROUND_REVISION.md.",
+  "default": "v001",
+  "geometry": {
+    "half_width": 0.33,
+    "round_radius": 0.46,
+    "round_sides": 16,
+    "cornice_width": 0.36,
+    "roof_height": 0.24,
+    "window_columns": 3,
+    "yaw_degrees": 38,
+    "rope_width": 0.016,
+    "sling_height": 0.28
+  },
+  "themes": [
+    {
+      "id": "v001",
+      "name_key": "THEME_MANOR",
+      "description_key": "THEME_MANOR_DESC",
+      "architecture": "classical",
+      "scenery": "garden",
+      "palette": {
+        "body": "#ecdfbd",
+        "shadow": "#b5a281",
+        "trim": "#f9f0d8",
+        "glass": "#447da3",
+        "accent": "#73955e",
+        "gold": "#e8bd68"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v001-manor.png",
+        "reference": "v001_manor.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v002",
+      "name_key": "THEME_CORPORATE",
+      "description_key": "THEME_CORPORATE_DESC",
+      "architecture": "glass",
+      "scenery": "skyline",
+      "palette": {
+        "body": "#8aaec3",
+        "shadow": "#466f8a",
+        "trim": "#d8e2e5",
+        "glass": "#285f87",
+        "accent": "#4f826d",
+        "gold": "#c6dbe5"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v002-corporate.png",
+        "reference": "v002_corporate.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v003",
+      "name_key": "THEME_CHINESE",
+      "description_key": "THEME_CHINESE_DESC",
+      "architecture": "pagoda",
+      "scenery": "river",
+      "palette": {
+        "body": "#e8d6b3",
+        "shadow": "#683d32",
+        "trim": "#513e43",
+        "glass": "#38596a",
+        "accent": "#b84335",
+        "gold": "#e4b75c"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v003-chinese.png",
+        "reference": "v003_traditional_chinese.png",
+        "sun_style": "natural_gold",
+        "lighting": {
+          "key_color": "#ffe1ad",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffe9ce",
+          "rim_energy": 0.12,
+          "window_glow": 0.12,
+          "key_position": [
+            7,
+            5,
+            4
+          ],
+          "rim_position": [
+            -6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v004",
+      "name_key": "THEME_PALACE",
+      "description_key": "THEME_PALACE_DESC",
+      "architecture": "palace",
+      "scenery": "courtyard",
+      "palette": {
+        "body": "#f1e4c5",
+        "shadow": "#cebd9e",
+        "trim": "#e5c16f",
+        "glass": "#3d7696",
+        "accent": "#c79d45",
+        "gold": "#f0d38b"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v004-palace.png",
+        "reference": "v004_palace.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v005",
+      "name_key": "THEME_FORT",
+      "description_key": "THEME_FORT_DESC",
+      "architecture": "fort",
+      "scenery": "fortress",
+      "palette": {
+        "body": "#d4cdb7",
+        "shadow": "#aa9f8b",
+        "trim": "#eee3c6",
+        "glass": "#36516b",
+        "accent": "#3c628b",
+        "gold": "#e4bc57"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v005-fort.png",
+        "reference": "v005_fort.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v006",
+      "name_key": "THEME_IGLOO",
+      "description_key": "THEME_IGLOO_DESC",
+      "architecture": "ice",
+      "scenery": "arctic",
+      "palette": {
+        "body": "#c8ebf2",
+        "shadow": "#85bfda",
+        "trim": "#f5fcfa",
+        "glass": "#387fba",
+        "accent": "#8bd0ea",
+        "gold": "#f0f8f8"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v006-igloo.png",
+        "reference": "v006_igloo.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v007",
+      "name_key": "THEME_PRISON",
+      "description_key": "THEME_PRISON_DESC",
+      "architecture": "prison",
+      "scenery": "compound",
+      "palette": {
+        "body": "#aeb4b6",
+        "shadow": "#78818c",
+        "trim": "#535e6b",
+        "glass": "#394d60",
+        "accent": "#4e5964",
+        "gold": "#c7b87e"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v007-prison.png",
+        "reference": "v007_prison.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v008",
+      "name_key": "THEME_OFFICE",
+      "description_key": "THEME_OFFICE_DESC",
+      "architecture": "office",
+      "scenery": "campus",
+      "palette": {
+        "body": "#9aaeb3",
+        "shadow": "#566a77",
+        "trim": "#d6d9d1",
+        "glass": "#315b72",
+        "accent": "#5f9273",
+        "gold": "#e5c58b"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v008-office.png",
+        "reference": "v008_office.png",
+        "sun_style": "none",
+        "lighting": {
+          "key_color": "#fffaf0",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffffff",
+          "rim_energy": 0.12,
+          "window_glow": 0.02,
+          "key_position": [
+            -7,
+            8,
+            4
+          ],
+          "rim_position": [
+            6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v009",
+      "name_key": "THEME_FACTORY",
+      "description_key": "THEME_FACTORY_DESC",
+      "architecture": "factory",
+      "scenery": "harbor",
+      "palette": {
+        "body": "#999d9b",
+        "shadow": "#5d6970",
+        "trim": "#c3c0ad",
+        "glass": "#4b6268",
+        "accent": "#bd5146",
+        "gold": "#ddad60"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v009-factory.png",
+        "reference": "v009_factory.png",
+        "sun_style": "natural_gold",
+        "lighting": {
+          "key_color": "#ffe1ad",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffe9ce",
+          "rim_energy": 0.12,
+          "window_glow": 0.12,
+          "key_position": [
+            7,
+            5,
+            4
+          ],
+          "rim_position": [
+            -6,
+            3,
+            -6
+          ]
+        }
+      }
+    },
+    {
+      "id": "v010",
+      "name_key": "THEME_LIGHTHOUSE",
+      "description_key": "THEME_LIGHTHOUSE_DESC",
+      "architecture": "lighthouse",
+      "scenery": "coast",
+      "palette": {
+        "body": "#eee8da",
+        "shadow": "#c6b9a5",
+        "trim": "#454b55",
+        "glass": "#537d91",
+        "accent": "#b9483e",
+        "gold": "#efc873"
+      },
+      "background": {
+        "texture": "res://assets/backgrounds/v010-lighthouse.png",
+        "reference": "v010_lighthouse.png",
+        "sun_style": "natural_gold",
+        "lighting": {
+          "key_color": "#ffe1ad",
+          "key_energy": 0.9,
+          "ambient_color": "#e8f1fc",
+          "ambient_energy": 0.5,
+          "rim_color": "#ffe9ce",
+          "rim_energy": 0.12,
+          "window_glow": 0.12,
+          "key_position": [
+            7,
+            5,
+            4
+          ],
+          "rim_position": [
+            -6,
+            3,
+            -6
+          ]
+        }
+      }
+    }
+  ],
+  "backdrop": {
+    "overscan": 1.005,
+    "distance": 240.0
+  }
+}

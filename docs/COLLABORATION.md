@@ -83,3 +83,9 @@ Small fixes later? Same branch, new commit, push: the pull request updates autom
   `tools/cleanroom_check.py` (run by `tools/check.sh`) fails if any file here matches a file there.
 - AI agent sessions keep following `AGENTS.md`; they should pull before starting and push their commits so the artist
   sees them.
+
+## If completed work seems to disappear
+
+Check the active branch before rebuilding anything: `git status --short --branch`, `git branch -avv`, and `git log --all --oneline -20`. Switching branches changes the visible files; it does not combine the branches. Completed features may be committed on another local branch, and local commits may still be waiting to be pushed.
+
+The October 26 recovery merges the October 24 theme/background work from local `main` into `istiaque_leon`, together with the startup fix. Backup refs and the untouched GitHub Desktop stash are documented in `RECOVERY_2026-10-26.md`. Keep that stash untouched unless its diff is explicitly needed; it removes the dynamic-background feature.

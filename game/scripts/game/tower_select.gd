@@ -4,6 +4,7 @@
 extends Control
 
 const UI := preload("res://scripts/game/ui_kit.gd")
+const ThemeCatalog := preload("res://scripts/game/theme_catalog.gd")
 const Progression := preload("res://scripts/core/progression.gd")
 
 
@@ -14,6 +15,29 @@ func _ready() -> void:
 	var pop := SaveData.lifetime_population()
 	col.add_child(UI.label(tr("LIFETIME_POP") % pop, 24, UI.MUTED))
 	col.add_child(UI.spacer(16))
+	col.add_child(UI.label(tr("THEME_SELECT"), 24, UI.MUTED))
+	var choices := OptionButton.new()
+	choices.name = "ThemeSelector"
+	choices.custom_minimum_size = Vector2(0, 64)
+	choices.add_theme_font_size_override("font_size", 26)
+	choices.get_popup().add_theme_font_size_override("font_size", 26)
+	choices.get_popup().add_theme_constant_override("v_separation", 16)
+	var config: Dictionary = GameConfig.table("themes")
+	var selected := ThemeCatalog.resolve(config, SceneRouter.selected_theme)
+	SceneRouter.selected_theme = selected["id"]
+	for theme in config["themes"]:
+		choices.add_item(tr(theme["name_key"]))
+		choices.set_item_metadata(choices.item_count - 1, theme["id"])
+		if theme["id"] == selected["id"]:
+			choices.select(choices.item_count - 1)
+	col.add_child(choices)
+	var description := UI.label(tr(selected["description_key"]), 21, UI.MUTED)
+	description.custom_minimum_size.y = 54
+	col.add_child(description)
+	choices.item_selected.connect(func(index: int) -> void:
+		SceneRouter.selected_theme = choices.get_item_metadata(index)
+		var theme := ThemeCatalog.resolve(config, SceneRouter.selected_theme)
+		description.text = tr(theme["description_key"]))
 
 	for t in GameConfig.table("block_types")["types"]:
 		var unlocked := Progression.is_unlocked(t, pop)
@@ -25,7 +49,7 @@ func _ready() -> void:
 			text += (tr("TOWER_BEST") % best["population"]) + (" 🏆" if best.get("star", false) else "")
 		var id: String = t["id"]
 		var b := UI.button(text, func() -> void: SceneRouter.go("game", {"block_type": id}), 28, unlocked)
-		b.custom_minimum_size = Vector2(0, 120)
+		b.custom_minimum_size = Vector2(0, 100)
 		var sb := StyleBoxFlat.new()
 		sb.bg_color = Color(t["colour"]) if unlocked else UI.LOCKED
 		sb.set_corner_radius_all(14)

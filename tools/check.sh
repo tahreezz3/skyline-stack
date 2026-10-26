@@ -22,6 +22,8 @@ run_step() {   # name, command...
   if [ "$name" = "smoke" ] && ! echo "$out" | grep -qE 'AUTOPLAY_(SUMMARY|TIMEOUT)'; then rc=1; fi
   if [ "$name" = "smoke" ] && echo "$out" | grep -qE 'AUTOPLAY_FRAMING violations=[1-9]'; then rc=1; fi
   if [ "$name" = "ui-tour" ] && { echo "$out" | grep -qE 'SCRIPT ERROR|Parse Error|TOUR .* FAILED' || ! echo "$out" | grep -q 'TOUR_DONE'; }; then rc=1; fi
+  if [ "$name" = "background-motion" ] && { echo "$out" | grep -q 'BACKGROUND_MOTION FAILED' || ! echo "$out" | grep -q 'BACKGROUND_MOTION_DONE failures=0'; }; then rc=1; fi
+  if [ "$name" = "theme-tour" ] && { echo "$out" | grep -q 'THEME_TOUR FAILED' || ! echo "$out" | grep -q 'THEME_TOUR_DONE failures=0'; }; then rc=1; fi
   local v=true; [ $rc -ne 0 ] && { v=false; ok_all=0; echo "!! $name FAILED"; }
   steps_json="${steps_json}\"$name\": $v, "
 }
@@ -35,6 +37,8 @@ run_step config  python3 tools/validate_config.py
 run_step tests   with_timeout "$GODOT" --headless --path game --script res://tests/run_tests.gd
 run_step smoke   with_timeout "$GODOT" --headless --path game -- --autoplay --seconds=90
 run_step ui-tour with_timeout "$GODOT" --headless --path game -- --tour
+run_step theme-tour with_timeout "$GODOT" --headless --path game --script res://tools/theme_tour.gd
+run_step background-motion with_timeout "$GODOT" --headless --path game --script res://tools/background_motion_tour.gd
 run_step cleanroom python3 tools/cleanroom_check.py
 # Generated translation resources must ship in Git and match the import result.
 run_step translations bash -c 'git ls-files --error-unmatch game/localisation/strings.en.translation game/localisation/strings.es.translation game/localisation/strings.de.translation >/dev/null && git diff --quiet -- "game/localisation/*.translation" && [ -z "$(git ls-files --others --exclude-standard -- "game/localisation/*.translation")" ] || { echo "stage the current generated game/localisation/*.translation files"; exit 1; }'

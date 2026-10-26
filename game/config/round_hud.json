@@ -1,0 +1,17 @@
+{
+  "_doc": "Logical canvas pixels. Meter is height / target height, or height modulo endless_page_floors in endless. It is not block width. All controls use viewport anchors.",
+  "margin": 28,
+  "heart_pixel": 4,
+  "heart_spacing": 44,
+  "meter_width": 36,
+  "meter_height": 184,
+  "meter_segments": 12,
+  "badge_height": 44,
+  "bottom_clearance": 60,
+  "endless_page_floors": 20,
+  "counter_digits": 5,
+  "population_font_size": 34,
+  "pause_size": 64,
+  "combo_width": 180,
+  "combo_height": 12
+}

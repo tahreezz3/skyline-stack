@@ -188,11 +188,14 @@ Art direction lives in `docs/06_ART_AUDIO_SPEC.md`.
 - requested: 2026-10-13 by opus55-a7k2
 - spec: `game/localisation/strings.csv` has English plus Spanish and German drafts written by an AI. A native speaker should review the `es` and `de` columns (tone: friendly, short, game-like), fix them directly in the CSV, keep every `%d`/`%s` placeholder, and set this to `answered`. Preview a language with `godot --path game -- --lang=es`. Also decide which languages ship at launch (add columns for more).
 
+HR-0018 follow-up (2026-10-24, T-0314): also review the new `THEME_*`, `HUD_PAUSE` and `HUD_METER_HELP` Spanish/German drafts. Preserve the `%d` floor-page placeholder.
 
-### HR-0019 · Restore GitHub authentication for startup-fix synchronization
+### HR-0019 · Restore GitHub authentication and sync the recovered game
 - status: open
 - type: account
 - priority: P2
-- needed_for: T-0005, shared-repository sync
-- requested: 2026-10-26 by codex-s4n8
-- spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git and push the local startup-fix claim and implementation commits on `istiaque_leon`, or sync from an authenticated checkout. Do not force-push. The startup fix and verification are complete locally; only remote synchronization needs account access.
+- needed_for: T-0005, T-0006, T-0314, T-0315, T-0316, shared-repository sync
+- requested: 2026-10-24 by codex-p8m4
+- spec: This checkout cannot authenticate HTTPS GitHub operations (`could not read Username`). Authenticate Git for this repository and push the recovered October 24 work and October 26 startup fix from `istiaque_leon`, or sync them from an authenticated checkout. Do not force-push shared history. Implementation is complete locally; this request only covers repository synchronization.
+
+HR-0019 follow-up (2026-10-26, T-0006): local `main` retains all October 24 theme/background commits. Recovery merges this history into `istiaque_leon` together with T-0005. Preserve both branches and the existing GitHub Desktop stash; synchronize the merge after authenticating Git.
